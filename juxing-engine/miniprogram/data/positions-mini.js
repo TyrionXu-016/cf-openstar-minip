@@ -1,4 +1,5 @@
-// 精简版岗位数据\nconst positionsDB = [
+// 精简版岗位数据
+const positionsDB = [
   {
     "id": 1,
     "name": "中央办公厅",
@@ -22423,4 +22424,6 @@
       "politics": "中共党员"
     }
   }
-];\nmodule.exports = positionsDB;
+];
+
+module.exports = positionsDB;
