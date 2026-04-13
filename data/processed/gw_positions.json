@@ -1,0 +1,4544 @@
+[
+  {
+    "id": 1,
+    "name": "中央办公厅",
+    "category": "省考",
+    "subCategory": "法务管理岗位一级主任科员及以下",
+    "description": "从事法务管理相关工作",
+    "work": "综合管理、日常工作协调、文稿撰写",
+    "salary": "中等偏上",
+    "promotion": "晋升空间明确",
+    "requirements": {
+      "majors": [
+        "030105民商法",
+        "030103宪法学与行政法学",
+        "035102法律（法学）"
+      ],
+      "education": [
+        "本科",
+        "硕士",
+        "博士"
+      ],
+      "other": "仅限硕士研究生"
+    },
+    "isThreeFree": false,
+    "threeFreeNote": "",
+    "tags": [
+      "正式编制",
+      "稳定"
+    ],
+    "difficulty": "中等",
+    "goodFor": [
+      "应往届毕业生",
+      "符合专业要求者"
+    ]
+  },
+  {
+    "id": 2,
+    "name": "中央办公厅",
+    "category": "省考",
+    "subCategory": "财务管理岗位一级主任科员及以下",
+    "description": "从事财务管理相关工作",
+    "work": "综合管理、日常工作协调、文稿撰写",
+    "salary": "中等偏上",
+    "promotion": "晋升空间明确",
+    "requirements": {
+      "majors": [
+        "120203K会计学",
+        "120204财务管理",
+        "120201会计学",
+        "1253会计"
+      ],
+      "education": [
+        "本科",
+        "硕士",
+        "博士"
+      ],
+      "other": "本科或硕士研究生"
+    },
+    "isThreeFree": false,
+    "threeFreeNote": "",
+    "tags": [
+      "正式编制",
+      "稳定"
+    ],
+    "difficulty": "中等",
+    "goodFor": [
+      "应往届毕业生",
+      "符合专业要求者"
+    ]
+  },
+  {
+    "id": 3,
+    "name": "中央办公厅",
+    "category": "省考",
+    "subCategory": "工程监理岗位一级主任科员及以下",
+    "description": "从事工程监理相关工作",
+    "work": "综合管理、日常工作协调、文稿撰写",
+    "salary": "中等偏上",
+    "promotion": "晋升空间明确",
+    "requirements": {
+      "majors": [
+        "081001土木工程",
+        "120103工程管理",
+        "120105工程造价",
+        "125601工程管理",
+        "081402结构工程"
+      ],
+      "education": [
+        "本科",
+        "硕士",
+        "博士"
+      ],
+      "other": "本科或硕士研究生"
+    },
+    "isThreeFree": false,
+    "threeFreeNote": "",
+    "tags": [
+      "正式编制",
+      "稳定"
+    ],
+    "difficulty": "中等",
+    "goodFor": [
+      "应往届毕业生",
+      "符合专业要求者"
+    ]
+  },
+  {
+    "id": 4,
+    "name": "中央办公厅",
+    "category": "省考",
+    "subCategory": "文秘岗位一级主任科员及以下",
+    "description": "从事综合文秘等工作",
+    "work": "综合管理、日常工作协调、文稿撰写",
+    "salary": "中等偏上",
+    "promotion": "晋升空间明确",
+    "requirements": {
+      "majors": [
+        "0301法学",
+        "0501中国语言文学",
+        "0602中国史"
+      ],
+      "education": [
+        "本科",
+        "硕士",
+        "博士"
+      ],
+      "other": "仅限硕士研究生"
+    },
+    "isThreeFree": false,
+    "threeFreeNote": "",
+    "tags": [
+      "正式编制",
+      "稳定"
+    ],
+    "difficulty": "中等",
+    "goodFor": [
+      "应往届毕业生",
+      "符合专业要求者"
+    ]
+  },
+  {
+    "id": 5,
+    "name": "中央办公厅",
+    "category": "省考",
+    "subCategory": "党务岗位一级主任科员及以下",
+    "description": "从事党建等工作",
+    "work": "综合管理、日常工作协调、文稿撰写",
+    "salary": "中等偏上",
+    "promotion": "晋升空间明确",
+    "requirements": {
+      "majors": [
+        "0305马克思主义理论",
+        "0307中共党史党建学",
+        "0308纪检监察学"
+      ],
+      "education": [
+        "本科",
+        "硕士",
+        "博士"
+      ],
+      "other": "仅限硕士研究生"
+    },
+    "isThreeFree": false,
+    "threeFreeNote": "",
+    "tags": [
+      "正式编制",
+      "稳定"
+    ],
+    "difficulty": "中等",
+    "goodFor": [
+      "应往届毕业生",
+      "符合专业要求者"
+    ]
+  },
+  {
+    "id": 6,
+    "name": "中央办公厅",
+    "category": "省考",
+    "subCategory": "服务管理岗位一级主任科员及以下",
+    "description": "从事综合服务等工作",
+    "work": "综合管理、日常工作协调、文稿撰写",
+    "salary": "中等偏上",
+    "promotion": "晋升空间明确",
+    "requirements": {
+      "majors": [
+        "030301社会学",
+        "030302社会工作",
+        "030306T老年学",
+        "030307T社会政策"
+      ],
+      "education": [
+        "本科",
+        "硕士",
+        "博士"
+      ],
+      "other": "仅限本科"
+    },
+    "isThreeFree": false,
+    "threeFreeNote": "",
+    "tags": [
+      "正式编制",
+      "稳定"
+    ],
+    "difficulty": "中等",
+    "goodFor": [
+      "应往届毕业生",
+      "符合专业要求者"
+    ]
+  },
+  {
+    "id": 7,
+    "name": "中央办公厅",
+    "category": "省考",
+    "subCategory": "卫生健康管理岗位一级主任科员及以下",
+    "description": "从事卫生健康管理等工作",
+    "work": "综合管理、日常工作协调、文稿撰写",
+    "salary": "中等偏上",
+    "promotion": "晋升空间明确",
+    "requirements": {
+      "majors": [
+        "1051临床医学"
+      ],
+      "education": [
+        "本科",
+        "硕士",
+        "博士"
+      ],
+      "other": "仅限硕士研究生"
+    },
+    "isThreeFree": false,
+    "threeFreeNote": "",
+    "tags": [
+      "正式编制",
+      "稳定"
+    ],
+    "difficulty": "中等",
+    "goodFor": [
+      "应往届毕业生",
+      "符合专业要求者"
+    ]
+  },
+  {
+    "id": 8,
+    "name": "中央办公厅",
+    "category": "省考",
+    "subCategory": "行政后勤岗位一级主任科员及以下",
+    "description": "从事设备管理等行政后勤保障工作",
+    "work": "综合管理、日常工作协调、文稿撰写",
+    "salary": "中等偏上",
+    "promotion": "晋升空间明确",
+    "requirements": {
+      "majors": [
+        "081002建筑环境与能源应用工程"
+      ],
+      "education": [
+        "本科",
+        "硕士",
+        "博士"
+      ],
+      "other": "仅限本科"
+    },
+    "isThreeFree": false,
+    "threeFreeNote": "",
+    "tags": [
+      "正式编制",
+      "稳定"
+    ],
+    "difficulty": "中等",
+    "goodFor": [
+      "应往届毕业生",
+      "符合专业要求者"
+    ]
+  },
+  {
+    "id": 9,
+    "name": "中央办公厅",
+    "category": "省考",
+    "subCategory": "财务管理岗位一级主任科员及以下",
+    "description": "从事财务管理工作",
+    "work": "综合管理、日常工作协调、文稿撰写",
+    "salary": "中等偏上",
+    "promotion": "晋升空间明确",
+    "requirements": {
+      "majors": [
+        "120203K会计学",
+        "120204财务管理"
+      ],
+      "education": [
+        "本科",
+        "硕士",
+        "博士"
+      ],
+      "other": "仅限本科"
+    },
+    "isThreeFree": false,
+    "threeFreeNote": "",
+    "tags": [
+      "正式编制",
+      "稳定"
+    ],
+    "difficulty": "中等",
+    "goodFor": [
+      "应往届毕业生",
+      "符合专业要求者"
+    ]
+  },
+  {
+    "id": 10,
+    "name": "中央办公厅",
+    "category": "省考",
+    "subCategory": "宣传教育岗位一级主任科员及以下",
+    "description": "从事领袖革命业绩、光辉思想、崇高风范的宣传工作",
+    "work": "综合管理、日常工作协调、文稿撰写",
+    "salary": "中等偏上",
+    "promotion": "晋升空间明确",
+    "requirements": {
+      "majors": [
+        "130309播音与主持艺术",
+        "1301艺术学",
+        "1354戏剧与影视（研究生报考本科阶段专业须为130309播音与主持艺术）"
+      ],
+      "education": [
+        "本科",
+        "硕士",
+        "博士"
+      ],
+      "other": "本科或硕士研究生"
+    },
+    "isThreeFree": false,
+    "threeFreeNote": "",
+    "tags": [
+      "正式编制",
+      "稳定"
+    ],
+    "difficulty": "中等",
+    "goodFor": [
+      "应往届毕业生",
+      "符合专业要求者"
+    ]
+  },
+  {
+    "id": 11,
+    "name": "中央办公厅",
+    "category": "省考",
+    "subCategory": "信息管理岗位一级主任科员及以下",
+    "description": "从事信息管理等工作",
+    "work": "综合管理、日常工作协调、文稿撰写",
+    "salary": "中等偏上",
+    "promotion": "晋升空间明确",
+    "requirements": {
+      "majors": [
+        "0807电子信息类",
+        "0808自动化类",
+        "0809计算机类",
+        "0810信息与通信工程",
+        "0811控制科学与工程",
+        "0812计算机科学与技术",
+        "0854电子信息"
+      ],
+      "education": [
+        "本科",
+        "硕士",
+        "博士"
+      ],
+      "other": "本科或硕士研究生"
+    },
+    "isThreeFree": false,
+    "threeFreeNote": "",
+    "tags": [
+      "正式编制",
+      "稳定"
+    ],
+    "difficulty": "中等",
+    "goodFor": [
+      "应往届毕业生",
+      "符合专业要求者"
+    ]
+  },
+  {
+    "id": 12,
+    "name": "中央直属机关事务管理局",
+    "category": "省考",
+    "subCategory": "园林管理岗位一级主任科员及以下",
+    "description": "从事园林绿化管理等工作",
+    "work": "综合管理、日常工作协调、文稿撰写",
+    "salary": "中等偏上",
+    "promotion": "晋升空间明确",
+    "requirements": {
+      "majors": [
+        "0901植物生产类",
+        "0902自然保护与环境生态类",
+        "0905林学类",
+        "0907草学类"
+      ],
+      "education": [
+        "本科",
+        "硕士",
+        "博士"
+      ],
+      "other": "仅限本科"
+    },
+    "isThreeFree": false,
+    "threeFreeNote": "",
+    "tags": [
+      "正式编制",
+      "稳定"
+    ],
+    "difficulty": "中等",
+    "goodFor": [
+      "应往届毕业生",
+      "符合专业要求者"
+    ]
+  },
+  {
+    "id": 13,
+    "name": "中央直属机关事务管理局",
+    "category": "省考",
+    "subCategory": "综合管理岗位一级主任科员及以下",
+    "description": "从事综合管理等工作",
+    "work": "综合管理、日常工作协调、文稿撰写",
+    "salary": "中等偏上",
+    "promotion": "晋升空间明确",
+    "requirements": {
+      "majors": [
+        "法学类",
+        "政治学类",
+        "马克思主义理论类",
+        "中国语言文学类",
+        "新闻传播学类",
+        "历史学",
+        "人力资源管理",
+        "行政管理",
+        "档案学",
+        "哲学",
+        "法学",
+        "政治学",
+        "马克思主义理论",
+        "中国语言文学",
+        "新闻传播学"
+      ],
+      "education": [
+        "本科",
+        "硕士",
+        "博士"
+      ],
+      "other": "本科或硕士研究生"
+    },
+    "isThreeFree": false,
+    "threeFreeNote": "",
+    "tags": [
+      "正式编制",
+      "稳定"
+    ],
+    "difficulty": "中等",
+    "goodFor": [
+      "应往届毕业生",
+      "符合专业要求者"
+    ]
+  },
+  {
+    "id": 14,
+    "name": "中央直属机关事务管理局",
+    "category": "省考",
+    "subCategory": "规划管理岗位一级主任科员及以下",
+    "description": "从事规划管理等工作",
+    "work": "综合管理、日常工作协调、文稿撰写",
+    "salary": "中等偏上",
+    "promotion": "晋升空间明确",
+    "requirements": {
+      "majors": [
+        "0813建筑学",
+        "0833城乡规划学",
+        "0853城乡规划"
+      ],
+      "education": [
+        "本科",
+        "硕士",
+        "博士"
+      ],
+      "other": "仅限硕士研究生"
+    },
+    "isThreeFree": false,
+    "threeFreeNote": "",
+    "tags": [
+      "正式编制",
+      "稳定"
+    ],
+    "difficulty": "中等",
+    "goodFor": [
+      "应往届毕业生",
+      "符合专业要求者"
+    ]
+  },
+  {
+    "id": 15,
+    "name": "中央直属机关事务管理局",
+    "category": "省考",
+    "subCategory": "工程管理岗位一级主任科员及以下",
+    "description": "从事工程管理等工作",
+    "work": "综合管理、日常工作协调、文稿撰写",
+    "salary": "中等偏上",
+    "promotion": "晋升空间明确",
+    "requirements": {
+      "majors": [
+        "081001土木工程",
+        "081002建筑环境与能源应用工程",
+        "081004建筑电气与智能化",
+        "082801建筑学",
+        "0814土木工程",
+        "085900土木水利",
+        "085901土木工程"
+      ],
+      "education": [
+        "本科",
+        "硕士",
+        "博士"
+      ],
+      "other": "本科或硕士研究生"
+    },
+    "isThreeFree": false,
+    "threeFreeNote": "",
+    "tags": [
+      "正式编制",
+      "稳定"
+    ],
+    "difficulty": "中等",
+    "goodFor": [
+      "应往届毕业生",
+      "符合专业要求者"
+    ]
+  },
+  {
+    "id": 16,
+    "name": "中央直属机关事务管理局",
+    "category": "省考",
+    "subCategory": "资产管理岗位一级主任科员及以下",
+    "description": "从事资产管理等工作",
+    "work": "综合管理、日常工作协调、文稿撰写",
+    "salary": "中等偏上",
+    "promotion": "晋升空间明确",
+    "requirements": {
+      "majors": [
+        "020201K财政学",
+        "120204财务管理",
+        "120208资产评估",
+        "020203财政学",
+        "0256资产评估"
+      ],
+      "education": [
+        "本科",
+        "硕士",
+        "博士"
+      ],
+      "other": "本科或硕士研究生"
+    },
+    "isThreeFree": false,
+    "threeFreeNote": "",
+    "tags": [
+      "正式编制",
+      "稳定"
+    ],
+    "difficulty": "中等",
+    "goodFor": [
+      "应往届毕业生",
+      "符合专业要求者"
+    ]
+  },
+  {
+    "id": 17,
+    "name": "中央直属机关事务管理局",
+    "category": "省考",
+    "subCategory": "信息管理岗位一级主任科员及以下",
+    "description": "从事信息管理等工作",
+    "work": "综合管理、日常工作协调、文稿撰写",
+    "salary": "中等偏上",
+    "promotion": "晋升空间明确",
+    "requirements": {
+      "majors": [
+        "080901计算机科学与技术",
+        "080902软件工程",
+        "080903网络工程",
+        "0775计算机科学与技术",
+        "0812计算机科学与技术",
+        "0835软件工程",
+        "085404计算机技术",
+        "085405软件工程"
+      ],
+      "education": [
+        "本科",
+        "硕士",
+        "博士"
+      ],
+      "other": "本科或硕士研究生"
+    },
+    "isThreeFree": false,
+    "threeFreeNote": "",
+    "tags": [
+      "正式编制",
+      "稳定"
+    ],
+    "difficulty": "中等",
+    "goodFor": [
+      "应往届毕业生",
+      "符合专业要求者"
+    ]
+  },
+  {
+    "id": 18,
+    "name": "中央直属机关事务管理局",
+    "category": "省考",
+    "subCategory": "政策法规岗位一级主任科员及以下",
+    "description": "从事政策法规等工作",
+    "work": "综合管理、日常工作协调、文稿撰写",
+    "salary": "中等偏上",
+    "promotion": "晋升空间明确",
+    "requirements": {
+      "majors": [
+        "0301法学"
+      ],
+      "education": [
+        "本科",
+        "硕士",
+        "博士"
+      ],
+      "other": "仅限硕士研究生"
+    },
+    "isThreeFree": false,
+    "threeFreeNote": "",
+    "tags": [
+      "正式编制",
+      "稳定"
+    ],
+    "difficulty": "中等",
+    "goodFor": [
+      "应往届毕业生",
+      "符合专业要求者"
+    ]
+  },
+  {
+    "id": 19,
+    "name": "中央直属机关事务管理局",
+    "category": "省考",
+    "subCategory": "综合管理岗位一级主任科员及以下",
+    "description": "从事综合管理等工作",
+    "work": "综合管理、日常工作协调、文稿撰写",
+    "salary": "中等偏上",
+    "promotion": "晋升空间明确",
+    "requirements": {
+      "majors": [
+        "哲学类",
+        "法学类",
+        "政治学类",
+        "马克思主义理论类",
+        "中国语言文学类",
+        "新闻传播学类",
+        "行政管理",
+        "哲学",
+        "政治学",
+        "马克思主义理论",
+        "中国语言文学",
+        "新闻传播学",
+        "行政管理"
+      ],
+      "education": [
+        "本科",
+        "硕士",
+        "博士"
+      ],
+      "other": "本科或硕士研究生"
+    },
+    "isThreeFree": false,
+    "threeFreeNote": "",
+    "tags": [
+      "正式编制",
+      "稳定"
+    ],
+    "difficulty": "中等",
+    "goodFor": [
+      "应往届毕业生",
+      "符合专业要求者"
+    ]
+  },
+  {
+    "id": 20,
+    "name": "中央档案馆国家档案局",
+    "category": "省考",
+    "subCategory": "财务管理岗位一级主任科员及以下",
+    "description": "从事财务管理等工作",
+    "work": "综合管理、日常工作协调、文稿撰写",
+    "salary": "中等偏上",
+    "promotion": "晋升空间明确",
+    "requirements": {
+      "majors": [
+        "120203K会计学",
+        "120204财务管理",
+        "020201K财政学",
+        "120201会计学",
+        "1253会计",
+        "020203财政学"
+      ],
+      "education": [
+        "本科",
+        "硕士",
+        "博士"
+      ],
+      "other": "本科或硕士研究生"
+    },
+    "isThreeFree": false,
+    "threeFreeNote": "",
+    "tags": [
+      "正式编制",
+      "稳定"
+    ],
+    "difficulty": "中等",
+    "goodFor": [
+      "应往届毕业生",
+      "符合专业要求者"
+    ]
+  },
+  {
+    "id": 21,
+    "name": "中央档案馆国家档案局",
+    "category": "省考",
+    "subCategory": "消防安全岗位一级主任科员及以下",
+    "description": "从事消防安全管理等工作",
+    "work": "综合管理、日常工作协调、文稿撰写",
+    "salary": "中等偏上",
+    "promotion": "晋升空间明确",
+    "requirements": {
+      "majors": [
+        "083102K消防工程",
+        "0837安全科学与工程（须为消防安全方向）"
+      ],
+      "education": [
+        "本科",
+        "硕士",
+        "博士"
+      ],
+      "other": "本科或硕士研究生"
+    },
+    "isThreeFree": false,
+    "threeFreeNote": "",
+    "tags": [
+      "正式编制",
+      "稳定"
+    ],
+    "difficulty": "中等",
+    "goodFor": [
+      "应往届毕业生",
+      "符合专业要求者"
+    ]
+  },
+  {
+    "id": 22,
+    "name": "中央档案馆国家档案局",
+    "category": "省考",
+    "subCategory": "财务管理岗位一级主任科员及以下",
+    "description": "从事财务管理等工作",
+    "work": "综合管理、日常工作协调、文稿撰写",
+    "salary": "中等偏上",
+    "promotion": "晋升空间明确",
+    "requirements": {
+      "majors": [
+        "120201会计学",
+        "1253会计"
+      ],
+      "education": [
+        "本科",
+        "硕士",
+        "博士"
+      ],
+      "other": "仅限硕士研究生"
+    },
+    "isThreeFree": false,
+    "threeFreeNote": "",
+    "tags": [
+      "正式编制",
+      "稳定"
+    ],
+    "difficulty": "中等",
+    "goodFor": [
+      "应往届毕业生",
+      "符合专业要求者"
+    ]
+  },
+  {
+    "id": 23,
+    "name": "中央档案馆国家档案局",
+    "category": "省考",
+    "subCategory": "消防安全岗位一级主任科员及以下",
+    "description": "从事消防安全管理等工作",
+    "work": "综合管理、日常工作协调、文稿撰写",
+    "salary": "中等偏上",
+    "promotion": "晋升空间明确",
+    "requirements": {
+      "majors": [
+        "081403/085905市政工程（给排水方向）",
+        "085702安全工程（消防工程方向）"
+      ],
+      "education": [
+        "本科",
+        "硕士",
+        "博士"
+      ],
+      "other": "仅限硕士研究生"
+    },
+    "isThreeFree": false,
+    "threeFreeNote": "",
+    "tags": [
+      "正式编制",
+      "稳定"
+    ],
+    "difficulty": "中等",
+    "goodFor": [
+      "应往届毕业生",
+      "符合专业要求者"
+    ]
+  },
+  {
+    "id": 24,
+    "name": "中央档案馆国家档案局",
+    "category": "省考",
+    "subCategory": "后勤管理岗位一级主任科员及以下",
+    "description": "从事馆区园林绿化管理等工作",
+    "work": "综合管理、日常工作协调、文稿撰写",
+    "salary": "中等偏上",
+    "promotion": "晋升空间明确",
+    "requirements": {
+      "majors": [
+        "0834风景园林学",
+        "0862/0953风景园林",
+        "090706园林植物与观赏园艺"
+      ],
+      "education": [
+        "本科",
+        "硕士",
+        "博士"
+      ],
+      "other": "仅限硕士研究生"
+    },
+    "isThreeFree": false,
+    "threeFreeNote": "",
+    "tags": [
+      "正式编制",
+      "稳定"
+    ],
+    "difficulty": "中等",
+    "goodFor": [
+      "应往届毕业生",
+      "符合专业要求者"
+    ]
+  },
+  {
+    "id": 25,
+    "name": "中央档案馆国家档案局",
+    "category": "省考",
+    "subCategory": "档案利用岗位一级主任科员及以下",
+    "description": "从事查档咨询、接待利用、个人查证服务等工作",
+    "work": "综合管理、日常工作协调、文稿撰写",
+    "salary": "中等偏上",
+    "promotion": "晋升空间明确",
+    "requirements": {
+      "majors": [
+        "0602中国史（中国近现代史方向）",
+        "0602L5中国近现代史"
+      ],
+      "education": [
+        "本科",
+        "硕士",
+        "博士"
+      ],
+      "other": "硕士研究生及以上"
+    },
+    "isThreeFree": false,
+    "threeFreeNote": "",
+    "tags": [
+      "正式编制",
+      "稳定"
+    ],
+    "difficulty": "中等",
+    "goodFor": [
+      "应往届毕业生",
+      "符合专业要求者"
+    ]
+  },
+  {
+    "id": 26,
+    "name": "中央组织部",
+    "category": "省考",
+    "subCategory": "业务处室职位一级主任科员及以下",
+    "description": "从事老干部相关工作",
+    "work": "综合管理、日常工作协调、文稿撰写",
+    "salary": "中等偏上",
+    "promotion": "晋升空间明确",
+    "requirements": {
+      "majors": [
+        "哲学（0101）",
+        "政治学（0302）",
+        "马克思主义理论（0305）",
+        "中共党史党建学（0307）",
+        "中国语言文学（0501）",
+        "新闻传播（0503",
+        "0552）",
+        "中国史（0602）等相关专业"
+      ],
+      "education": [
+        "本科",
+        "硕士",
+        "博士"
+      ],
+      "other": "仅限硕士研究生"
+    },
+    "isThreeFree": false,
+    "threeFreeNote": "",
+    "tags": [
+      "正式编制",
+      "稳定"
+    ],
+    "difficulty": "中等",
+    "goodFor": [
+      "应往届毕业生",
+      "符合专业要求者"
+    ]
+  },
+  {
+    "id": 27,
+    "name": "中央组织部",
+    "category": "省考",
+    "subCategory": "业务处室职位一级主任科员及以下",
+    "description": "从事机关行政、后勤等事务管理工作",
+    "work": "综合管理、日常工作协调、文稿撰写",
+    "salary": "中等偏上",
+    "promotion": "晋升空间明确",
+    "requirements": {
+      "majors": [
+        "马克思主义理论（0305）",
+        "中共党史党建学（0307）",
+        "中国语言文学（0501）",
+        "建筑（0813",
+        "0851）",
+        "土木工程（0814）",
+        "管理科学与工程（1201",
+        "1256）等相关专业"
+      ],
+      "education": [
+        "本科",
+        "硕士",
+        "博士"
+      ],
+      "other": "仅限硕士研究生"
+    },
+    "isThreeFree": false,
+    "threeFreeNote": "",
+    "tags": [
+      "正式编制",
+      "稳定"
+    ],
+    "difficulty": "中等",
+    "goodFor": [
+      "应往届毕业生",
+      "符合专业要求者"
+    ]
+  },
+  {
+    "id": 28,
+    "name": "中央对外联络部",
+    "category": "省考",
+    "subCategory": "英语翻译",
+    "description": "从事有关英语国家联络调研工作，承担有关交替传译和同声传译任务。",
+    "work": "综合管理、日常工作协调、文稿撰写",
+    "salary": "中等偏上",
+    "promotion": "晋升空间明确",
+    "requirements": {
+      "majors": [
+        "英语（同声传译",
+        "口译）"
+      ],
+      "education": [
+        "本科",
+        "硕士",
+        "博士"
+      ],
+      "other": "本科或硕士研究生"
+    },
+    "isThreeFree": false,
+    "threeFreeNote": "",
+    "tags": [
+      "正式编制",
+      "稳定"
+    ],
+    "difficulty": "中等",
+    "goodFor": [
+      "应往届毕业生",
+      "符合专业要求者"
+    ]
+  },
+  {
+    "id": 29,
+    "name": "中央对外联络部",
+    "category": "省考",
+    "subCategory": "综合调研一",
+    "description": "从事综合调研等工作。",
+    "work": "综合管理、日常工作协调、文稿撰写",
+    "salary": "中等偏上",
+    "promotion": "晋升空间明确",
+    "requirements": {
+      "majors": [
+        "政治学理论",
+        "中外政治制度",
+        "科学社会主义与国际共产主义运动",
+        "中共党史",
+        "国际政治",
+        "国际关系",
+        "外交学",
+        "马克思主义中国化研究",
+        "国际法学",
+        "世界史",
+        "国际政治经济学",
+        "世界经济",
+        "政治经济学",
+        "区域国别学等相关专业"
+      ],
+      "education": [
+        "本科",
+        "硕士",
+        "博士"
+      ],
+      "other": "硕士研究生及以上"
+    },
+    "isThreeFree": false,
+    "threeFreeNote": "",
+    "tags": [
+      "正式编制",
+      "稳定"
+    ],
+    "difficulty": "中等",
+    "goodFor": [
+      "应往届毕业生",
+      "符合专业要求者"
+    ]
+  },
+  {
+    "id": 30,
+    "name": "中央对外联络部",
+    "category": "省考",
+    "subCategory": "阿拉伯语翻译",
+    "description": "从事有关阿拉伯语国家联络调研工作，承担有关交替传译和同声传译任务。",
+    "work": "综合管理、日常工作协调、文稿撰写",
+    "salary": "中等偏上",
+    "promotion": "晋升空间明确",
+    "requirements": {
+      "majors": [
+        "阿拉伯语"
+      ],
+      "education": [
+        "本科",
+        "硕士",
+        "博士"
+      ],
+      "other": "本科或硕士研究生"
+    },
+    "isThreeFree": false,
+    "threeFreeNote": "",
+    "tags": [
+      "正式编制",
+      "稳定"
+    ],
+    "difficulty": "中等",
+    "goodFor": [
+      "应往届毕业生",
+      "符合专业要求者"
+    ]
+  },
+  {
+    "id": 31,
+    "name": "中央对外联络部",
+    "category": "省考",
+    "subCategory": "朝鲜语翻译",
+    "description": "从事有关朝鲜、韩国联络调研工作，承担有关交替传译和同声传译任务。",
+    "work": "综合管理、日常工作协调、文稿撰写",
+    "salary": "中等偏上",
+    "promotion": "晋升空间明确",
+    "requirements": {
+      "majors": [
+        "朝鲜语（韩语）"
+      ],
+      "education": [
+        "本科",
+        "硕士",
+        "博士"
+      ],
+      "other": "本科或硕士研究生"
+    },
+    "isThreeFree": false,
+    "threeFreeNote": "",
+    "tags": [
+      "正式编制",
+      "稳定"
+    ],
+    "difficulty": "中等",
+    "goodFor": [
+      "应往届毕业生",
+      "符合专业要求者"
+    ]
+  },
+  {
+    "id": 32,
+    "name": "中央对外联络部",
+    "category": "省考",
+    "subCategory": "法语翻译",
+    "description": "从事有关法语国家联络调研工作，承担有关交替传译和同声传译任务。",
+    "work": "综合管理、日常工作协调、文稿撰写",
+    "salary": "中等偏上",
+    "promotion": "晋升空间明确",
+    "requirements": {
+      "majors": [
+        "法语"
+      ],
+      "education": [
+        "本科",
+        "硕士",
+        "博士"
+      ],
+      "other": "本科或硕士研究生"
+    },
+    "isThreeFree": false,
+    "threeFreeNote": "",
+    "tags": [
+      "正式编制",
+      "稳定"
+    ],
+    "difficulty": "中等",
+    "goodFor": [
+      "应往届毕业生",
+      "符合专业要求者"
+    ]
+  },
+  {
+    "id": 33,
+    "name": "中央对外联络部",
+    "category": "省考",
+    "subCategory": "西班牙语翻译",
+    "description": "从事有关西班牙语国家联络调研工作，承担有关交替传译和同声传译任务。",
+    "work": "综合管理、日常工作协调、文稿撰写",
+    "salary": "中等偏上",
+    "promotion": "晋升空间明确",
+    "requirements": {
+      "majors": [
+        "西班牙语"
+      ],
+      "education": [
+        "本科",
+        "硕士",
+        "博士"
+      ],
+      "other": "本科或硕士研究生"
+    },
+    "isThreeFree": false,
+    "threeFreeNote": "",
+    "tags": [
+      "正式编制",
+      "稳定"
+    ],
+    "difficulty": "中等",
+    "goodFor": [
+      "应往届毕业生",
+      "符合专业要求者"
+    ]
+  },
+  {
+    "id": 34,
+    "name": "中央对外联络部",
+    "category": "省考",
+    "subCategory": "尼泊尔语翻译",
+    "description": "从事有关尼泊尔联络调研工作，承担有关交替传译和同声传译任务。",
+    "work": "综合管理、日常工作协调、文稿撰写",
+    "salary": "中等偏上",
+    "promotion": "晋升空间明确",
+    "requirements": {
+      "majors": [
+        "尼泊尔语"
+      ],
+      "education": [
+        "本科",
+        "硕士",
+        "博士"
+      ],
+      "other": "本科或硕士研究生"
+    },
+    "isThreeFree": false,
+    "threeFreeNote": "",
+    "tags": [
+      "正式编制",
+      "稳定"
+    ],
+    "difficulty": "中等",
+    "goodFor": [
+      "应往届毕业生",
+      "符合专业要求者"
+    ]
+  },
+  {
+    "id": 35,
+    "name": "中央对外联络部",
+    "category": "省考",
+    "subCategory": "匈牙利语翻译",
+    "description": "从事有关匈牙利联络调研工作，承担有关交替传译和同声传译任务。",
+    "work": "综合管理、日常工作协调、文稿撰写",
+    "salary": "中等偏上",
+    "promotion": "晋升空间明确",
+    "requirements": {
+      "majors": [
+        "匈牙利语"
+      ],
+      "education": [
+        "本科",
+        "硕士",
+        "博士"
+      ],
+      "other": "本科或硕士研究生"
+    },
+    "isThreeFree": false,
+    "threeFreeNote": "",
+    "tags": [
+      "正式编制",
+      "稳定"
+    ],
+    "difficulty": "中等",
+    "goodFor": [
+      "应往届毕业生",
+      "符合专业要求者"
+    ]
+  },
+  {
+    "id": 36,
+    "name": "中央对外联络部",
+    "category": "省考",
+    "subCategory": "综合调研二",
+    "description": "从事综合调研等工作。",
+    "work": "综合管理、日常工作协调、文稿撰写",
+    "salary": "中等偏上",
+    "promotion": "晋升空间明确",
+    "requirements": {
+      "majors": [
+        "政治学理论",
+        "中外政治制度",
+        "科学社会主义与国际共产主义运动",
+        "中共党史",
+        "国际政治",
+        "国际关系",
+        "外交学",
+        "马克思主义中国化研究",
+        "国际法学",
+        "世界史",
+        "国际政治经济学",
+        "世界经济",
+        "政治经济学",
+        "区域国别学等相关专业"
+      ],
+      "education": [
+        "本科",
+        "硕士",
+        "博士"
+      ],
+      "other": "硕士研究生及以上"
+    },
+    "isThreeFree": false,
+    "threeFreeNote": "",
+    "tags": [
+      "正式编制",
+      "稳定"
+    ],
+    "difficulty": "中等",
+    "goodFor": [
+      "应往届毕业生",
+      "符合专业要求者"
+    ]
+  },
+  {
+    "id": 37,
+    "name": "中央台办",
+    "category": "省考",
+    "subCategory": "业务司局岗位（一级主任科员及以下）",
+    "description": "承担文稿起草和综合调研等工作",
+    "work": "综合管理、日常工作协调、文稿撰写",
+    "salary": "中等偏上",
+    "promotion": "晋升空间明确",
+    "requirements": {
+      "majors": [
+        "理学类",
+        "工学类"
+      ],
+      "education": [
+        "本科",
+        "硕士",
+        "博士"
+      ],
+      "other": "仅限硕士研究生"
+    },
+    "isThreeFree": false,
+    "threeFreeNote": "",
+    "tags": [
+      "正式编制",
+      "稳定"
+    ],
+    "difficulty": "中等",
+    "goodFor": [
+      "应往届毕业生",
+      "符合专业要求者"
+    ]
+  },
+  {
+    "id": 38,
+    "name": "中央金融办、中央金融工委",
+    "category": "省考",
+    "subCategory": "综合业务处一级主任科员及以下",
+    "description": "主要从事宏观经济金融政策协调、金融监管政策协调、文稿起草、综合管理等工作",
+    "work": "综合管理、日常工作协调、文稿撰写",
+    "salary": "中等偏上",
+    "promotion": "晋升空间明确",
+    "requirements": {
+      "majors": [
+        "0202应用经济学",
+        "0251金融"
+      ],
+      "education": [
+        "本科",
+        "硕士",
+        "博士"
+      ],
+      "other": "硕士研究生及以上"
+    },
+    "isThreeFree": false,
+    "threeFreeNote": "",
+    "tags": [
+      "正式编制",
+      "稳定"
+    ],
+    "difficulty": "中等",
+    "goodFor": [
+      "应往届毕业生",
+      "符合专业要求者"
+    ]
+  },
+  {
+    "id": 39,
+    "name": "中央金融办、中央金融工委",
+    "category": "省考",
+    "subCategory": "综合业务处一级主任科员及以下",
+    "description": "主要从事监督问责、文稿起草、综合管理等工作",
+    "work": "综合管理、日常工作协调、文稿撰写",
+    "salary": "中等偏上",
+    "promotion": "晋升空间明确",
+    "requirements": {
+      "majors": [
+        "0202应用经济学",
+        "0251金融",
+        "0301法学",
+        "0351法律"
+      ],
+      "education": [
+        "本科",
+        "硕士",
+        "博士"
+      ],
+      "other": "硕士研究生及以上"
+    },
+    "isThreeFree": false,
+    "threeFreeNote": "",
+    "tags": [
+      "正式编制",
+      "稳定"
+    ],
+    "difficulty": "中等",
+    "goodFor": [
+      "应往届毕业生",
+      "符合专业要求者"
+    ]
+  },
+  {
+    "id": 40,
+    "name": "中央金融办、中央金融工委",
+    "category": "省考",
+    "subCategory": "综合业务处一级主任科员及以下",
+    "description": "主要从事党建工作、文稿起草、综合管理等工作",
+    "work": "综合管理、日常工作协调、文稿撰写",
+    "salary": "中等偏上",
+    "promotion": "晋升空间明确",
+    "requirements": {
+      "majors": [
+        "0202应用经济学",
+        "0251金融",
+        "0301法学",
+        "0305马克思主义理论",
+        "0307中共党史党建学",
+        "0351法律",
+        "1201管理科学与工程",
+        "1202工商管理学",
+        "1204公共管理学",
+        "1251工商管理",
+        "1252公共管理"
+      ],
+      "education": [
+        "本科",
+        "硕士",
+        "博士"
+      ],
+      "other": "硕士研究生及以上"
+    },
+    "isThreeFree": false,
+    "threeFreeNote": "",
+    "tags": [
+      "正式编制",
+      "稳定"
+    ],
+    "difficulty": "中等",
+    "goodFor": [
+      "应往届毕业生",
+      "符合专业要求者"
+    ]
+  },
+  {
+    "id": 41,
+    "name": "中央党史和文献研究院",
+    "category": "省考",
+    "subCategory": "编研岗一级主任科员及以下",
+    "description": "主要从事党史文献编辑、研究、宣传教育等工作",
+    "work": "综合管理、日常工作协调、文稿撰写",
+    "salary": "中等偏上",
+    "promotion": "晋升空间明确",
+    "requirements": {
+      "majors": [
+        "中共党史党建学",
+        "中国史",
+        "世界史",
+        "哲学",
+        "理论经济学",
+        "应用经济学",
+        "法学",
+        "政治学",
+        "马克思主义理论",
+        "社会学",
+        "民族学",
+        "中国语言文学",
+        "新闻传播学等相关专业"
+      ],
+      "education": [
+        "本科",
+        "硕士",
+        "博士"
+      ],
+      "other": "硕士研究生及以上"
+    },
+    "isThreeFree": false,
+    "threeFreeNote": "",
+    "tags": [
+      "正式编制",
+      "稳定"
+    ],
+    "difficulty": "中等",
+    "goodFor": [
+      "应往届毕业生",
+      "符合专业要求者"
+    ]
+  },
+  {
+    "id": 42,
+    "name": "中央党史和文献研究院",
+    "category": "省考",
+    "subCategory": "德语翻译岗一级主任科员及以下",
+    "description": "主要从事党史和文献德语翻译工作",
+    "work": "综合管理、日常工作协调、文稿撰写",
+    "salary": "中等偏上",
+    "promotion": "晋升空间明确",
+    "requirements": {
+      "majors": [
+        "德语"
+      ],
+      "education": [
+        "本科",
+        "硕士",
+        "博士"
+      ],
+      "other": "硕士研究生及以上"
+    },
+    "isThreeFree": false,
+    "threeFreeNote": "",
+    "tags": [
+      "正式编制",
+      "稳定"
+    ],
+    "difficulty": "中等",
+    "goodFor": [
+      "应往届毕业生",
+      "符合专业要求者"
+    ]
+  },
+  {
+    "id": 43,
+    "name": "中央党史和文献研究院",
+    "category": "省考",
+    "subCategory": "西班牙语翻译岗一级主任科员及以下",
+    "description": "主要从事党史和文献西班牙语翻译工作",
+    "work": "综合管理、日常工作协调、文稿撰写",
+    "salary": "中等偏上",
+    "promotion": "晋升空间明确",
+    "requirements": {
+      "majors": [
+        "西班牙语"
+      ],
+      "education": [
+        "本科",
+        "硕士",
+        "博士"
+      ],
+      "other": "硕士研究生及以上"
+    },
+    "isThreeFree": false,
+    "threeFreeNote": "",
+    "tags": [
+      "正式编制",
+      "稳定"
+    ],
+    "difficulty": "中等",
+    "goodFor": [
+      "应往届毕业生",
+      "符合专业要求者"
+    ]
+  },
+  {
+    "id": 44,
+    "name": "中国外文局",
+    "category": "省考",
+    "subCategory": "财务管理处一级主任科员及以下",
+    "description": "负责经费核算与管理；负责编制、上报并批复全局部门决算及住房改革支出决算；负责财务分析有关工作；负责财会监督有关工作；负责相关文件的起草。",
+    "work": "综合管理、日常工作协调、文稿撰写",
+    "salary": "中等偏上",
+    "promotion": "晋升空间明确",
+    "requirements": {
+      "majors": [
+        "1202工商管理学（会计学",
+        "审计学）",
+        "1253会计",
+        "1257审计"
+      ],
+      "education": [
+        "本科",
+        "硕士",
+        "博士"
+      ],
+      "other": "硕士研究生及以上"
+    },
+    "isThreeFree": false,
+    "threeFreeNote": "",
+    "tags": [
+      "正式编制",
+      "稳定"
+    ],
+    "difficulty": "中等",
+    "goodFor": [
+      "应往届毕业生",
+      "符合专业要求者"
+    ]
+  },
+  {
+    "id": 45,
+    "name": "中国浦东干部学院",
+    "category": "省考",
+    "subCategory": "学员工作二处一级主任科员及以下",
+    "description": "从事学员管理工作、综合管理类事务",
+    "work": "综合管理、日常工作协调、文稿撰写",
+    "salary": "中等偏上",
+    "promotion": "晋升空间明确",
+    "requirements": {
+      "majors": [
+        "0302政治学",
+        "0303社会学（社会学）",
+        "1202工商管理（人力资源管理）",
+        "0302政治学",
+        "0303社会学（社会学）"
+      ],
+      "education": [
+        "本科",
+        "硕士",
+        "博士"
+      ],
+      "other": "本科及以上"
+    },
+    "isThreeFree": false,
+    "threeFreeNote": "",
+    "tags": [
+      "正式编制",
+      "稳定"
+    ],
+    "difficulty": "中等",
+    "goodFor": [
+      "应往届毕业生",
+      "符合专业要求者"
+    ]
+  },
+  {
+    "id": 46,
+    "name": "中国浦东干部学院",
+    "category": "省考",
+    "subCategory": "培训开发处一级主任科员及以下",
+    "description": "从事培训项目开发、学员管理工作、综合管理类事务",
+    "work": "综合管理、日常工作协调、文稿撰写",
+    "salary": "中等偏上",
+    "promotion": "晋升空间明确",
+    "requirements": {
+      "majors": [
+        "0201经济学（经济统计学）",
+        "0203金融学（金融数学）",
+        "0701数学",
+        "0712统计学",
+        "0202应用经济学（统计学）",
+        "0252应用统计",
+        "0701数学",
+        "0714统计学"
+      ],
+      "education": [
+        "本科",
+        "硕士",
+        "博士"
+      ],
+      "other": "本科及以上"
+    },
+    "isThreeFree": false,
+    "threeFreeNote": "",
+    "tags": [
+      "正式编制",
+      "稳定"
+    ],
+    "difficulty": "中等",
+    "goodFor": [
+      "应往届毕业生",
+      "符合专业要求者"
+    ]
+  },
+  {
+    "id": 47,
+    "name": "中国井冈山干部学院",
+    "category": "省考",
+    "subCategory": "综合文字岗一级主任科员及以下",
+    "description": "从事综合文字工作",
+    "work": "综合管理、日常工作协调、文稿撰写",
+    "salary": "中等偏上",
+    "promotion": "晋升空间明确",
+    "requirements": {
+      "majors": [
+        "理论经济学0201",
+        "应用经济学0202",
+        "法学03",
+        "中国语言文学0501",
+        "新闻传播学0503",
+        "中国史0602",
+        "管理科学与工程1201",
+        "工商管理学1202",
+        "公共管理学1204"
+      ],
+      "education": [
+        "本科",
+        "硕士",
+        "博士"
+      ],
+      "other": "硕士研究生及以上"
+    },
+    "isThreeFree": false,
+    "threeFreeNote": "",
+    "tags": [
+      "正式编制",
+      "稳定"
+    ],
+    "difficulty": "中等",
+    "goodFor": [
+      "应往届毕业生",
+      "符合专业要求者"
+    ]
+  },
+  {
+    "id": 48,
+    "name": "中国井冈山干部学院",
+    "category": "省考",
+    "subCategory": "后勤保障处一级主任科员及以下",
+    "description": "从事学院工程管理工作",
+    "work": "综合管理、日常工作协调、文稿撰写",
+    "salary": "中等偏上",
+    "promotion": "晋升空间明确",
+    "requirements": {
+      "majors": [
+        "土木类（0810）",
+        "建筑类（0828）"
+      ],
+      "education": [
+        "本科",
+        "硕士",
+        "博士"
+      ],
+      "other": "本科及以上"
+    },
+    "isThreeFree": false,
+    "threeFreeNote": "",
+    "tags": [
+      "正式编制",
+      "稳定"
+    ],
+    "difficulty": "中等",
+    "goodFor": [
+      "应往届毕业生",
+      "符合专业要求者"
+    ]
+  },
+  {
+    "id": 49,
+    "name": "中国延安干部学院",
+    "category": "省考",
+    "subCategory": "研究室一级主任科员及以下",
+    "description": "干部教育工作相关政策研究与重要文稿起草",
+    "work": "综合管理、日常工作协调、文稿撰写",
+    "salary": "中等偏上",
+    "promotion": "晋升空间明确",
+    "requirements": {
+      "majors": [
+        "哲学",
+        "经济学",
+        "法学",
+        "管理学",
+        "教育学",
+        "文学",
+        "历史学",
+        "工学（以上均指学科门类）"
+      ],
+      "education": [
+        "本科",
+        "硕士",
+        "博士"
+      ],
+      "other": "硕士研究生及以上"
+    },
+    "isThreeFree": false,
+    "threeFreeNote": "",
+    "tags": [
+      "正式编制",
+      "稳定"
+    ],
+    "difficulty": "中等",
+    "goodFor": [
+      "应往届毕业生",
+      "符合专业要求者"
+    ]
+  },
+  {
+    "id": 50,
+    "name": "中国延安干部学院",
+    "category": "省考",
+    "subCategory": "后勤保障处一级主任科员及以下",
+    "description": "后勤保障和物业监督管理",
+    "work": "综合管理、日常工作协调、文稿撰写",
+    "salary": "中等偏上",
+    "promotion": "晋升空间明确",
+    "requirements": {
+      "majors": [
+        "081002建筑环境与能源应用工程",
+        "081003给排水科学与工程",
+        "081004建筑电气与智能化",
+        "085906人工环境工程"
+      ],
+      "education": [
+        "本科",
+        "硕士",
+        "博士"
+      ],
+      "other": "本科及以上"
+    },
+    "isThreeFree": false,
+    "threeFreeNote": "",
+    "tags": [
+      "正式编制",
+      "稳定"
+    ],
+    "difficulty": "中等",
+    "goodFor": [
+      "应往届毕业生",
+      "符合专业要求者"
+    ]
+  },
+  {
+    "id": 51,
+    "name": "中国延安干部学院",
+    "category": "省考",
+    "subCategory": "业务处室一级主任科员及以下",
+    "description": "培训组织与学员管理",
+    "work": "综合管理、日常工作协调、文稿撰写",
+    "salary": "中等偏上",
+    "promotion": "晋升空间明确",
+    "requirements": {
+      "majors": [
+        "哲学",
+        "经济学",
+        "法学",
+        "管理学",
+        "教育学",
+        "文学",
+        "历史学",
+        "工学（以上均指学科门类）"
+      ],
+      "education": [
+        "本科",
+        "硕士",
+        "博士"
+      ],
+      "other": "硕士研究生及以上"
+    },
+    "isThreeFree": false,
+    "threeFreeNote": "",
+    "tags": [
+      "正式编制",
+      "稳定"
+    ],
+    "difficulty": "中等",
+    "goodFor": [
+      "应往届毕业生",
+      "符合专业要求者"
+    ]
+  },
+  {
+    "id": 52,
+    "name": "全国人大",
+    "category": "省考",
+    "subCategory": "业务处一级主任科员及以下",
+    "description": "为有关外事活动提供翻译服务；参与出访和接待工作；办理全国人大与有关国家议会交往的日常事务等。",
+    "work": "综合管理、日常工作协调、文稿撰写",
+    "salary": "中等偏上",
+    "promotion": "晋升空间明确",
+    "requirements": {
+      "majors": [
+        "英语",
+        "国际法学",
+        "国际政治",
+        "国际关系",
+        "外交学"
+      ],
+      "education": [
+        "本科",
+        "硕士",
+        "博士"
+      ],
+      "other": "本科及以上"
+    },
+    "isThreeFree": false,
+    "threeFreeNote": "",
+    "tags": [
+      "正式编制",
+      "稳定"
+    ],
+    "difficulty": "中等",
+    "goodFor": [
+      "应往届毕业生",
+      "符合专业要求者"
+    ]
+  },
+  {
+    "id": 53,
+    "name": "全国人大",
+    "category": "省考",
+    "subCategory": "业务二处一级主任科员及以下",
+    "description": "参与政府采购项目文件编制工作，从事采购需求标准和评价体系的研究与制订等。",
+    "work": "综合管理、日常工作协调、文稿撰写",
+    "salary": "中等偏上",
+    "promotion": "晋升空间明确",
+    "requirements": {
+      "majors": [
+        "经济工程",
+        "工程管理",
+        "工程造价"
+      ],
+      "education": [
+        "本科",
+        "硕士",
+        "博士"
+      ],
+      "other": "本科及以上"
+    },
+    "isThreeFree": false,
+    "threeFreeNote": "",
+    "tags": [
+      "正式编制",
+      "稳定"
+    ],
+    "difficulty": "中等",
+    "goodFor": [
+      "应往届毕业生",
+      "符合专业要求者"
+    ]
+  },
+  {
+    "id": 54,
+    "name": "全国政协",
+    "category": "省考",
+    "subCategory": "业务处室一级主任科员及以下（一）",
+    "description": "从事相关领域专题研究、文稿起草工作",
+    "work": "综合管理、日常工作协调、文稿撰写",
+    "salary": "中等偏上",
+    "promotion": "晋升空间明确",
+    "requirements": {
+      "majors": [
+        "哲学（马克思主义哲学）",
+        "法学（政治学",
+        "法学",
+        "马克思主义理论）",
+        "历史学（中国史",
+        "世界史）"
+      ],
+      "education": [
+        "本科",
+        "硕士",
+        "博士"
+      ],
+      "other": "仅限博士研究生"
+    },
+    "isThreeFree": false,
+    "threeFreeNote": "",
+    "tags": [
+      "正式编制",
+      "稳定"
+    ],
+    "difficulty": "中等",
+    "goodFor": [
+      "应往届毕业生",
+      "符合专业要求者"
+    ]
+  },
+  {
+    "id": 55,
+    "name": "全国政协",
+    "category": "省考",
+    "subCategory": "业务处室一级主任科员及以下（二）",
+    "description": "从事相关专业工作、文稿起草工作、协商议政会议活动的组织协调工作",
+    "work": "综合管理、日常工作协调、文稿撰写",
+    "salary": "中等偏上",
+    "promotion": "晋升空间明确",
+    "requirements": {
+      "majors": [
+        "工学（软件工程",
+        "计算机科学与技术",
+        "电子科学与技术",
+        "信息与通信工程",
+        "安全科学与工程",
+        "网络空间安全",
+        "电子信息）",
+        "理学（系统科学）",
+        "管理学（管理科学与工程）",
+        "国家安全学"
+      ],
+      "education": [
+        "本科",
+        "硕士",
+        "博士"
+      ],
+      "other": "仅限博士研究生"
+    },
+    "isThreeFree": false,
+    "threeFreeNote": "",
+    "tags": [
+      "正式编制",
+      "稳定"
+    ],
+    "difficulty": "中等",
+    "goodFor": [
+      "应往届毕业生",
+      "符合专业要求者"
+    ]
+  },
+  {
+    "id": 56,
+    "name": "全国政协",
+    "category": "省考",
+    "subCategory": "业务处室一级主任科员及以下（三）",
+    "description": "从事外事工作、外事相关文稿起草工作",
+    "work": "综合管理、日常工作协调、文稿撰写",
+    "salary": "中等偏上",
+    "promotion": "晋升空间明确",
+    "requirements": {
+      "majors": [
+        "外国语言文学",
+        "翻译（英语）"
+      ],
+      "education": [
+        "本科",
+        "硕士",
+        "博士"
+      ],
+      "other": "仅限博士研究生"
+    },
+    "isThreeFree": false,
+    "threeFreeNote": "",
+    "tags": [
+      "正式编制",
+      "稳定"
+    ],
+    "difficulty": "中等",
+    "goodFor": [
+      "应往届毕业生",
+      "符合专业要求者"
+    ]
+  },
+  {
+    "id": 57,
+    "name": "全国政协",
+    "category": "省考",
+    "subCategory": "业务处室一级主任科员及以下（四）",
+    "description": "从事相关专业工作、文稿起草工作、协商议政会议活动的服务保障工作",
+    "work": "综合管理、日常工作协调、文稿撰写",
+    "salary": "中等偏上",
+    "promotion": "晋升空间明确",
+    "requirements": {
+      "majors": [
+        "财务管理",
+        "会计",
+        "审计"
+      ],
+      "education": [
+        "本科",
+        "硕士",
+        "博士"
+      ],
+      "other": "硕士研究生及以上"
+    },
+    "isThreeFree": false,
+    "threeFreeNote": "",
+    "tags": [
+      "正式编制",
+      "稳定"
+    ],
+    "difficulty": "中等",
+    "goodFor": [
+      "应往届毕业生",
+      "符合专业要求者"
+    ]
+  },
+  {
+    "id": 58,
+    "name": "民建中央",
+    "category": "省考",
+    "subCategory": "对外交流处一级主任科员及以下",
+    "description": "承担公务出国调研交流团组的筹备组织报批工作；承担港澳工商经济界的联络工作，推动港澳与内地的融合发展；负责筹备组织两岸交流项目。",
+    "work": "综合管理、日常工作协调、文稿撰写",
+    "salary": "中等偏上",
+    "promotion": "晋升空间明确",
+    "requirements": {
+      "majors": [
+        "国际事务与国际关系（030204T）",
+        "英语（050201）"
+      ],
+      "education": [
+        "本科",
+        "硕士",
+        "博士"
+      ],
+      "other": "本科或硕士研究生"
+    },
+    "isThreeFree": false,
+    "threeFreeNote": "",
+    "tags": [
+      "正式编制",
+      "稳定"
+    ],
+    "difficulty": "中等",
+    "goodFor": [
+      "应往届毕业生",
+      "符合专业要求者"
+    ]
+  },
+  {
+    "id": 59,
+    "name": "民建中央",
+    "category": "省考",
+    "subCategory": "财务处一级主任科员及以下",
+    "description": "从事机关出纳工作，负责办理现金、银行收付款业务（机关和工会）；贯彻执行国家财经法规和本单位财务管理制度；逐笔登记现金、汇款日记账，并结清余额，日清日结；职工医药费、差旅费报销；与会计对账，与预算一体化系统支付流水对账，并做余额调节表。",
+    "work": "综合管理、日常工作协调、文稿撰写",
+    "salary": "中等偏上",
+    "promotion": "晋升空间明确",
+    "requirements": {
+      "majors": [
+        "会计学（120203K）",
+        "财务管理（120204）"
+      ],
+      "education": [
+        "本科",
+        "硕士",
+        "博士"
+      ],
+      "other": "本科及以上"
+    },
+    "isThreeFree": false,
+    "threeFreeNote": "",
+    "tags": [
+      "正式编制",
+      "稳定"
+    ],
+    "difficulty": "中等",
+    "goodFor": [
+      "应往届毕业生",
+      "符合专业要求者"
+    ]
+  },
+  {
+    "id": 60,
+    "name": "民进中央",
+    "category": "省考",
+    "subCategory": "三处一级主任科员及以下",
+    "description": "主要负责反映社情民意信息工作，组织落实有关会议、培训、活动，联系和服务民进中央参政议政特邀研究员、特邀信息员；参与年度重点考察调研。",
+    "work": "综合管理、日常工作协调、文稿撰写",
+    "salary": "中等偏上",
+    "promotion": "晋升空间明确",
+    "requirements": {
+      "majors": [
+        "020101政治经济学",
+        "0303社会学",
+        "0351法律",
+        "0401教育学",
+        "0402心理学",
+        "0501中国语言文学",
+        "0701数学",
+        "1204 公共管理学",
+        "0702 物理学",
+        "0771心理学"
+      ],
+      "education": [
+        "本科",
+        "硕士",
+        "博士"
+      ],
+      "other": "硕士研究生及以上"
+    },
+    "isThreeFree": false,
+    "threeFreeNote": "",
+    "tags": [
+      "正式编制",
+      "稳定"
+    ],
+    "difficulty": "中等",
+    "goodFor": [
+      "应往届毕业生",
+      "符合专业要求者"
+    ]
+  },
+  {
+    "id": 61,
+    "name": "民进中央",
+    "category": "省考",
+    "subCategory": "综合处一级主任科员及以下",
+    "description": "主要负责起草民进社会服务工作中长期规划和年度计划，起草相关规章制度，组织开展社会服务工作的调查研究和理论探索。承办民进中央联络委员会、开明画院、民进企业家联谊会及开明慈善基金会相关工作。",
+    "work": "综合管理、日常工作协调、文稿撰写",
+    "salary": "中等偏上",
+    "promotion": "晋升空间明确",
+    "requirements": {
+      "majors": [
+        "020101政治经济学",
+        "0303社会学",
+        "0351法律",
+        "0401教育学",
+        "0402心理学",
+        "0501中国语言文学",
+        "0701数学",
+        "1204 公共管理学",
+        "0702 物理学",
+        "0771心理学"
+      ],
+      "education": [
+        "本科",
+        "硕士",
+        "博士"
+      ],
+      "other": "硕士研究生及以上"
+    },
+    "isThreeFree": false,
+    "threeFreeNote": "",
+    "tags": [
+      "正式编制",
+      "稳定"
+    ],
+    "difficulty": "中等",
+    "goodFor": [
+      "应往届毕业生",
+      "符合专业要求者"
+    ]
+  },
+  {
+    "id": 62,
+    "name": "民进中央",
+    "category": "省考",
+    "subCategory": "年鉴处一级主任科员及以下",
+    "description": "负责《中国民主促进会年鉴》的编撰与出版工作，联系、指导省级组织年鉴的编写工作。",
+    "work": "综合管理、日常工作协调、文稿撰写",
+    "salary": "中等偏上",
+    "promotion": "晋升空间明确",
+    "requirements": {
+      "majors": [
+        "020101政治经济学",
+        "0303社会学",
+        "0351法律",
+        "0401教育学",
+        "0402心理学",
+        "0501中国语言文学",
+        "0701数学",
+        "1204 公共管理学",
+        "06历史学"
+      ],
+      "education": [
+        "本科",
+        "硕士",
+        "博士"
+      ],
+      "other": "硕士研究生及以上"
+    },
+    "isThreeFree": false,
+    "threeFreeNote": "",
+    "tags": [
+      "正式编制",
+      "稳定"
+    ],
+    "difficulty": "中等",
+    "goodFor": [
+      "应往届毕业生",
+      "符合专业要求者"
+    ]
+  },
+  {
+    "id": 63,
+    "name": "农工党中央",
+    "category": "省考",
+    "subCategory": "行政管理处一级主任科员及以下",
+    "description": "从事本单位建设项目管理、采购与招投标管理等相关工作",
+    "work": "综合管理、日常工作协调、文稿撰写",
+    "salary": "中等偏上",
+    "promotion": "晋升空间明确",
+    "requirements": {
+      "majors": [
+        "081001土木工程",
+        "120103工程管理",
+        "120105工程造价",
+        "120109T工程审计",
+        "0814土木工程",
+        "0859土木水利",
+        "1201管理科学与工程",
+        "1256工程管理"
+      ],
+      "education": [
+        "本科",
+        "硕士",
+        "博士"
+      ],
+      "other": "仅限硕士研究生"
+    },
+    "isThreeFree": false,
+    "threeFreeNote": "",
+    "tags": [
+      "正式编制",
+      "稳定"
+    ],
+    "difficulty": "中等",
+    "goodFor": [
+      "应往届毕业生",
+      "符合专业要求者"
+    ]
+  },
+  {
+    "id": 64,
+    "name": "农工党中央",
+    "category": "省考",
+    "subCategory": "干部组织处一级主任科员及以下",
+    "description": "联系地方组织、参与党员干部教育培训、开展调研、文稿起草等工作",
+    "work": "综合管理、日常工作协调、文稿撰写",
+    "salary": "中等偏上",
+    "promotion": "晋升空间明确",
+    "requirements": {
+      "majors": [
+        "0301法学",
+        "0302政治学",
+        "1202工商管理学（人力资源管理）",
+        "1204公共管理学"
+      ],
+      "education": [
+        "本科",
+        "硕士",
+        "博士"
+      ],
+      "other": "仅限硕士研究生"
+    },
+    "isThreeFree": false,
+    "threeFreeNote": "",
+    "tags": [
+      "正式编制",
+      "稳定"
+    ],
+    "difficulty": "中等",
+    "goodFor": [
+      "应往届毕业生",
+      "符合专业要求者"
+    ]
+  },
+  {
+    "id": 65,
+    "name": "致公党中央",
+    "category": "省考",
+    "subCategory": "综合处一级主任科员及以下",
+    "description": "从事政府采购、招投标，基建工程管理类工作",
+    "work": "综合管理、日常工作协调、文稿撰写",
+    "salary": "中等偏上",
+    "promotion": "晋升空间明确",
+    "requirements": {
+      "majors": [
+        "土木工程（081001）",
+        "建筑学（082801）",
+        "工程造价（120105）",
+        "工程审计（120109T）",
+        "工商管理（120201K）",
+        "土木工程（0814）",
+        "建筑学（0813）",
+        "管理科学与工程（1201）",
+        "工商管理学（1202）"
+      ],
+      "education": [
+        "本科",
+        "硕士",
+        "博士"
+      ],
+      "other": "本科或硕士研究生"
+    },
+    "isThreeFree": false,
+    "threeFreeNote": "",
+    "tags": [
+      "正式编制",
+      "稳定"
+    ],
+    "difficulty": "中等",
+    "goodFor": [
+      "应往届毕业生",
+      "符合专业要求者"
+    ]
+  },
+  {
+    "id": 66,
+    "name": "致公党中央",
+    "category": "省考",
+    "subCategory": "综合处一级主任科员及以下",
+    "description": "从事民主党派社会服务和乡村振兴帮扶工作等，承担文稿起草、调查研究、综合协调、项目实施等工作",
+    "work": "综合管理、日常工作协调、文稿撰写",
+    "salary": "中等偏上",
+    "promotion": "晋升空间明确",
+    "requirements": {
+      "majors": [
+        "经济学（020101）",
+        "法学（030101K）",
+        "教育学（040101）",
+        "汉语言文学（050101）",
+        "管理科学（120101）",
+        "理论经济学",
+        "应用经济学",
+        "法学（0301）",
+        "教育学（0401）",
+        "中国语言文学",
+        "管理科学与工程"
+      ],
+      "education": [
+        "本科",
+        "硕士",
+        "博士"
+      ],
+      "other": "本科或硕士研究生"
+    },
+    "isThreeFree": false,
+    "threeFreeNote": "",
+    "tags": [
+      "正式编制",
+      "稳定"
+    ],
+    "difficulty": "中等",
+    "goodFor": [
+      "应往届毕业生",
+      "符合专业要求者"
+    ]
+  },
+  {
+    "id": 67,
+    "name": "台盟中央",
+    "category": "省考",
+    "subCategory": "档案处一级主任科员及以下",
+    "description": "联系服务老同志，人事档案管理等。",
+    "work": "综合管理、日常工作协调、文稿撰写",
+    "salary": "中等偏上",
+    "promotion": "晋升空间明确",
+    "requirements": {
+      "majors": [
+        "计算机科学与技术",
+        "马克思主义理论",
+        "劳动与社会保障"
+      ],
+      "education": [
+        "本科",
+        "硕士",
+        "博士"
+      ],
+      "other": "仅限本科"
+    },
+    "isThreeFree": false,
+    "threeFreeNote": "",
+    "tags": [
+      "正式编制",
+      "稳定"
+    ],
+    "difficulty": "中等",
+    "goodFor": [
+      "应往届毕业生",
+      "符合专业要求者"
+    ]
+  },
+  {
+    "id": 68,
+    "name": "全国总工会",
+    "category": "省考",
+    "subCategory": "政策处一级主任科员及以下",
+    "description": "1.参与党中央关于工人阶级和工会工作重要指示和论述的理论阐释工作；2.参与有关工人阶级、工人运动和工会工作重要理论问题的研究工作；3.参与全总重要文稿起草工作。",
+    "work": "综合管理、日常工作协调、文稿撰写",
+    "salary": "中等偏上",
+    "promotion": "晋升空间明确",
+    "requirements": {
+      "majors": [
+        "0201理论经济学",
+        "0202应用经济学"
+      ],
+      "education": [
+        "本科",
+        "硕士",
+        "博士"
+      ],
+      "other": "硕士研究生及以上"
+    },
+    "isThreeFree": false,
+    "threeFreeNote": "",
+    "tags": [
+      "正式编制",
+      "稳定"
+    ],
+    "difficulty": "中等",
+    "goodFor": [
+      "应往届毕业生",
+      "符合专业要求者"
+    ]
+  },
+  {
+    "id": 69,
+    "name": "全国总工会",
+    "category": "省考",
+    "subCategory": "就业服务处一级主任科员及以下",
+    "description": "1.研究劳动力市场结构变化和发展趋势；2.参与政策研究制定；3.组织大型专项活动；4.参与处室数智化建设与系统管理完善。",
+    "work": "综合管理、日常工作协调、文稿撰写",
+    "salary": "中等偏上",
+    "promotion": "晋升空间明确",
+    "requirements": {
+      "majors": [
+        "0701数学",
+        "0711系统科学",
+        "0714统计学",
+        "120404社会保障"
+      ],
+      "education": [
+        "本科",
+        "硕士",
+        "博士"
+      ],
+      "other": "硕士研究生及以上"
+    },
+    "isThreeFree": false,
+    "threeFreeNote": "",
+    "tags": [
+      "正式编制",
+      "稳定"
+    ],
+    "difficulty": "中等",
+    "goodFor": [
+      "应往届毕业生",
+      "符合专业要求者"
+    ]
+  },
+  {
+    "id": 70,
+    "name": "全国总工会",
+    "category": "省考",
+    "subCategory": "技能培训与技术创新处一级主任科员及以下",
+    "description": "1、参与职工学历提升与技能培训、创新创造等方面调查研究和政策制定；2、有较强的数智化素养和人工智能应用能力；承担部门网络信息与数字化工作；3、参与职工技术帮扶活动的组织和有关大型活动等策划、筹备、协调工作；4、有较好的文字能力、沟通协调能力；5、吃苦耐劳、爱岗敬业，需要适应经常性加班和出差。",
+    "work": "综合管理、日常工作协调、文稿撰写",
+    "salary": "中等偏上",
+    "promotion": "晋升空间明确",
+    "requirements": {
+      "majors": [
+        "0802机械工程",
+        "0808电气工程",
+        "0809电子科学与技术",
+        "0810信息与通信工程",
+        "0811控制科学与工程",
+        "0812计算机科学与技术"
+      ],
+      "education": [
+        "本科",
+        "硕士",
+        "博士"
+      ],
+      "other": "硕士研究生及以上"
+    },
+    "isThreeFree": false,
+    "threeFreeNote": "",
+    "tags": [
+      "正式编制",
+      "稳定"
+    ],
+    "difficulty": "中等",
+    "goodFor": [
+      "应往届毕业生",
+      "符合专业要求者"
+    ]
+  },
+  {
+    "id": 71,
+    "name": "全国总工会",
+    "category": "省考",
+    "subCategory": "综合处一级主任科员及以下",
+    "description": "1.参与部门工作计划、总结、通知、领导讲话等文稿起草；2.参与有关会议、活动、培训的组织；3.参与部门数智化建设项目工作；4.负责部门公文运转、档案管理等；5.完成部门领导交办的其他工作；6.需要适应经常性出差。",
+    "work": "综合管理、日常工作协调、文稿撰写",
+    "salary": "中等偏上",
+    "promotion": "晋升空间明确",
+    "requirements": {
+      "majors": [
+        "0810 信息与通信工程",
+        "0812 计算机科学与技术",
+        "1201 管理科学与工程",
+        "1205信息资源管理",
+        "1405智能科学与技术"
+      ],
+      "education": [
+        "本科",
+        "硕士",
+        "博士"
+      ],
+      "other": "仅限硕士研究生"
+    },
+    "isThreeFree": false,
+    "threeFreeNote": "",
+    "tags": [
+      "正式编制",
+      "稳定"
+    ],
+    "difficulty": "中等",
+    "goodFor": [
+      "应往届毕业生",
+      "符合专业要求者"
+    ]
+  },
+  {
+    "id": 72,
+    "name": "全国总工会",
+    "category": "省考",
+    "subCategory": "维稳工作处一级主任科员及以下",
+    "description": "1.参与部门会议、活动等会务组织；2.参与做好调查研究、文稿撰写、信息收集、分析研判等工作；3.完成部门领导交办的其他工作；4.需要适应经常性出差。",
+    "work": "综合管理、日常工作协调、文稿撰写",
+    "salary": "中等偏上",
+    "promotion": "晋升空间明确",
+    "requirements": {
+      "majors": [
+        "0202应用经济学",
+        "0302政治学",
+        "0303社会学",
+        "0305马克思主义理论",
+        "0501中国语言文学",
+        "1204公共管理"
+      ],
+      "education": [
+        "本科",
+        "硕士",
+        "博士"
+      ],
+      "other": "硕士研究生及以上"
+    },
+    "isThreeFree": false,
+    "threeFreeNote": "",
+    "tags": [
+      "正式编制",
+      "稳定"
+    ],
+    "difficulty": "中等",
+    "goodFor": [
+      "应往届毕业生",
+      "符合专业要求者"
+    ]
+  },
+  {
+    "id": 73,
+    "name": "全国总工会",
+    "category": "省考",
+    "subCategory": "财务监督处一级主任科员及以下",
+    "description": "1.参与制定工会财务监督管理制度文件；2.参与预算（投资）评审、财务审计、资产评估与监督检查数据库的建设与管理；3.参与预算执行情况审计的组织协调；4.参与财务监督检查。",
+    "work": "综合管理、日常工作协调、文稿撰写",
+    "salary": "中等偏上",
+    "promotion": "晋升空间明确",
+    "requirements": {
+      "majors": [
+        "020203财政学",
+        "120201会计学",
+        "0256资产评估"
+      ],
+      "education": [
+        "本科",
+        "硕士",
+        "博士"
+      ],
+      "other": "仅限硕士研究生"
+    },
+    "isThreeFree": false,
+    "threeFreeNote": "",
+    "tags": [
+      "正式编制",
+      "稳定"
+    ],
+    "difficulty": "中等",
+    "goodFor": [
+      "应往届毕业生",
+      "符合专业要求者"
+    ]
+  },
+  {
+    "id": 74,
+    "name": "全国总工会",
+    "category": "省考",
+    "subCategory": "办公室一级主任科员及以下",
+    "description": "1.参与部门工作计划、总结、通知、公函等公文起草工作和会议、活动等会务组织；2.参与部门综合性课题的调查研究和报告的起草；3.负责部门文电运转、档案管理、后勤管理等；4.完成部门领导交办的其他工作；5.需要适应经常性出差。",
+    "work": "综合管理、日常工作协调、文稿撰写",
+    "salary": "中等偏上",
+    "promotion": "晋升空间明确",
+    "requirements": {
+      "majors": [
+        "0808电气工程",
+        "0812计算机科学与技术",
+        "0816测绘科学与技术",
+        "0817化学工程与技术",
+        "0818地质资源与地质工程",
+        "0820石油与天然气工程"
+      ],
+      "education": [
+        "本科",
+        "硕士",
+        "博士"
+      ],
+      "other": "硕士研究生及以上"
+    },
+    "isThreeFree": false,
+    "threeFreeNote": "",
+    "tags": [
+      "正式编制",
+      "稳定"
+    ],
+    "difficulty": "中等",
+    "goodFor": [
+      "应往届毕业生",
+      "符合专业要求者"
+    ]
+  },
+  {
+    "id": 75,
+    "name": "全国总工会",
+    "category": "省考",
+    "subCategory": "国防科技工作部一级主任科员及以下",
+    "description": "1.参与处室工作计划、总结、通知、公函等公文起草工作和会议、活动等会务组织；2.参与处室专项课题的调查研究和报告的起草；3.完成领导交办的其他工作；4.需要适应经常性出差。",
+    "work": "综合管理、日常工作协调、文稿撰写",
+    "salary": "中等偏上",
+    "promotion": "晋升空间明确",
+    "requirements": {
+      "majors": [
+        "0810信息与通信工程",
+        "0812计算机科学与技术",
+        "0824船舶与海洋工程",
+        "0825航空宇航科学与技术",
+        "0826兵器科学与技术",
+        "0827核科学与技术"
+      ],
+      "education": [
+        "本科",
+        "硕士",
+        "博士"
+      ],
+      "other": "硕士研究生及以上"
+    },
+    "isThreeFree": false,
+    "threeFreeNote": "",
+    "tags": [
+      "正式编制",
+      "稳定"
+    ],
+    "difficulty": "中等",
+    "goodFor": [
+      "应往届毕业生",
+      "符合专业要求者"
+    ]
+  },
+  {
+    "id": 76,
+    "name": "全国总工会",
+    "category": "省考",
+    "subCategory": "综合处一级主任科员及以下",
+    "description": "1.参与部门工作通知、公函、总结等公文起草工作和会议、活动等会务组织；2.参与部门综合性课题的调查研究和报告的起草；3.负责部门文电运转、档案管理、后勤管理等；4.完成部门领导交办的其他工作。",
+    "work": "综合管理、日常工作协调、文稿撰写",
+    "salary": "中等偏上",
+    "promotion": "晋升空间明确",
+    "requirements": {
+      "majors": [
+        "0301法学",
+        "0305马克思主义理论",
+        "0501中国语言文学",
+        "0552新闻与传播",
+        "0812计算机科学与技术"
+      ],
+      "education": [
+        "本科",
+        "硕士",
+        "博士"
+      ],
+      "other": "硕士研究生及以上"
+    },
+    "isThreeFree": false,
+    "threeFreeNote": "",
+    "tags": [
+      "正式编制",
+      "稳定"
+    ],
+    "difficulty": "中等",
+    "goodFor": [
+      "应往届毕业生",
+      "符合专业要求者"
+    ]
+  },
+  {
+    "id": 77,
+    "name": "全国妇联",
+    "category": "省考",
+    "subCategory": "业务处室一级主任科员及以下",
+    "description": "参与领导重要讲话和指示批示的督办、综合性文稿起草、提议案办理等工作。",
+    "work": "综合管理、日常工作协调、文稿撰写",
+    "salary": "中等偏上",
+    "promotion": "晋升空间明确",
+    "requirements": {
+      "majors": [
+        "0101哲学",
+        "0301法学",
+        "0302政治学",
+        "0303社会学",
+        "1204公共管理学"
+      ],
+      "education": [
+        "本科",
+        "硕士",
+        "博士"
+      ],
+      "other": "硕士研究生及以上"
+    },
+    "isThreeFree": false,
+    "threeFreeNote": "",
+    "tags": [
+      "正式编制",
+      "稳定"
+    ],
+    "difficulty": "中等",
+    "goodFor": [
+      "应往届毕业生",
+      "符合专业要求者"
+    ]
+  },
+  {
+    "id": 78,
+    "name": "全国妇联",
+    "category": "省考",
+    "subCategory": "业务处室一级主任科员及以下",
+    "description": "参与妇联组织建设、妇联干部教育培训等工作。",
+    "work": "综合管理、日常工作协调、文稿撰写",
+    "salary": "中等偏上",
+    "promotion": "晋升空间明确",
+    "requirements": {
+      "majors": [
+        "0101哲学",
+        "0201理论经济学",
+        "0202应用经济学",
+        "0301法学",
+        "0302 政治学",
+        "0303社会学",
+        "0305马克思主义理论",
+        "0401教育学",
+        "0501中国语言文学",
+        "0503新闻传播学"
+      ],
+      "education": [
+        "本科",
+        "硕士",
+        "博士"
+      ],
+      "other": "硕士研究生及以上"
+    },
+    "isThreeFree": false,
+    "threeFreeNote": "",
+    "tags": [
+      "正式编制",
+      "稳定"
+    ],
+    "difficulty": "中等",
+    "goodFor": [
+      "应往届毕业生",
+      "符合专业要求者"
+    ]
+  },
+  {
+    "id": 79,
+    "name": "全国妇联",
+    "category": "省考",
+    "subCategory": "科创服务处一级主任科员及以下",
+    "description": "参与引领女性参与科技创新相关活动（如论坛、培训等）的方案起草、组织协调、文稿撰写等工作；参与促进女科技工作者发展的相关调查研究。",
+    "work": "综合管理、日常工作协调、文稿撰写",
+    "salary": "中等偏上",
+    "promotion": "晋升空间明确",
+    "requirements": {
+      "majors": [
+        "0701数学类",
+        "0702物理学类",
+        "0703化学类",
+        "0809计算机类",
+        "080717T人工智能",
+        "0701数学",
+        "0712科学技术史",
+        "0714统计学"
+      ],
+      "education": [
+        "本科",
+        "硕士",
+        "博士"
+      ],
+      "other": "本科及以上"
+    },
+    "isThreeFree": false,
+    "threeFreeNote": "",
+    "tags": [
+      "正式编制",
+      "稳定"
+    ],
+    "difficulty": "中等",
+    "goodFor": [
+      "应往届毕业生",
+      "符合专业要求者"
+    ]
+  },
+  {
+    "id": 80,
+    "name": "全国妇联",
+    "category": "省考",
+    "subCategory": "西亚非洲处一级主任科员及以下",
+    "description": "对外交流（翻译）",
+    "work": "综合管理、日常工作协调、文稿撰写",
+    "salary": "中等偏上",
+    "promotion": "晋升空间明确",
+    "requirements": {
+      "majors": [
+        "英语（包括英语语言文学",
+        "英语翻译",
+        "口译",
+        "同传）"
+      ],
+      "education": [
+        "本科",
+        "硕士",
+        "博士"
+      ],
+      "other": "仅限硕士研究生"
+    },
+    "isThreeFree": false,
+    "threeFreeNote": "",
+    "tags": [
+      "正式编制",
+      "稳定"
+    ],
+    "difficulty": "中等",
+    "goodFor": [
+      "应往届毕业生",
+      "符合专业要求者"
+    ]
+  },
+  {
+    "id": 81,
+    "name": "全国妇联",
+    "category": "省考",
+    "subCategory": "联合国处一级主任科员及以下",
+    "description": "对外交流（翻译）",
+    "work": "综合管理、日常工作协调、文稿撰写",
+    "salary": "中等偏上",
+    "promotion": "晋升空间明确",
+    "requirements": {
+      "majors": [
+        "英语（包括英语语言文学",
+        "英语翻译",
+        "口译",
+        "同传）"
+      ],
+      "education": [
+        "本科",
+        "硕士",
+        "博士"
+      ],
+      "other": "仅限硕士研究生"
+    },
+    "isThreeFree": false,
+    "threeFreeNote": "",
+    "tags": [
+      "正式编制",
+      "稳定"
+    ],
+    "difficulty": "中等",
+    "goodFor": [
+      "应往届毕业生",
+      "符合专业要求者"
+    ]
+  },
+  {
+    "id": 82,
+    "name": "全国妇联",
+    "category": "省考",
+    "subCategory": "党委办公室（精神文明办公室）一级主任科员及以下",
+    "description": "参与机关党员思想政治引领、基层党组织建设、精神文明建设等党建工作及部门综合事务等。",
+    "work": "综合管理、日常工作协调、文稿撰写",
+    "salary": "中等偏上",
+    "promotion": "晋升空间明确",
+    "requirements": {
+      "majors": [
+        "0101哲学",
+        "0301法学",
+        "0303社会学"
+      ],
+      "education": [
+        "本科",
+        "硕士",
+        "博士"
+      ],
+      "other": "仅限硕士研究生"
+    },
+    "isThreeFree": false,
+    "threeFreeNote": "",
+    "tags": [
+      "正式编制",
+      "稳定"
+    ],
+    "difficulty": "中等",
+    "goodFor": [
+      "应往届毕业生",
+      "符合专业要求者"
+    ]
+  },
+  {
+    "id": 83,
+    "name": "中国作协",
+    "category": "省考",
+    "subCategory": "欧美处一级主任科员及以下",
+    "description": "参与组织对外文学交流活动；承担日常西班牙语口笔译任务；参与日常文稿起草工作。",
+    "work": "综合管理、日常工作协调、文稿撰写",
+    "salary": "中等偏上",
+    "promotion": "晋升空间明确",
+    "requirements": {
+      "majors": [
+        "西班牙语（050205）",
+        "西班牙语言文学（050207）",
+        "西班牙语笔译（055113）",
+        "西班牙语口译（055114）"
+      ],
+      "education": [
+        "本科",
+        "硕士",
+        "博士"
+      ],
+      "other": "本科或硕士研究生"
+    },
+    "isThreeFree": false,
+    "threeFreeNote": "",
+    "tags": [
+      "正式编制",
+      "稳定"
+    ],
+    "difficulty": "中等",
+    "goodFor": [
+      "应往届毕业生",
+      "符合专业要求者"
+    ]
+  },
+  {
+    "id": 84,
+    "name": "中国侨联",
+    "category": "省考",
+    "subCategory": "机关党委办公室一级主任科员及以下",
+    "description": "从事党务、文稿起草、办文办会等工作",
+    "work": "综合管理、日常工作协调、文稿撰写",
+    "salary": "中等偏上",
+    "promotion": "晋升空间明确",
+    "requirements": {
+      "majors": [
+        "法学0301",
+        "统计学027000",
+        "政治学0302",
+        "马克思主义哲学010101",
+        "马克思主义理论0305",
+        "中共党史党建学0307",
+        "语言学及应用语言学050102"
+      ],
+      "education": [
+        "本科",
+        "硕士",
+        "博士"
+      ],
+      "other": "硕士研究生及以上"
+    },
+    "isThreeFree": false,
+    "threeFreeNote": "",
+    "tags": [
+      "正式编制",
+      "稳定"
+    ],
+    "difficulty": "中等",
+    "goodFor": [
+      "应往届毕业生",
+      "符合专业要求者"
+    ]
+  },
+  {
+    "id": 85,
+    "name": "全国友协",
+    "category": "省考",
+    "subCategory": "财务",
+    "description": "从事机关预决算、财务管理和项目经费管理。",
+    "work": "综合管理、日常工作协调、文稿撰写",
+    "salary": "中等偏上",
+    "promotion": "晋升空间明确",
+    "requirements": {
+      "majors": [
+        "会计学",
+        "财务管理"
+      ],
+      "education": [
+        "本科",
+        "硕士",
+        "博士"
+      ],
+      "other": "本科或硕士研究生"
+    },
+    "isThreeFree": false,
+    "threeFreeNote": "",
+    "tags": [
+      "正式编制",
+      "稳定"
+    ],
+    "difficulty": "中等",
+    "goodFor": [
+      "应往届毕业生",
+      "符合专业要求者"
+    ]
+  },
+  {
+    "id": 86,
+    "name": "全国友协",
+    "category": "省考",
+    "subCategory": "国际传播",
+    "description": "承担文稿起草、会议组织、新闻宣传等工作，开展新媒体策划、创意剪辑等。",
+    "work": "综合管理、日常工作协调、文稿撰写",
+    "salary": "中等偏上",
+    "promotion": "晋升空间明确",
+    "requirements": {
+      "majors": [
+        "国际新闻与传播",
+        "国际传播"
+      ],
+      "education": [
+        "本科",
+        "硕士",
+        "博士"
+      ],
+      "other": "本科或硕士研究生"
+    },
+    "isThreeFree": false,
+    "threeFreeNote": "",
+    "tags": [
+      "正式编制",
+      "稳定"
+    ],
+    "difficulty": "中等",
+    "goodFor": [
+      "应往届毕业生",
+      "符合专业要求者"
+    ]
+  },
+  {
+    "id": 87,
+    "name": "全国友协",
+    "category": "省考",
+    "subCategory": "外交学或国际关系学",
+    "description": "开展与有关国家的友好交流与合作，承担举办对外友好交流活动的组织协调和翻译工作",
+    "work": "综合管理、日常工作协调、文稿撰写",
+    "salary": "中等偏上",
+    "promotion": "晋升空间明确",
+    "requirements": {
+      "majors": [
+        "外交学",
+        "国际事务与国际关系"
+      ],
+      "education": [
+        "本科",
+        "硕士",
+        "博士"
+      ],
+      "other": "本科或硕士研究生"
+    },
+    "isThreeFree": false,
+    "threeFreeNote": "",
+    "tags": [
+      "正式编制",
+      "稳定"
+    ],
+    "difficulty": "中等",
+    "goodFor": [
+      "应往届毕业生",
+      "符合专业要求者"
+    ]
+  },
+  {
+    "id": 88,
+    "name": "全国友协",
+    "category": "省考",
+    "subCategory": "阿拉伯语",
+    "description": "开展与有关国家的友好交流与合作，承担举办对外友好交流活动的组织协调和翻译工作。",
+    "work": "综合管理、日常工作协调、文稿撰写",
+    "salary": "中等偏上",
+    "promotion": "晋升空间明确",
+    "requirements": {
+      "majors": [
+        "阿拉伯语"
+      ],
+      "education": [
+        "本科",
+        "硕士",
+        "博士"
+      ],
+      "other": "本科或硕士研究生"
+    },
+    "isThreeFree": false,
+    "threeFreeNote": "",
+    "tags": [
+      "正式编制",
+      "稳定"
+    ],
+    "difficulty": "中等",
+    "goodFor": [
+      "应往届毕业生",
+      "符合专业要求者"
+    ]
+  },
+  {
+    "id": 89,
+    "name": "全国友协",
+    "category": "省考",
+    "subCategory": "俄语",
+    "description": "开展与有关国家的友好交流与合作，承担举办对外友好交流活动的组织协调和翻译工作。",
+    "work": "综合管理、日常工作协调、文稿撰写",
+    "salary": "中等偏上",
+    "promotion": "晋升空间明确",
+    "requirements": {
+      "majors": [
+        "俄语"
+      ],
+      "education": [
+        "本科",
+        "硕士",
+        "博士"
+      ],
+      "other": "本科或硕士研究生"
+    },
+    "isThreeFree": false,
+    "threeFreeNote": "",
+    "tags": [
+      "正式编制",
+      "稳定"
+    ],
+    "difficulty": "中等",
+    "goodFor": [
+      "应往届毕业生",
+      "符合专业要求者"
+    ]
+  },
+  {
+    "id": 90,
+    "name": "全国友协",
+    "category": "省考",
+    "subCategory": "葡萄牙语",
+    "description": "开展与有关国家的友好交流与合作，承担举办对外友好交流活动的组织协调和翻译工作。",
+    "work": "综合管理、日常工作协调、文稿撰写",
+    "salary": "中等偏上",
+    "promotion": "晋升空间明确",
+    "requirements": {
+      "majors": [
+        "葡萄牙语"
+      ],
+      "education": [
+        "本科",
+        "硕士",
+        "博士"
+      ],
+      "other": "本科或硕士研究生"
+    },
+    "isThreeFree": false,
+    "threeFreeNote": "",
+    "tags": [
+      "正式编制",
+      "稳定"
+    ],
+    "difficulty": "中等",
+    "goodFor": [
+      "应往届毕业生",
+      "符合专业要求者"
+    ]
+  },
+  {
+    "id": 91,
+    "name": "全国友协",
+    "category": "省考",
+    "subCategory": "泰语",
+    "description": "开展与有关国家的友好交流与合作，承担举办对外友好交流活动的组织协调和翻译工作。",
+    "work": "综合管理、日常工作协调、文稿撰写",
+    "salary": "中等偏上",
+    "promotion": "晋升空间明确",
+    "requirements": {
+      "majors": [
+        "泰语"
+      ],
+      "education": [
+        "本科",
+        "硕士",
+        "博士"
+      ],
+      "other": "本科或硕士研究生"
+    },
+    "isThreeFree": false,
+    "threeFreeNote": "",
+    "tags": [
+      "正式编制",
+      "稳定"
+    ],
+    "difficulty": "中等",
+    "goodFor": [
+      "应往届毕业生",
+      "符合专业要求者"
+    ]
+  },
+  {
+    "id": 92,
+    "name": "全国友协",
+    "category": "省考",
+    "subCategory": "意大利语",
+    "description": "开展与有关国家的友好交流与合作，承担举办对外友好交流活动的组织协调和翻译工作。",
+    "work": "综合管理、日常工作协调、文稿撰写",
+    "salary": "中等偏上",
+    "promotion": "晋升空间明确",
+    "requirements": {
+      "majors": [
+        "意大利语"
+      ],
+      "education": [
+        "本科",
+        "硕士",
+        "博士"
+      ],
+      "other": "本科或硕士研究生"
+    },
+    "isThreeFree": false,
+    "threeFreeNote": "",
+    "tags": [
+      "正式编制",
+      "稳定"
+    ],
+    "difficulty": "中等",
+    "goodFor": [
+      "应往届毕业生",
+      "符合专业要求者"
+    ]
+  },
+  {
+    "id": 93,
+    "name": "外交学会",
+    "category": "省考",
+    "subCategory": "一级主任科员及以下（英语翻译）",
+    "description": "负责有关国家及地区来访团组接待和办案工作，承担英文翻译（口、笔译）任务，跟踪研究有关国家及地区形势，开展外交外事调研，撰写调研材料，参与研讨会、论坛等大型活动筹办工作，承办领导交办的其他工作等。",
+    "work": "综合管理、日常工作协调、文稿撰写",
+    "salary": "中等偏上",
+    "promotion": "晋升空间明确",
+    "requirements": {
+      "majors": [
+        "英语专业"
+      ],
+      "education": [
+        "本科",
+        "硕士",
+        "博士"
+      ],
+      "other": "本科及以上"
+    },
+    "isThreeFree": false,
+    "threeFreeNote": "",
+    "tags": [
+      "正式编制",
+      "稳定"
+    ],
+    "difficulty": "中等",
+    "goodFor": [
+      "应往届毕业生",
+      "符合专业要求者"
+    ]
+  },
+  {
+    "id": 94,
+    "name": "中国贸促会",
+    "category": "省考",
+    "subCategory": "一级主任科员及以下",
+    "description": "参与预决算管理、经费支出管理、绩效管理等工作；参与会计核算及财务年度报告编制工作；承担其他综合性事务工作。",
+    "work": "综合管理、日常工作协调、文稿撰写",
+    "salary": "中等偏上",
+    "promotion": "晋升空间明确",
+    "requirements": {
+      "majors": [
+        "会计学",
+        "财政学（020201K）",
+        "审计学 会计学",
+        "会计",
+        "财政学",
+        "审计"
+      ],
+      "education": [
+        "本科",
+        "硕士",
+        "博士"
+      ],
+      "other": "硕士研究生及以上"
+    },
+    "isThreeFree": false,
+    "threeFreeNote": "",
+    "tags": [
+      "正式编制",
+      "稳定"
+    ],
+    "difficulty": "中等",
+    "goodFor": [
+      "应往届毕业生",
+      "符合专业要求者"
+    ]
+  },
+  {
+    "id": 95,
+    "name": "中国贸促会",
+    "category": "省考",
+    "subCategory": "一级主任科员及以下",
+    "description": "负责行政事业性国有资产报表等编制，承担内部审计和财会监督工作等。",
+    "work": "综合管理、日常工作协调、文稿撰写",
+    "salary": "中等偏上",
+    "promotion": "晋升空间明确",
+    "requirements": {
+      "majors": [
+        "会计学",
+        "会计",
+        "财政学",
+        "审计"
+      ],
+      "education": [
+        "本科",
+        "硕士",
+        "博士"
+      ],
+      "other": "硕士研究生及以上"
+    },
+    "isThreeFree": false,
+    "threeFreeNote": "",
+    "tags": [
+      "正式编制",
+      "稳定"
+    ],
+    "difficulty": "中等",
+    "goodFor": [
+      "应往届毕业生",
+      "符合专业要求者"
+    ]
+  },
+  {
+    "id": 96,
+    "name": "中国贸促会",
+    "category": "省考",
+    "subCategory": "一级主任科员及以下",
+    "description": "开展贸易投资相关领域和行业调研，起草综合性文稿，承担综合性事务工作。",
+    "work": "综合管理、日常工作协调、文稿撰写",
+    "salary": "中等偏上",
+    "promotion": "晋升空间明确",
+    "requirements": {
+      "majors": [
+        "世界经济",
+        "国际经济与贸易",
+        "贸易经济",
+        "国际经济发展合作",
+        "国际贸易学",
+        "数字经济",
+        "金融学",
+        "投资学",
+        "统计学",
+        "经济统计学",
+        "英语",
+        "英语语言文学",
+        "翻译（英语）",
+        "经济法学",
+        "国际法学"
+      ],
+      "education": [
+        "本科",
+        "硕士",
+        "博士"
+      ],
+      "other": "硕士研究生及以上"
+    },
+    "isThreeFree": false,
+    "threeFreeNote": "",
+    "tags": [
+      "正式编制",
+      "稳定"
+    ],
+    "difficulty": "中等",
+    "goodFor": [
+      "应往届毕业生",
+      "符合专业要求者"
+    ]
+  },
+  {
+    "id": 97,
+    "name": "中国贸促会",
+    "category": "省考",
+    "subCategory": "一级主任科员及以下",
+    "description": "开展贸易投资相关领域和行业调研，起草综合性文稿，承担综合性事务工作。",
+    "work": "综合管理、日常工作协调、文稿撰写",
+    "salary": "中等偏上",
+    "promotion": "晋升空间明确",
+    "requirements": {
+      "majors": [
+        "计算机科学与技术",
+        "新能源汽车工程",
+        "机器人工程",
+        "人工智能",
+        "智能科学与技术",
+        "控制科学与工程",
+        "精密仪器",
+        "精密仪器及机械"
+      ],
+      "education": [
+        "本科",
+        "硕士",
+        "博士"
+      ],
+      "other": "硕士研究生及以上"
+    },
+    "isThreeFree": false,
+    "threeFreeNote": "",
+    "tags": [
+      "正式编制",
+      "稳定"
+    ],
+    "difficulty": "中等",
+    "goodFor": [
+      "应往届毕业生",
+      "符合专业要求者"
+    ]
+  },
+  {
+    "id": 98,
+    "name": "中国贸促会",
+    "category": "省考",
+    "subCategory": "一级主任科员及以下",
+    "description": "承担人事管理工作。",
+    "work": "综合管理、日常工作协调、文稿撰写",
+    "salary": "中等偏上",
+    "promotion": "晋升空间明确",
+    "requirements": {
+      "majors": [
+        "人力资源管理",
+        "劳动经济学",
+        "劳动关系",
+        "管理科学",
+        "经济学（020101）",
+        "国际经济与贸易",
+        "国际贸易学",
+        "统计学",
+        "应用统计",
+        "应用统计学",
+        "金融学（本科020301K",
+        "研究生020204）",
+        "金融",
+        "数学（0701）"
+      ],
+      "education": [
+        "本科",
+        "硕士",
+        "博士"
+      ],
+      "other": "硕士研究生及以上"
+    },
+    "isThreeFree": false,
+    "threeFreeNote": "",
+    "tags": [
+      "正式编制",
+      "稳定"
+    ],
+    "difficulty": "中等",
+    "goodFor": [
+      "应往届毕业生",
+      "符合专业要求者"
+    ]
+  },
+  {
+    "id": 99,
+    "name": "中国贸促会",
+    "category": "省考",
+    "subCategory": "一级主任科员及以下",
+    "description": "承担人事管理工作。",
+    "work": "综合管理、日常工作协调、文稿撰写",
+    "salary": "中等偏上",
+    "promotion": "晋升空间明确",
+    "requirements": {
+      "majors": [
+        "计算机科学与技术",
+        "计算机技术",
+        "人工智能",
+        "大数据技术与工程",
+        "信息与通信工程",
+        "电子科学与技术",
+        "车辆工程",
+        "机器人工程",
+        "生物与医药",
+        "资源与环境"
+      ],
+      "education": [
+        "本科",
+        "硕士",
+        "博士"
+      ],
+      "other": "硕士研究生及以上"
+    },
+    "isThreeFree": false,
+    "threeFreeNote": "",
+    "tags": [
+      "正式编制",
+      "稳定"
+    ],
+    "difficulty": "中等",
+    "goodFor": [
+      "应往届毕业生",
+      "符合专业要求者"
+    ]
+  },
+  {
+    "id": 100,
+    "name": "中国贸促会",
+    "category": "省考",
+    "subCategory": "一级主任科员及以下",
+    "description": "承担日常口、笔译任务；参与筹备、协调实施大型双边经贸活动；与国外对口组织及工商界人士联络事务；接待来访、组织出访等外事管理综合性事务；驻外代表处建设及业务指导。",
+    "work": "综合管理、日常工作协调、文稿撰写",
+    "salary": "中等偏上",
+    "promotion": "晋升空间明确",
+    "requirements": {
+      "majors": [
+        "英语",
+        "英语语言文学",
+        "翻译（英语）",
+        "国际经济与贸易",
+        "贸易经济",
+        "国际贸易学",
+        "国际商务",
+        "外交学",
+        "国际事务与国际关系",
+        "国际事务",
+        "国际关系"
+      ],
+      "education": [
+        "本科",
+        "硕士",
+        "博士"
+      ],
+      "other": "本科及以上"
+    },
+    "isThreeFree": false,
+    "threeFreeNote": "",
+    "tags": [
+      "正式编制",
+      "稳定"
+    ],
+    "difficulty": "中等",
+    "goodFor": [
+      "应往届毕业生",
+      "符合专业要求者"
+    ]
+  },
+  {
+    "id": 101,
+    "name": "中国贸促会",
+    "category": "省考",
+    "subCategory": "一级主任科员及以下",
+    "description": "承担日常口、笔译任务；参与筹备、协调实施大型双边经贸活动；与国外对口组织及工商界人士联络事务；接待来访、组织出访等外事管理综合性事务；驻外代表处建设及业务指导。",
+    "work": "综合管理、日常工作协调、文稿撰写",
+    "salary": "中等偏上",
+    "promotion": "晋升空间明确",
+    "requirements": {
+      "majors": [
+        "俄语",
+        "俄语语言文学"
+      ],
+      "education": [
+        "本科",
+        "硕士",
+        "博士"
+      ],
+      "other": "本科及以上"
+    },
+    "isThreeFree": false,
+    "threeFreeNote": "",
+    "tags": [
+      "正式编制",
+      "稳定"
+    ],
+    "difficulty": "中等",
+    "goodFor": [
+      "应往届毕业生",
+      "符合专业要求者"
+    ]
+  },
+  {
+    "id": 102,
+    "name": "中国贸促会",
+    "category": "省考",
+    "subCategory": "一级主任科员及以下",
+    "description": "承担日常口、笔译任务；参与筹备、协调实施大型双边经贸活动；与国外对口组织及工商界人士联络事务；接待来访、组织出访等外事管理综合性事务；驻外代表处建设及业务指导。",
+    "work": "综合管理、日常工作协调、文稿撰写",
+    "salary": "中等偏上",
+    "promotion": "晋升空间明确",
+    "requirements": {
+      "majors": [
+        "阿拉伯语"
+      ],
+      "education": [
+        "本科",
+        "硕士",
+        "博士"
+      ],
+      "other": "本科及以上"
+    },
+    "isThreeFree": false,
+    "threeFreeNote": "",
+    "tags": [
+      "正式编制",
+      "稳定"
+    ],
+    "difficulty": "中等",
+    "goodFor": [
+      "应往届毕业生",
+      "符合专业要求者"
+    ]
+  },
+  {
+    "id": 103,
+    "name": "中国贸促会",
+    "category": "省考",
+    "subCategory": "一级主任科员及以下",
+    "description": "开展全球经济治理相关调研，起草综合性文稿，承担综合性事务工作。",
+    "work": "综合管理、日常工作协调、文稿撰写",
+    "salary": "中等偏上",
+    "promotion": "晋升空间明确",
+    "requirements": {
+      "majors": [
+        "政治经济学",
+        "世界经济",
+        "国际贸易学",
+        "国际经济与贸易",
+        "国际商务",
+        "国际关系",
+        "国际事务与国际关系",
+        "汉语言文学",
+        "中国现当代文学",
+        "比较文学与世界文学",
+        "新闻学",
+        "传播学",
+        "新闻与传播"
+      ],
+      "education": [
+        "本科",
+        "硕士",
+        "博士"
+      ],
+      "other": "硕士研究生及以上"
+    },
+    "isThreeFree": false,
+    "threeFreeNote": "",
+    "tags": [
+      "正式编制",
+      "稳定"
+    ],
+    "difficulty": "中等",
+    "goodFor": [
+      "应往届毕业生",
+      "符合专业要求者"
+    ]
+  },
+  {
+    "id": 104,
+    "name": "中国贸促会",
+    "category": "省考",
+    "subCategory": "一级主任科员及以下",
+    "description": "联系国际组织，落实相关合作项目；参与多边经贸事务谈判和磋商，筹办重要经贸活动；接待来访团组、组织出访团组；承担口、笔译工作；撰写相关文稿；承担部门交办的其他工作。",
+    "work": "综合管理、日常工作协调、文稿撰写",
+    "salary": "中等偏上",
+    "promotion": "晋升空间明确",
+    "requirements": {
+      "majors": [
+        "英语",
+        "英语语言文学",
+        "翻译（英语）",
+        "区域经济学",
+        "国际贸易学",
+        "国际经济与贸易",
+        "国际商务",
+        "区域国别学",
+        "国际法",
+        "国际法学",
+        "国际政治",
+        "国际关系",
+        "国际事务与国际关系",
+        "外交学"
+      ],
+      "education": [
+        "本科",
+        "硕士",
+        "博士"
+      ],
+      "other": "硕士研究生及以上"
+    },
+    "isThreeFree": false,
+    "threeFreeNote": "",
+    "tags": [
+      "正式编制",
+      "稳定"
+    ],
+    "difficulty": "中等",
+    "goodFor": [
+      "应往届毕业生",
+      "符合专业要求者"
+    ]
+  },
+  {
+    "id": 105,
+    "name": "中国贸促会",
+    "category": "省考",
+    "subCategory": "一级主任科员及以下",
+    "description": "开展贸易投资、产业促进相关领域和行业调研，参与组织筹备各类经贸活动，起草综合性文稿，承担综合性事务工作。",
+    "work": "综合管理、日常工作协调、文稿撰写",
+    "salary": "中等偏上",
+    "promotion": "晋升空间明确",
+    "requirements": {
+      "majors": [
+        "国际经济与贸易",
+        "国际贸易学",
+        "国际商务",
+        "电子信息工程",
+        "人工智能",
+        "电气工程",
+        "电子科学与技术",
+        "电子信息",
+        "计算机科学与技术",
+        "智能科学与技术",
+        "控制科学与工程",
+        "机械工程",
+        "跨境电子商务",
+        "供应链管理"
+      ],
+      "education": [
+        "本科",
+        "硕士",
+        "博士"
+      ],
+      "other": "硕士研究生及以上"
+    },
+    "isThreeFree": false,
+    "threeFreeNote": "",
+    "tags": [
+      "正式编制",
+      "稳定"
+    ],
+    "difficulty": "中等",
+    "goodFor": [
+      "应往届毕业生",
+      "符合专业要求者"
+    ]
+  },
+  {
+    "id": 106,
+    "name": "中国贸促会",
+    "category": "省考",
+    "subCategory": "一级主任科员及以下",
+    "description": "承担世博会中国馆项目建设的协调、沟通工作，对项目设计、进度、质量、成本、造价、投资、安全等综合控制；承担世博会中国馆项目工程采购与招投标管理、工程合同管理等工作。",
+    "work": "综合管理、日常工作协调、文稿撰写",
+    "salary": "中等偏上",
+    "promotion": "晋升空间明确",
+    "requirements": {
+      "majors": [
+        "工程管理",
+        "项目管理",
+        "土木工程",
+        "结构工程",
+        "管理科学与工程",
+        "智能工程与创意设计",
+        "建筑环境与能源应用工程",
+        "建筑电气与智能化"
+      ],
+      "education": [
+        "本科",
+        "硕士",
+        "博士"
+      ],
+      "other": "硕士研究生及以上"
+    },
+    "isThreeFree": false,
+    "threeFreeNote": "",
+    "tags": [
+      "正式编制",
+      "稳定"
+    ],
+    "difficulty": "中等",
+    "goodFor": [
+      "应往届毕业生",
+      "符合专业要求者"
+    ]
+  },
+  {
+    "id": 107,
+    "name": "中国贸促会",
+    "category": "省考",
+    "subCategory": "一级主任科员及以下",
+    "description": "承担出国经贸展览审批管理行政许可事项的实施、改革，会展行业服务等工作。",
+    "work": "综合管理、日常工作协调、文稿撰写",
+    "salary": "中等偏上",
+    "promotion": "晋升空间明确",
+    "requirements": {
+      "majors": [
+        "法学",
+        "法律",
+        "国际法",
+        "国际法学",
+        "经济学（020101）",
+        "应用经济学",
+        "应用统计学",
+        "应用统计"
+      ],
+      "education": [
+        "本科",
+        "硕士",
+        "博士"
+      ],
+      "other": "硕士研究生及以上"
+    },
+    "isThreeFree": false,
+    "threeFreeNote": "",
+    "tags": [
+      "正式编制",
+      "稳定"
+    ],
+    "difficulty": "中等",
+    "goodFor": [
+      "应往届毕业生",
+      "符合专业要求者"
+    ]
+  },
+  {
+    "id": 108,
+    "name": "中国贸促会",
+    "category": "省考",
+    "subCategory": "一级主任科员及以下",
+    "description": "承担展览会相关项目的预算编制、采购与招投标管理、合同管理等工作。",
+    "work": "综合管理、日常工作协调、文稿撰写",
+    "salary": "中等偏上",
+    "promotion": "晋升空间明确",
+    "requirements": {
+      "majors": [
+        "工商管理",
+        "会计学",
+        "会计",
+        "审计学",
+        "审计",
+        "财务管理"
+      ],
+      "education": [
+        "本科",
+        "硕士",
+        "博士"
+      ],
+      "other": "硕士研究生及以上"
+    },
+    "isThreeFree": false,
+    "threeFreeNote": "",
+    "tags": [
+      "正式编制",
+      "稳定"
+    ],
+    "difficulty": "中等",
+    "goodFor": [
+      "应往届毕业生",
+      "符合专业要求者"
+    ]
+  },
+  {
+    "id": 109,
+    "name": "中国贸促会",
+    "category": "省考",
+    "subCategory": "一级主任科员及以下",
+    "description": "负责配合开展立法、修法建议、中国贸促会知识产权工作、有关规范性文件合法性审核等工作。负责配合开展与各国、有关国际组织法律交流和平台构建，参与国际争议解决机制构建等工作。",
+    "work": "综合管理、日常工作协调、文稿撰写",
+    "salary": "中等偏上",
+    "promotion": "晋升空间明确",
+    "requirements": {
+      "majors": [
+        "法学理论",
+        "宪法与行政法学",
+        "诉讼法学",
+        "民商法学",
+        "经济法学",
+        "国际法学",
+        "国际法",
+        "知识产权",
+        "国际经贸规则",
+        "国际经济与贸易",
+        "贸易经济",
+        "国际贸易学",
+        "国际商务",
+        "国际经济发展合作",
+        "产业经济学"
+      ],
+      "education": [
+        "本科",
+        "硕士",
+        "博士"
+      ],
+      "other": "硕士研究生及以上"
+    },
+    "isThreeFree": false,
+    "threeFreeNote": "",
+    "tags": [
+      "正式编制",
+      "稳定"
+    ],
+    "difficulty": "中等",
+    "goodFor": [
+      "应往届毕业生",
+      "符合专业要求者"
+    ]
+  },
+  {
+    "id": 110,
+    "name": "中国贸促会",
+    "category": "省考",
+    "subCategory": "一级主任科员及以下",
+    "description": "起草党的建设综合性文稿，承担综合性事务工作。",
+    "work": "综合管理、日常工作协调、文稿撰写",
+    "salary": "中等偏上",
+    "promotion": "晋升空间明确",
+    "requirements": {
+      "majors": [
+        "思想政治教育",
+        "汉语言文学",
+        "法学",
+        "法律",
+        "审计学",
+        "审计",
+        "内部审计"
+      ],
+      "education": [
+        "本科",
+        "硕士",
+        "博士"
+      ],
+      "other": "硕士研究生及以上"
+    },
+    "isThreeFree": false,
+    "threeFreeNote": "",
+    "tags": [
+      "正式编制",
+      "稳定"
+    ],
+    "difficulty": "中等",
+    "goodFor": [
+      "应往届毕业生",
+      "符合专业要求者"
+    ]
+  },
+  {
+    "id": 111,
+    "name": "中国贸促会",
+    "category": "省考",
+    "subCategory": "一级主任科员及以下",
+    "description": "从事驻外代表处相关工作。研究国别经贸政策；对外联络、协调、交涉；承担日常口、笔译任务；组织实施大型多双边经贸活动。",
+    "work": "综合管理、日常工作协调、文稿撰写",
+    "salary": "中等偏上",
+    "promotion": "晋升空间明确",
+    "requirements": {
+      "majors": [
+        "英语",
+        "英语语言文学",
+        "翻译（英语）",
+        "国际政治",
+        "外交学",
+        "国际事务与国际关系",
+        "国际组织与全球治理"
+      ],
+      "education": [
+        "本科",
+        "硕士",
+        "博士"
+      ],
+      "other": "硕士研究生及以上"
+    },
+    "isThreeFree": false,
+    "threeFreeNote": "",
+    "tags": [
+      "正式编制",
+      "稳定"
+    ],
+    "difficulty": "中等",
+    "goodFor": [
+      "应往届毕业生",
+      "符合专业要求者"
+    ]
+  },
+  {
+    "id": 112,
+    "name": "中国贸促会",
+    "category": "省考",
+    "subCategory": "一级主任科员及以下",
+    "description": "从事驻外代表处相关工作。研究国别经贸政策；对外联络、协调、交涉；承担日常口、笔译任务；组织实施大型多双边经贸活动。",
+    "work": "综合管理、日常工作协调、文稿撰写",
+    "salary": "中等偏上",
+    "promotion": "晋升空间明确",
+    "requirements": {
+      "majors": [
+        "理论经济学",
+        "应用经济学",
+        "投资学",
+        "统计学",
+        "金融学",
+        "法学"
+      ],
+      "education": [
+        "本科",
+        "硕士",
+        "博士"
+      ],
+      "other": "硕士研究生及以上"
+    },
+    "isThreeFree": false,
+    "threeFreeNote": "",
+    "tags": [
+      "正式编制",
+      "稳定"
+    ],
+    "difficulty": "中等",
+    "goodFor": [
+      "应往届毕业生",
+      "符合专业要求者"
+    ]
+  },
+  {
+    "id": 113,
+    "name": "中国贸促会",
+    "category": "省考",
+    "subCategory": "一级主任科员及以下",
+    "description": "从事驻外代表处相关工作。开展贸易投资促进相关产业和行业调研；组织实施经贸展会论坛活动；办理综合性事务。",
+    "work": "综合管理、日常工作协调、文稿撰写",
+    "salary": "中等偏上",
+    "promotion": "晋升空间明确",
+    "requirements": {
+      "majors": [
+        "机械工程",
+        "建筑学",
+        "能源与动力工程",
+        "电子信息工程",
+        "人工智能",
+        "数据科学与大数据技术",
+        "新媒体技术"
+      ],
+      "education": [
+        "本科",
+        "硕士",
+        "博士"
+      ],
+      "other": "硕士研究生及以上"
+    },
+    "isThreeFree": false,
+    "threeFreeNote": "",
+    "tags": [
+      "正式编制",
+      "稳定"
+    ],
+    "difficulty": "中等",
+    "goodFor": [
+      "应往届毕业生",
+      "符合专业要求者"
+    ]
+  },
+  {
+    "id": 114,
+    "name": "中国残联",
+    "category": "省考",
+    "subCategory": "文电处一级主任科员及以下",
+    "description": "承担公文处理等工作。",
+    "work": "综合管理、日常工作协调、文稿撰写",
+    "salary": "中等偏上",
+    "promotion": "晋升空间明确",
+    "requirements": {
+      "majors": [
+        "0101哲学",
+        "0301法学",
+        "0305马克思主义理论",
+        "0501中国语言文学",
+        "0503新闻传播学",
+        "1205信息资源管理"
+      ],
+      "education": [
+        "本科",
+        "硕士",
+        "博士"
+      ],
+      "other": "硕士研究生及以上"
+    },
+    "isThreeFree": false,
+    "threeFreeNote": "",
+    "tags": [
+      "正式编制",
+      "稳定"
+    ],
+    "difficulty": "中等",
+    "goodFor": [
+      "应往届毕业生",
+      "符合专业要求者"
+    ]
+  },
+  {
+    "id": 115,
+    "name": "中国残联",
+    "category": "省考",
+    "subCategory": "教育处一级主任科员及以下",
+    "description": "配合教育行政部门开展残疾人教育相关管理工作，负责盲文、手语的研究与推广工作。",
+    "work": "综合管理、日常工作协调、文稿撰写",
+    "salary": "中等偏上",
+    "promotion": "晋升空间明确",
+    "requirements": {
+      "majors": [
+        "大学0401教育学类",
+        "0501中国语言文学类",
+        "0711心理学类",
+        "0101哲学",
+        "0301法学",
+        "0303社会学",
+        "0401教育学",
+        "0402心理学",
+        "0501中国语言文学",
+        "0503新闻传播学",
+        "1204公共管理学"
+      ],
+      "education": [
+        "本科",
+        "硕士",
+        "博士"
+      ],
+      "other": "本科或硕士研究生"
+    },
+    "isThreeFree": false,
+    "threeFreeNote": "",
+    "tags": [
+      "正式编制",
+      "稳定"
+    ],
+    "difficulty": "中等",
+    "goodFor": [
+      "应往届毕业生",
+      "符合专业要求者"
+    ]
+  },
+  {
+    "id": 116,
+    "name": "中国残联",
+    "category": "省考",
+    "subCategory": "业务处室一级主任科员及以下",
+    "description": "承担人事管理服务及信息化建设相关工作。",
+    "work": "综合管理、日常工作协调、文稿撰写",
+    "salary": "中等偏上",
+    "promotion": "晋升空间明确",
+    "requirements": {
+      "majors": [
+        "0101哲学",
+        "0701数学",
+        "0714统计学",
+        "0809电子科学与技术",
+        "0810信息与通信工程",
+        "0812计算机科学与技术",
+        "0835软件工程",
+        "0837安全科学与工程",
+        "0854电子信息",
+        "1201管理科学与工程",
+        "1202工商管理学（限人力资源管理）"
+      ],
+      "education": [
+        "本科",
+        "硕士",
+        "博士"
+      ],
+      "other": "硕士研究生及以上"
+    },
+    "isThreeFree": false,
+    "threeFreeNote": "",
+    "tags": [
+      "正式编制",
+      "稳定"
+    ],
+    "difficulty": "中等",
+    "goodFor": [
+      "应往届毕业生",
+      "符合专业要求者"
+    ]
+  },
+  {
+    "id": 117,
+    "name": "中国残联",
+    "category": "省考",
+    "subCategory": "办公室一级主任科员及以下",
+    "description": "从事机关党建、群团工作等综合协调工作。",
+    "work": "综合管理、日常工作协调、文稿撰写",
+    "salary": "中等偏上",
+    "promotion": "晋升空间明确",
+    "requirements": {
+      "majors": [
+        "0101哲学",
+        "0602中国史",
+        "0301法学",
+        "0302政治学",
+        "0303社会学",
+        "0305马克思主义理论",
+        "0307中共党史党建",
+        "0352社会工作",
+        "0501中国语言文学",
+        "0503新闻传播学",
+        "0552新闻与传播",
+        "1252公共管理"
+      ],
+      "education": [
+        "本科",
+        "硕士",
+        "博士"
+      ],
+      "other": "硕士研究生及以上"
+    },
+    "isThreeFree": false,
+    "threeFreeNote": "",
+    "tags": [
+      "正式编制",
+      "稳定"
+    ],
+    "difficulty": "中等",
+    "goodFor": [
+      "应往届毕业生",
+      "符合专业要求者"
+    ]
+  },
+  {
+    "id": 118,
+    "name": "中国法学会",
+    "category": "省考",
+    "subCategory": "人事保卫处一级主任科员及以下",
+    "description": "参与人事工作信息化建设、干部人事管理、安全保卫等工作。",
+    "work": "综合管理、日常工作协调、文稿撰写",
+    "salary": "中等偏上",
+    "promotion": "晋升空间明确",
+    "requirements": {
+      "majors": [
+        "理学07",
+        "工学08",
+        "行政管理120401"
+      ],
+      "education": [
+        "本科",
+        "硕士",
+        "博士"
+      ],
+      "other": "硕士研究生及以上"
+    },
+    "isThreeFree": false,
+    "threeFreeNote": "",
+    "tags": [
+      "正式编制",
+      "稳定"
+    ],
+    "difficulty": "中等",
+    "goodFor": [
+      "应往届毕业生",
+      "符合专业要求者"
+    ]
+  },
+  {
+    "id": 119,
+    "name": "中国法学会",
+    "category": "省考",
+    "subCategory": "会员工作处一级主任科员及以下",
+    "description": "参与会员的发展、管理和服务，指导地方法学会法治论坛和相关活动，会员代表大会、理事会筹备等工作。",
+    "work": "综合管理、日常工作协调、文稿撰写",
+    "salary": "中等偏上",
+    "promotion": "晋升空间明确",
+    "requirements": {
+      "majors": [
+        "法学0301",
+        "马克思主义理论0305",
+        "法律 0351",
+        "工商管理学1202",
+        "公共管理学1204"
+      ],
+      "education": [
+        "本科",
+        "硕士",
+        "博士"
+      ],
+      "other": "硕士研究生及以上"
+    },
+    "isThreeFree": false,
+    "threeFreeNote": "",
+    "tags": [
+      "正式编制",
+      "稳定"
+    ],
+    "difficulty": "中等",
+    "goodFor": [
+      "应往届毕业生",
+      "符合专业要求者"
+    ]
+  },
+  {
+    "id": 120,
+    "name": "欧美同学会",
+    "category": "省考",
+    "subCategory": "一级主任科员及以下",
+    "description": "负责文稿起草、行政事务管理工作。",
+    "work": "综合管理、日常工作协调、文稿撰写",
+    "salary": "中等偏上",
+    "promotion": "晋升空间明确",
+    "requirements": {
+      "majors": [
+        "0201经济学类",
+        "0302政治学类",
+        "0401教育学类",
+        "0501中国语言文学类",
+        "硕士：0201理论经济学",
+        "0202应用经济学",
+        "0302政治学",
+        "0401教育学",
+        "0501中国语言文学"
+      ],
+      "education": [
+        "本科",
+        "硕士",
+        "博士"
+      ],
+      "other": "本科及以上"
+    },
+    "isThreeFree": false,
+    "threeFreeNote": "",
+    "tags": [
+      "正式编制",
+      "稳定"
+    ],
+    "difficulty": "中等",
+    "goodFor": [
+      "应往届毕业生",
+      "符合专业要求者"
+    ]
+  },
+  {
+    "id": 121,
+    "name": "欧美同学会",
+    "category": "省考",
+    "subCategory": "一级主任科员及以下",
+    "description": "负责联络海外留学人员和留学人员团体，开展交流活动及其他外事工作。",
+    "work": "综合管理、日常工作协调、文稿撰写",
+    "salary": "中等偏上",
+    "promotion": "晋升空间明确",
+    "requirements": {
+      "majors": [
+        "050201英语",
+        "硕士：0502外国语言文学（英语）",
+        "0551翻译（英语）"
+      ],
+      "education": [
+        "本科",
+        "硕士",
+        "博士"
+      ],
+      "other": "本科及以上"
+    },
+    "isThreeFree": false,
+    "threeFreeNote": "",
+    "tags": [
+      "正式编制",
+      "稳定"
+    ],
+    "difficulty": "中等",
+    "goodFor": [
+      "应往届毕业生",
+      "符合专业要求者"
+    ]
+  },
+  {
+    "id": 122,
+    "name": "中国计划生育协会",
+    "category": "省考",
+    "subCategory": "组织宣传处一级主任科员及以下",
+    "description": "分析研究、数据处理",
+    "work": "综合管理、日常工作协调、文稿撰写",
+    "salary": "中等偏上",
+    "promotion": "晋升空间明确",
+    "requirements": {
+      "majors": [
+        "应用统计",
+        "统计学类"
+      ],
+      "education": [
+        "本科",
+        "硕士",
+        "博士"
+      ],
+      "other": "硕士研究生及以上"
+    },
+    "isThreeFree": false,
+    "threeFreeNote": "",
+    "tags": [
+      "正式编制",
+      "稳定"
+    ],
+    "difficulty": "中等",
+    "goodFor": [
+      "应往届毕业生",
+      "符合专业要求者"
+    ]
+  },
+  {
+    "id": 123,
+    "name": "中国藏学研究中心",
+    "category": "省考",
+    "subCategory": "国内协调处一级主任科员及以下（一）",
+    "description": "负责藏学信息技术相关建设、协调工作。",
+    "work": "综合管理、日常工作协调、文稿撰写",
+    "salary": "中等偏上",
+    "promotion": "晋升空间明确",
+    "requirements": {
+      "majors": [
+        "0807电子信息类",
+        "0808自动化类",
+        "0809计算机类 0811控制科学与工程",
+        "0812计算机科学与技术",
+        "0835软件工程",
+        "0839网络空间安全",
+        "0854电子信息",
+        "1405智能科学与技术"
+      ],
+      "education": [
+        "本科",
+        "硕士",
+        "博士"
+      ],
+      "other": "本科及以上"
+    },
+    "isThreeFree": false,
+    "threeFreeNote": "",
+    "tags": [
+      "正式编制",
+      "稳定"
+    ],
+    "difficulty": "中等",
+    "goodFor": [
+      "应往届毕业生",
+      "符合专业要求者"
+    ]
+  },
+  {
+    "id": 124,
+    "name": "中国藏学研究中心",
+    "category": "省考",
+    "subCategory": "国内协调处一级主任科员及以下（二）",
+    "description": "负责藏学数据资源相关建设、协调工作。",
+    "work": "综合管理、日常工作协调、文稿撰写",
+    "salary": "中等偏上",
+    "promotion": "晋升空间明确",
+    "requirements": {
+      "majors": [
+        "0304民族学",
+        "0501中国语言文学",
+        "0503新闻传播学",
+        "0551翻译",
+        "0552新闻与传播",
+        "0602中国史",
+        "0812计算机科学与技术",
+        "0835软件工程",
+        "0839网络空间安全",
+        "1205信息资源管理",
+        "1255图书情报",
+        "1405智能科学与技术"
+      ],
+      "education": [
+        "本科",
+        "硕士",
+        "博士"
+      ],
+      "other": "硕士研究生及以上"
+    },
+    "isThreeFree": false,
+    "threeFreeNote": "",
+    "tags": [
+      "正式编制",
+      "稳定"
+    ],
+    "difficulty": "中等",
+    "goodFor": [
+      "应往届毕业生",
+      "符合专业要求者"
+    ]
+  }
+]

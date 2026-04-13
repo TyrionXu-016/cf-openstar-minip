@@ -1,0 +1,113 @@
+/* pages/ocr-scan/ocr-scan.wxss */
+
+.container { background: var(--bg); min-height: 100vh; }
+
+.header { padding: 60rpx 40rpx 48rpx; border-radius: 0 0 40rpx 40rpx; }
+.header-title { display: block; color: #fff; font-size: 40rpx; font-weight: 700; margin-bottom: 12rpx; }
+.header-sub { display: block; color: rgba(255,255,255,0.75); font-size: 26rpx; }
+
+/* 上传区 */
+.upload-area { padding: 32rpx 24rpx; }
+.upload-box {
+  width: 100%;
+  min-height: 400rpx;
+  border-radius: var(--radius-lg);
+  border: 4rpx dashed var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: #fff;
+  transition: all 0.2s;
+}
+.upload-box:active { border-color: var(--primary); background: rgba(26,31,94,0.03); }
+
+.upload-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16rpx;
+  padding: 80rpx 0;
+}
+.upload-icon { font-size: 80rpx; }
+.upload-text { font-size: 30rpx; color: var(--text-primary); font-weight: 600; }
+.upload-tip { font-size: 24rpx; color: var(--text-hint); }
+
+.preview-img { width: 100%; height: 500rpx; }
+
+.upload-actions { display: flex; gap: 20rpx; margin-top: 24rpx; }
+.upload-actions button { flex: 1; padding: 28rpx; }
+
+/* 识别中 */
+.recognizing-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 60rpx 40rpx;
+}
+.recognizing-animation {
+  position: relative;
+  width: 500rpx;
+  height: 400rpx;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  margin-bottom: 32rpx;
+}
+.scan-preview { width: 100%; height: 100%; }
+.scan-line {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 4rpx;
+  background: var(--primary);
+  box-shadow: 0 0 16rpx var(--primary);
+  animation: scan 2s ease-in-out infinite;
+}
+@keyframes scan {
+  0% { top: 0; opacity: 1; }
+  50% { top: 100%; opacity: 0.5; }
+  100% { top: 0; opacity: 0; }
+}
+
+.recognizing-text { font-size: 30rpx; font-weight: 700; color: var(--text-primary); margin-bottom: 24rpx; }
+.recognizing-progress { width: 100%; }
+.progress-bar { height: 10rpx; background: var(--border); border-radius: 10rpx; overflow: hidden; }
+.progress-fill { height: 100%; background: var(--primary); border-radius: 10rpx; transition: width 0.3s; }
+
+/* 结果 */
+.result-area { padding: 24rpx; }
+.result-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24rpx; }
+.result-title { font-size: 30rpx; font-weight: 700; color: var(--text-primary); }
+
+.btn-sm { padding: 12rpx 24rpx; border-radius: 30rpx; font-size: 24rpx; background: var(--bg); color: var(--text-secondary); border: 2rpx solid var(--border); }
+
+.card { background: #fff; border-radius: var(--radius-lg); padding: 32rpx; margin-bottom: 24rpx; box-shadow: var(--shadow); }
+.card-title { display: block; font-size: 28rpx; font-weight: 700; color: var(--text-primary); margin-bottom: 16rpx; }
+
+.ocr-card { }
+.ocr-text { display: block; font-size: 26rpx; color: var(--text-secondary); line-height: 1.8; margin-bottom: 16rpx; }
+.ocr-conf { font-size: 24rpx; color: var(--success); font-weight: 500; }
+
+.parse-card { }
+.parse-header { display: flex; align-items: center; gap: 12rpx; flex-wrap: wrap; margin-bottom: 24rpx; }
+.parse-header .card-title { margin-bottom: 0; }
+
+.parse-question { background: var(--bg); border-radius: var(--radius); padding: 24rpx; margin-bottom: 20rpx; }
+.question-text { font-size: 28rpx; color: var(--text-primary); line-height: 1.8; }
+
+.parse-options { display: flex; flex-direction: column; gap: 12rpx; margin-bottom: 20rpx; }
+.option-item { font-size: 26rpx; color: var(--text-secondary); line-height: 1.6; }
+
+.parse-answer { margin-bottom: 16rpx; }
+.answer-label { font-size: 28rpx; font-weight: 700; color: var(--success); }
+.answer-value { font-size: 28rpx; font-weight: 700; color: var(--success); }
+
+.parse-expl { margin-bottom: 16rpx; }
+.expl-label { display: block; font-size: 26rpx; font-weight: 600; color: var(--primary); margin-bottom: 8rpx; }
+.expl-text { display: block; font-size: 26rpx; color: var(--text-secondary); line-height: 1.7; }
+
+.parse-knowledge { display: flex; align-items: center; gap: 12rpx; }
+.knowledge-label { font-size: 26rpx; font-weight: 600; color: var(--text-primary); }
+
+.result-actions { display: flex; gap: 20rpx; }
+.result-actions button { flex: 1; padding: 28rpx; }

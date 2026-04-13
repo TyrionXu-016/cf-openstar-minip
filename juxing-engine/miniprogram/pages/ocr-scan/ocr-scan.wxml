@@ -1,0 +1,93 @@
+<!--pages/ocr-scan/ocr-scan.wxml-->
+<view class="container">
+  <view class="header gradient-bg">
+    <text class="header-title">📷 拍题识别</text>
+    <text class="header-sub">拍照上传题目，AI 自动识别并给出解析</text>
+  </view>
+
+  <!-- 上传区域 -->
+  <view class="upload-area" wx:if="{{!recognizedQuestion}}">
+    <view class="upload-box" bindtap="chooseImage">
+      <image wx:if="{{imagePath}}" src="{{imagePath}}" class="preview-img" mode="aspectFit"></image>
+      <view class="upload-placeholder" wx:else>
+        <text class="upload-icon">📸</text>
+        <text class="upload-text">点击拍照或上传图片</text>
+        <text class="upload-tip">支持题目、试卷、资料等</text>
+      </view>
+    </view>
+
+    <view class="upload-actions" wx:if="{{imagePath}}">
+      <button class="btn-outline" bindtap="chooseImage">重新拍摄</button>
+      <button class="btn-primary" bindtap="recognizeImage">🔍 开始识别</button>
+    </view>
+  </view>
+
+  <!-- 识别中 -->
+  <view class="recognizing-wrap" wx:if="{{recognizing}}">
+    <view class="recognizing-animation">
+      <view class="scan-line"></view>
+      <image src="{{imagePath}}" class="scan-preview" mode="aspectFit"></image>
+    </view>
+    <text class="recognizing-text">AI 正在识别题目...</text>
+    <view class="recognizing-progress">
+      <view class="progress-bar">
+        <view class="progress-fill" style="width: {{recognizeProgress}}%"></view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 识别结果 -->
+  <view class="result-area" wx:if="{{recognizedQuestion && !recognizing}}">
+    <view class="result-header">
+      <text class="result-title">✅ 识别完成</text>
+      <button class="btn-sm" bindtap="resetScan">重新拍摄</button>
+    </view>
+
+    <!-- 原始OCR文本 -->
+    <view class="ocr-card card">
+      <text class="card-title">📝 识别内容</text>
+      <text class="ocr-text">{{rawOCR}}</text>
+      <text class="ocr-conf">识别置信度：{{recognizedQuestion.ocrConfidence || 95}}%</text>
+    </view>
+
+    <!-- 解析结果 -->
+    <view class="parse-card card">
+      <view class="parse-header">
+        <text class="card-title">🧠 题目解析</text>
+        <text class="tag tag-blue">{{recognizedQuestion.subject}}</text>
+        <text class="tag tag-gold" style="margin-left:8rpx">{{recognizedQuestion.difficulty || '中等'}}</text>
+      </view>
+
+      <view class="parse-question">
+        <text class="question-text">{{recognizedQuestion.question}}</text>
+      </view>
+
+      <view class="parse-options" wx:if="{{recognizedQuestion.options && recognizedQuestion.options.length}}">
+        <text class="option-item" wx:for="{{recognizedQuestion.options}}" wx:key="key">{{item.key}}. {{item.text}}</text>
+      </view>
+
+      <view class="parse-answer" wx:if="{{recognizedQuestion.answer}}">
+        <text class="answer-label">💡 答案：</text>
+        <text class="answer-value">{{recognizedQuestion.answer}}</text>
+      </view>
+
+      <view class="parse-expl" wx:if="{{recognizedQuestion.explanation}}">
+        <text class="expl-label">📖 解析：</text>
+        <text class="expl-text">{{recognizedQuestion.explanation}}</text>
+      </view>
+
+      <view class="parse-knowledge" wx:if="{{recognizedQuestion.knowledgePoint}}">
+        <text class="knowledge-label">🏷️ 知识点：</text>
+        <text class="knowledge-tag tag tag-blue">{{recognizedQuestion.knowledgePoint}}</text>
+      </view>
+    </view>
+
+    <!-- 操作 -->
+    <view class="result-actions">
+      <button class="btn-primary" bindtap="goPractice">📚 去练习</button>
+      <button class="btn-outline" bindtap="goAskAI">💬 问AI</button>
+    </view>
+  </view>
+
+  <view class="safe-bottom"></view>
+</view>

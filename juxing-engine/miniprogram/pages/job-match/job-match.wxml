@@ -1,0 +1,223 @@
+<!-- 智能选岗推荐页面 -->
+<view class="container">
+  <!-- 学员信息卡片 -->
+  <view class="student-card" wx:if="{{studentInfo}}">
+    <view class="card-header">
+      <view class="student-avatar">
+        <text class="avatar-text">{{studentInfo.name.substring(0, 1)}}</text>
+      </view>
+      <view class="student-info">
+        <text class="student-name">{{studentInfo.name}}</text>
+        <view class="student-tags">
+          <text class="tag">{{studentInfo.education}}</text>
+          <text class="tag">{{studentInfo.gender}}</text>
+          <text class="tag">{{studentInfo.examType}}</text>
+        </view>
+      </view>
+      <view class="match-score">
+        <text class="score-num">{{matchRate}}</text>
+        <text class="score-label">匹配度</text>
+      </view>
+    </view>
+    <view class="card-detail">
+      <text class="detail-item">📱 {{studentInfo.phone}}</text>
+      <text class="detail-item">🎓 {{studentInfo.major}}</text>
+      <text class="detail-item" wx:if="{{studentInfo.school}}">🏫 {{studentInfo.school}}</text>
+    </view>
+  </view>
+
+  <!-- 专业匹配提示 -->
+  <view class="major-tip" wx:if="{{studentInfo}}">
+    <text class="tip-icon">💡</text>
+    <view class="tip-content">
+      <text class="tip-title">专业匹配建议</text>
+      <text class="tip-text" wx:for="{{matchTips}}" wx:key="index">{{item}}</text>
+    </view>
+  </view>
+
+  <!-- 筛选栏 -->
+  <view class="filter-bar">
+    <view class="filter-group">
+      <text class="filter-label">考试类型：</text>
+      <view class="filter-options">
+        <view class="filter-item {{filterExam === '全部' ? 'active' : ''}}" bindtap="onFilterExam" data-type="全部">全部</view>
+        <view class="filter-item {{filterExam === '国考' ? 'active' : ''}}" bindtap="onFilterExam" data-type="国考">国考</view>
+        <view class="filter-item {{filterExam === '省考' ? 'active' : ''}}" bindtap="onFilterExam" data-type="省考">省考</view>
+      </view>
+    </view>
+    <view class="filter-group">
+      <text class="filter-label">岗位类型：</text>
+      <view class="filter-options">
+        <view class="filter-item {{filterType === '全部' ? 'active' : ''}}" bindtap="onFilterType" data-type="全部">全部</view>
+        <view class="filter-item {{filterType === '三不限' ? 'active' : ''}}" bindtap="onFilterType" data-type="三不限">三不限</view>
+        <view class="filter-item {{filterType === '我的专业' ? 'active' : ''}}" bindtap="onFilterType" data-type="我的专业">我的专业</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 匹配结果 -->
+  <view class="result-section">
+    <view class="section-header">
+      <text class="section-title">🎯 为您智能推荐</text>
+      <text class="result-count">共 {{positions.length}} 个适合岗位</text>
+    </view>
+
+    <!-- 岗位列表 -->
+    <view class="position-list">
+      <view class="position-card {{item.matchLevel}}" wx:for="{{positions}}" wx:key="id" bindtap="showDetail" data-position="{{item}}">
+        <view class="position-header">
+          <view class="position-main">
+            <text class="position-name">{{item.name}}</text>
+            <view class="position-tags">
+              <text class="position-tag tag-category">{{item.category}}</text>
+              <text class="position-tag tag-sub" wx:if="{{item.subCategory}}">{{item.subCategory}}</text>
+              <text class="position-tag tag-three" wx:if="{{item.isThreeFree}}">三不限</text>
+            </view>
+          </view>
+          <view class="match-badge {{item.matchLevel}}">
+            <text>{{item.matchScore}}%</text>
+          </view>
+        </view>
+
+        <view class="position-desc">{{item.description}}</view>
+
+        <!-- 专业要求展示 -->
+        <view class="major-req">
+          <text class="req-title">📚 可报专业：</text>
+          <text class="req-text" wx:if="{{!item.isThreeFree}}">{{item.requirements.majors.slice(0, 5).join('、')}}{{item.requirements.majors.length > 5 ? '...' : ''}}</text>
+          <text class="req-text three-free" wx:if="{{item.isThreeFree}}">{{item.threeFreeNote}}</text>
+        </view>
+
+        <view class="position-tags-row">
+          <text class="feature-tag {{tag.includes('三不限') ? 'tag-important' : ''}}" wx:for="{{item.tags}}" wx:for-item="tag" wx:key="index">{{tag}}</text>
+        </view>
+
+        <view class="position-footer">
+          <view class="salary">
+            <text class="salary-icon">💰</text>
+            <text>{{item.salary}}</text>
+          </view>
+          <view class="promotion">
+            <text class="promotion-icon">📈</text>
+            <text>{{item.promotion}}</text>
+          </view>
+        </view>
+      </view>
+
+      <!-- 空状态 -->
+      <view class="empty-state" wx:if="{{positions.length === 0}}">
+        <text class="empty-icon">🔍</text>
+        <text class="empty-text">暂无符合条件的岗位</text>
+        <text class="empty-hint">试试调整筛选条件</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 底部功能栏 -->
+  <view class="bottom-bar">
+    <view class="bar-btn" bindtap="saveResult">
+      <text class="bar-icon">💾</text>
+      <text>保存结果</text>
+    </view>
+    <view class="bar-btn primary" bindtap="startPractice">
+      <text class="bar-icon">📝</text>
+      <text>开始练习</text>
+    </view>
+    <view class="bar-btn" bindtap="shareResult">
+      <text class="bar-icon">📤</text>
+      <text>分享</text>
+    </view>
+  </view>
+
+  <!-- 岗位详情弹窗 -->
+  <view class="detail-modal {{showModal ? 'show' : ''}}" wx:if="{{selectedPosition}}">
+    <view class="modal-mask" bindtap="closeModal"></view>
+    <view class="modal-content">
+      <view class="modal-header">
+        <view class="modal-title-wrap">
+          <text class="modal-title">{{selectedPosition.name}}</text>
+          <view class="modal-badges">
+            <text class="modal-badge category">{{selectedPosition.category}}</text>
+            <text class="modal-badge three" wx:if="{{selectedPosition.isThreeFree}}">三不限</text>
+          </view>
+        </view>
+        <text class="modal-close" bindtap="closeModal">✕</text>
+      </view>
+
+      <scroll-view class="modal-body" scroll-y>
+        <view class="detail-section">
+          <view class="detail-section-title">📋 岗位简介</view>
+          <text class="detail-text">{{selectedPosition.description}}</text>
+        </view>
+
+        <view class="detail-section">
+          <view class="detail-section-title">💼 工作内容</view>
+          <text class="detail-text">{{selectedPosition.work}}</text>
+        </view>
+
+        <view class="detail-section">
+          <view class="detail-section-title">💰 薪资待遇</view>
+          <text class="detail-text">{{selectedPosition.salary}}</text>
+        </view>
+
+        <view class="detail-section">
+          <view class="detail-section-title">📈 晋升空间</view>
+          <text class="detail-text">{{selectedPosition.promotion}}</text>
+        </view>
+
+        <view class="detail-section">
+          <view class="detail-section-title">📚 招录要求</view>
+          <view class="requirement-item">
+            <text class="req-label">学历要求：</text>
+            <text class="req-value">{{selectedPosition.requirements.education.join('、')}}</text>
+          </view>
+          <view class="requirement-item major-req">
+            <text class="req-label">专业要求：</text>
+            <view class="major-list" wx:if="{{!selectedPosition.isThreeFree}}">
+              <text class="major-tag" wx:for="{{selectedPosition.requirements.majors}}" wx:key="index">{{item}}</text>
+            </view>
+            <text class="req-value three-free" wx:if="{{selectedPosition.isThreeFree}}">不限专业</text>
+          </view>
+          <view class="requirement-item" wx:if="{{selectedPosition.requirements.other}}">
+            <text class="req-label">其他说明：</text>
+            <text class="req-value">{{selectedPosition.requirements.other}}</text>
+          </view>
+        </view>
+
+        <view class="detail-section" wx:if="{{selectedPosition.isThreeFree}}">
+          <view class="three-free-tip">
+            <text class="tip-icon">⭐</text>
+            <text class="tip-text">{{selectedPosition.threeFreeNote}}</text>
+          </view>
+        </view>
+
+        <view class="detail-section" wx:if="{{selectedPosition.goodFor}}">
+          <view class="detail-section-title">🎯 适合人群</view>
+          <view class="good-for-list">
+            <text class="good-for-tag" wx:for="{{selectedPosition.goodFor}}" wx:key="index">{{item}}</text>
+          </view>
+        </view>
+
+        <view class="detail-section">
+          <view class="detail-section-title">🏷️ 岗位特点</view>
+          <view class="tag-list">
+            <text class="detail-tag" wx:for="{{selectedPosition.tags}}" wx:key="index">{{item}}</text>
+          </view>
+        </view>
+
+        <view class="detail-section">
+          <view class="detail-section-title">📊 竞争难度</view>
+          <view class="difficulty-bar">
+            <view class="difficulty-fill {{selectedPosition.difficulty}}"></view>
+            <text class="difficulty-text">{{selectedPosition.difficulty}}</text>
+          </view>
+        </view>
+      </scroll-view>
+
+      <view class="modal-footer">
+        <button class="modal-btn" bindtap="closeModal">关闭</button>
+        <button class="modal-btn primary" bindtap="practicePosition">练习相关题目</button>
+      </view>
+    </view>
+  </view>
+</view>

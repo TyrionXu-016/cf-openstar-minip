@@ -1,0 +1,142 @@
+/* pages/index/index.wxss */
+
+.container { background: var(--bg); min-height: 100vh; }
+
+/* Hero */
+.hero {
+  padding: 0;
+  padding-top: env(safe-area-inset-top);
+  border-radius: 0 0 40rpx 40rpx;
+}
+.hero-inner { padding: 32rpx 40rpx 48rpx; }
+.hero-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 32rpx;
+}
+.brand { display: flex; align-items: center; gap: 12rpx; }
+.brand-icon { font-size: 40rpx; }
+.brand-name { color: #fff; font-size: 36rpx; font-weight: 700; letter-spacing: 2rpx; }
+.hero-date { color: rgba(255,255,255,0.7); font-size: 24rpx; }
+
+.greeting-text { display: block; color: #fff; font-size: 36rpx; font-weight: 600; margin-bottom: 8rpx; }
+.greeting-sub { display: block; color: rgba(255,255,255,0.75); font-size: 26rpx; margin-bottom: 32rpx; }
+
+.progress-wrap { }
+.progress-label {
+  display: flex;
+  justify-content: space-between;
+  color: rgba(255,255,255,0.8);
+  font-size: 24rpx;
+  margin-bottom: 12rpx;
+}
+.progress-bar {
+  height: 12rpx;
+  background: rgba(255,255,255,0.25);
+  border-radius: 10rpx;
+  overflow: hidden;
+}
+.progress-fill {
+  height: 100%;
+  background: var(--accent);
+  border-radius: 10rpx;
+  transition: width 0.5s ease;
+}
+
+/* 统计行 */
+.stats-row {
+  display: flex;
+  margin: -32rpx 24rpx 0;
+  background: #fff;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  padding: 32rpx 0;
+  position: relative;
+  z-index: 10;
+}
+.stat-card {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8rpx;
+  border-right: 1rpx solid var(--border);
+}
+.stat-card:last-child { border-right: none; }
+.stat-icon { font-size: 32rpx; }
+.stat-value { font-size: 34rpx; font-weight: 700; color: var(--primary); }
+.stat-label { font-size: 22rpx; color: var(--text-secondary); }
+
+/* Section标题 */
+.section-title {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+  padding: 40rpx 40rpx 20rpx;
+}
+.title-text { font-size: 32rpx; font-weight: 700; color: var(--text-primary); }
+.title-badge {
+  font-size: 20rpx;
+  font-weight: 600;
+  background: var(--accent);
+  color: #fff;
+  padding: 4rpx 12rpx;
+  border-radius: 20rpx;
+}
+.more-text { margin-left: auto; font-size: 26rpx; color: var(--text-secondary); }
+
+/* AI 功能卡片 */
+.ai-features { padding: 0 24rpx; display: flex; flex-direction: column; gap: 20rpx; }
+.ai-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 32rpx;
+  border-radius: var(--radius-lg);
+}
+.ai-card-left { display: flex; align-items: center; gap: 24rpx; }
+.ai-icon { font-size: 48rpx; }
+.ai-title { display: block; font-size: 30rpx; font-weight: 600; }
+.ai-desc { display: block; font-size: 24rpx; margin-top: 4rpx; opacity: 0.75; }
+.ai-arrow { font-size: 48rpx; opacity: 0.5; }
+
+.ai-card-blue { background: linear-gradient(135deg, #e8eaf6 0%, #c5cae9 100%); color: var(--primary); }
+.ai-card-gold { background: linear-gradient(135deg, #fff8e1 0%, #ffe082 100%); color: #c77700; }
+.ai-card-purple { background: linear-gradient(135deg, #ede7f6 0%, #ce93d8 100%); color: #6a1b9a; }
+.ai-card-green { background: linear-gradient(135deg, #e8f5e9 0%, #a5d6a7 100%); color: #2e7d32; }
+.ai-card-red { background: linear-gradient(135deg, #fce4ec 0%, #f48fb1 100%); color: #c62828; }
+
+/* 题库分类 */
+.category-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24rpx;
+  padding: 0 24rpx;
+}
+.category-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10rpx;
+  background: #fff;
+  border-radius: var(--radius);
+  padding: 28rpx 16rpx;
+  box-shadow: var(--shadow);
+}
+.category-icon-wrap {
+  width: 80rpx;
+  height: 80rpx;
+  border-radius: 24rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.category-icon { font-size: 40rpx; }
+.category-name { font-size: 26rpx; font-weight: 600; color: var(--text-primary); }
+.category-count { font-size: 22rpx; color: var(--text-hint); }
+
+/* 推荐卡片 */
+.recommend-card { margin: 0 24rpx; }
+.recommend-tag { margin-bottom: 20rpx; }
+.recommend-question { font-size: 28rpx; color: var(--text-primary); line-height: 1.7; }

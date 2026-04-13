@@ -1,0 +1,98 @@
+<view class="container">
+  <!-- 页面标题 -->
+  <view class="header">
+    <view class="back" bindtap="goBack">‹ 返回</view>
+    <view class="title">学员测评</view>
+    <view class="subtitle">智能评估考生水平，制定个性化学习计划</view>
+  </view>
+
+  <!-- 页面内容 -->
+  <view class="content">
+    <!-- 学员信息 -->
+    <view class="card">
+      <view class="card-title">
+        <text class="icon">👤</text>
+        <text>学员信息</text>
+      </view>
+      <input class="input" placeholder="请输入学员姓名" value="{{studentName}}" bindinput="onNameInput" />
+      <input class="input" type="number" placeholder="请输入联系电话" value="{{phone}}" bindinput="onPhoneInput" />
+    </view>
+
+    <!-- 题目数量选择 -->
+    <view class="card">
+      <view class="card-title">
+        <text class="icon">📋</text>
+        <text>选择题目数量</text>
+      </view>
+      <view class="count-options">
+        <view 
+          class="count-option {{questionCount == 40 ? 'active' : ''}}" 
+          bindtap="selectCount" 
+          data-count="40"
+        >
+          <view class="number">40</view>
+          <view class="label">快速测评</view>
+        </view>
+        <view 
+          class="count-option {{questionCount == 60 ? 'active' : ''}}" 
+          bindtap="selectCount" 
+          data-count="60"
+        >
+          <view class="number">60</view>
+          <view class="label">标准测评</view>
+        </view>
+        <view 
+          class="count-option {{questionCount == 120 ? 'active' : ''}}" 
+          bindtap="selectCount" 
+          data-count="120"
+        >
+          <view class="number">120</view>
+          <view class="label">全面测评</view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 难度等级选择 -->
+    <view class="card">
+      <view class="card-title">
+        <text class="icon">⚡</text>
+        <text>选择难度等级</text>
+      </view>
+      <view class="difficulty-options">
+        <view 
+          class="difficulty-option {{difficulty == 'easy' ? 'active' : ''}}" 
+          bindtap="selectDifficulty" 
+          data-difficulty="easy"
+        >
+          <view class="icon-text">🌱</view>
+          <view class="name">简单</view>
+          <view class="desc">基础入门</view>
+        </view>
+        <view 
+          class="difficulty-option {{difficulty == 'normal' ? 'active' : ''}}" 
+          bindtap="selectDifficulty" 
+          data-difficulty="normal"
+        >
+          <view class="icon-text">⚖️</view>
+          <view class="name">正常</view>
+          <view class="desc">标准难度</view>
+        </view>
+        <view 
+          class="difficulty-option {{difficulty == 'hard' ? 'active' : ''}}" 
+          bindtap="selectDifficulty" 
+          data-difficulty="hard"
+        >
+          <view class="icon-text">🔥</view>
+          <view class="name">较难</view>
+          <view class="desc">挑战提升</view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 开始测评按钮 -->
+    <button class="start-btn" bindtap="startAssessment">
+      <text class="btn-icon">🚀</text>
+      <text>开始测评</text>
+    </button>
+  </view>
+</view>

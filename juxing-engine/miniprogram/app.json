@@ -1,0 +1,57 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/quiz/quiz",
+    "pages/assessment/assessment",
+    "pages/ai-generate/ai-generate",
+    "pages/essay/essay",
+    "pages/essay-result/essay-result",
+    "pages/ai-chat/ai-chat",
+    "pages/ocr-scan/ocr-scan",
+    "pages/student-info/student-info",
+    "pages/job-match/job-match",
+    "pages/profile/profile"
+  ],
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#1a1a2e",
+    "navigationBarTitleText": "聚星引擎",
+    "navigationBarTextStyle": "white",
+    "backgroundColor": "#f5f7fa"
+  },
+  "tabBar": {
+    "color": "#999999",
+    "selectedColor": "#1a1a2e",
+    "backgroundColor": "#ffffff",
+    "borderStyle": "white",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "text": "首页",
+        "iconPath": "images/tab_home.png",
+        "selectedIconPath": "images/tab_home_active.png"
+      },
+      {
+        "pagePath": "pages/quiz/quiz",
+        "text": "刷题",
+        "iconPath": "images/tab_quiz.png",
+        "selectedIconPath": "images/tab_quiz_active.png"
+      },
+      {
+        "pagePath": "pages/ai-chat/ai-chat",
+        "text": "AI答疑",
+        "iconPath": "images/tab_ai.png",
+        "selectedIconPath": "images/tab_ai_active.png"
+      },
+      {
+        "pagePath": "pages/profile/profile",
+        "text": "我的",
+        "iconPath": "images/tab_profile.png",
+        "selectedIconPath": "images/tab_profile_active.png"
+      }
+    ]
+  },
+  "cloud": true,
+  "sitemapLocation": "sitemap.json",
+  "style": "v2"
+}

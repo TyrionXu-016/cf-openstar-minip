@@ -1,0 +1,79 @@
+<!--pages/essay-result/essay-result.wxml-->
+<view class="container">
+  <view wx:if="{{result}}">
+    <!-- 总分卡 -->
+    <view class="score-hero gradient-bg">
+      <view class="score-hero-inner">
+        <text class="score-label">AI 综合评分</text>
+        <view class="score-circle">
+          <text class="score-number">{{result.totalScore}}</text>
+          <text class="score-unit">分</text>
+        </view>
+        <view class="score-grade-badge">{{result.grade}}</view>
+        <text class="score-feedback">{{result.overallFeedback}}</text>
+      </view>
+    </view>
+
+    <!-- 维度雷达 -->
+    <view class="dimension-card card">
+      <text class="card-title">📊 各维度得分</text>
+      <view class="dimensions">
+        <view class="dim-row" wx:for="{{result.dimensions}}" wx:key="name">
+          <view class="dim-info">
+            <text class="dim-name">{{item.name}}</text>
+            <text class="dim-score">{{item.score}}/{{item.maxScore}}</text>
+          </view>
+          <view class="dim-bar-wrap">
+            <view class="dim-bar" style="width: {{item.score / item.maxScore * 100}}%"></view>
+          </view>
+          <text class="dim-feedback">{{item.feedback}}</text>
+          <view class="dim-improvements" wx:if="{{item.improvements.length}}">
+            <text class="improve-item" wx:for="{{item.improvements}}" wx:key="index" wx:for-item="tip">
+              💡 {{tip}}
+            </text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 优点与不足 -->
+    <view class="strength-weak-row">
+      <view class="sw-card card">
+        <text class="sw-title strength">✅ 优点</text>
+        <text class="sw-item" wx:for="{{result.strengths}}" wx:key="index">• {{item}}</text>
+      </view>
+      <view class="sw-card card">
+        <text class="sw-title weakness">⚠️ 不足</text>
+        <text class="sw-item" wx:for="{{result.weaknesses}}" wx:key="index">• {{item}}</text>
+      </view>
+    </view>
+
+    <!-- 遗漏要点 -->
+    <view class="missed-card card" wx:if="{{result.keyMissedPoints.length}}">
+      <text class="card-title">🎯 遗漏要点</text>
+      <view class="missed-list">
+        <view class="missed-item" wx:for="{{result.keyMissedPoints}}" wx:key="index">
+          <text class="missed-icon">•</text>
+          <text class="missed-text">{{item}}</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 我的作文 -->
+    <view class="answer-card card">
+      <view class="answer-header" bindtap="toggleAnswer">
+        <text class="card-title">📝 我的作文</text>
+        <text class="toggle-text">{{showAnswer ? '收起' : '展开'}} ›</text>
+      </view>
+      <text class="answer-text" wx:if="{{showAnswer}}">{{answer}}</text>
+    </view>
+
+    <!-- 操作 -->
+    <view class="result-actions">
+      <button class="btn-primary" bindtap="goEssay">再写一篇</button>
+      <button class="btn-outline" bindtap="goHome">返回首页</button>
+    </view>
+  </view>
+
+  <view class="safe-bottom"></view>
+</view>

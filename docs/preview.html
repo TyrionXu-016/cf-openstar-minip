@@ -1,0 +1,1153 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>聚星引擎 - 公考刷题小程序</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+      min-height: 100vh;
+      padding: 40px 20px;
+    }
+    
+    .header {
+      text-align: center;
+      color: #fff;
+      margin-bottom: 40px;
+    }
+    
+    .header .logo {
+      width: 80px;
+      height: 80px;
+      margin-bottom: 15px;
+      filter: drop-shadow(0 4px 20px rgba(0,100,255,0.3));
+    }
+    
+    .header h1 {
+      font-size: 28px;
+      font-weight: 600;
+      margin-bottom: 5px;
+      background: linear-gradient(90deg, #00d4ff, #7b2ff7);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    
+    .header p {
+      color: rgba(255,255,255,0.7);
+      font-size: 14px;
+    }
+    
+    .phones-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 40px;
+      max-width: 1600px;
+      margin: 0 auto;
+    }
+    
+    .phone-wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    
+    .phone-label {
+      color: #fff;
+      font-size: 16px;
+      font-weight: 500;
+      margin-bottom: 15px;
+      padding: 8px 20px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 20px;
+      backdrop-filter: blur(10px);
+    }
+    
+    .phone-frame {
+      width: 375px;
+      height: 812px;
+      background: #1a1a1a;
+      border-radius: 50px;
+      padding: 12px;
+      box-shadow: 0 50px 100px rgba(0,0,0,0.5), 
+                  inset 0 0 0 2px #333,
+                  0 0 0 4px #1a1a1a;
+      position: relative;
+    }
+    
+    .phone-notch {
+      position: absolute;
+      top: 12px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 150px;
+      height: 30px;
+      background: #1a1a1a;
+      border-radius: 0 0 20px 20px;
+      z-index: 10;
+    }
+    
+    .phone-screen {
+      width: 100%;
+      height: 100%;
+      border-radius: 40px;
+      overflow: hidden;
+      background: #f5f5f5;
+      position: relative;
+    }
+    
+    /* 启动页 */
+    .page-splash {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(180deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+      position: relative;
+    }
+    
+    .splash-logo {
+      width: 120px;
+      height: 120px;
+      margin-bottom: 30px;
+      filter: drop-shadow(0 0 30px rgba(0,100,255,0.5));
+      animation: pulse 2s ease-in-out infinite;
+    }
+    
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
+    
+    .splash-brand {
+      font-size: 32px;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 10px;
+      letter-spacing: 2px;
+    }
+    
+    .splash-slogan {
+      font-size: 14px;
+      color: rgba(255,255,255,0.7);
+      margin-bottom: 60px;
+    }
+    
+    .splash-loading {
+      width: 40px;
+      height: 40px;
+      border: 3px solid rgba(255,255,255,0.2);
+      border-top-color: #00d4ff;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+    
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    
+    .splash-version {
+      position: absolute;
+      bottom: 50px;
+      font-size: 12px;
+      color: rgba(255,255,255,0.4);
+    }
+    
+    /* 首页 */
+    .page-home {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      background: #f5f5f5;
+    }
+    
+    .home-header {
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+      padding: 60px 20px 30px;
+      color: #fff;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .home-header::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      right: -20%;
+      width: 200px;
+      height: 200px;
+      background: radial-gradient(circle, rgba(0,212,255,0.2) 0%, transparent 70%);
+    }
+    
+    .home-header .top-bar {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    
+    .home-header .logo-small {
+      width: 40px;
+      height: 40px;
+    }
+    
+    .home-header .brand-name {
+      font-size: 20px;
+      font-weight: 700;
+    }
+    
+    .home-header .greeting {
+      font-size: 14px;
+      opacity: 0.9;
+    }
+    
+    .home-header .title {
+      font-size: 24px;
+      font-weight: 700;
+      margin-top: 5px;
+    }
+    
+    .home-header .subtitle {
+      font-size: 13px;
+      opacity: 0.8;
+      margin-top: 8px;
+    }
+    
+    .home-content {
+      flex: 1;
+      padding: 20px;
+      overflow-y: auto;
+    }
+    
+    .menu-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      margin-bottom: 25px;
+    }
+    
+    .menu-card {
+      background: #fff;
+      border-radius: 16px;
+      padding: 20px 15px;
+      cursor: pointer;
+      transition: transform 0.3s, box-shadow 0.3s;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    }
+    
+    .menu-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+    
+    .menu-card:nth-child(1) {
+      border-top: 4px solid #667eea;
+    }
+    
+    .menu-card:nth-child(2) {
+      border-top: 4px solid #f5576c;
+    }
+    
+    .menu-card:nth-child(3) {
+      border-top: 4px solid #43e97b;
+    }
+    
+    .menu-card:nth-child(4) {
+      border-top: 4px solid #fa709a;
+    }
+    
+    .menu-card:nth-child(5) {
+      border-top: 4px solid #00d4ff;
+    }
+    
+    .menu-icon {
+      font-size: 28px;
+      margin-bottom: 10px;
+    }
+    
+    .menu-title {
+      font-size: 15px;
+      font-weight: 600;
+      color: #333;
+    }
+    
+    .menu-desc {
+      font-size: 11px;
+      color: #999;
+      margin-top: 4px;
+    }
+    
+    .section-title {
+      font-size: 16px;
+      font-weight: 600;
+      color: #333;
+      margin-bottom: 15px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .question-list {
+      background: #fff;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    }
+    
+    .question-item {
+      padding: 15px;
+      border-bottom: 1px solid #f0f0f0;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    
+    .question-item:last-child {
+      border-bottom: none;
+    }
+    
+    .question-num {
+      width: 36px;
+      height: 36px;
+      background: linear-gradient(135deg, #1a1a2e, #0f3460);
+      color: #fff;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: 600;
+    }
+    
+    .question-info {
+      flex: 1;
+    }
+    
+    .question-title {
+      font-size: 14px;
+      color: #333;
+      font-weight: 500;
+    }
+    
+    .question-meta {
+      font-size: 11px;
+      color: #999;
+      margin-top: 3px;
+    }
+    
+    .question-arrow {
+      color: #ccc;
+      font-size: 18px;
+    }
+    
+    /* 学员测评页面 */
+    .page-assessment {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      background: #f5f5f5;
+    }
+    
+    .assessment-header {
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+      padding: 60px 20px 25px;
+      color: #fff;
+    }
+    
+    .assessment-header .back {
+      font-size: 24px;
+      margin-bottom: 15px;
+    }
+    
+    .assessment-header h2 {
+      font-size: 22px;
+      font-weight: 600;
+    }
+    
+    .assessment-header p {
+      font-size: 13px;
+      opacity: 0.85;
+      margin-top: 5px;
+    }
+    
+    .assessment-content {
+      flex: 1;
+      padding: 20px;
+      overflow-y: auto;
+    }
+    
+    .assessment-card {
+      background: #fff;
+      border-radius: 20px;
+      padding: 25px;
+      margin-bottom: 15px;
+      box-shadow: 0 2px 15px rgba(0,0,0,0.05);
+    }
+    
+    .assessment-card-title {
+      font-size: 16px;
+      font-weight: 600;
+      color: #333;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .assessment-card-title span {
+      font-size: 20px;
+    }
+    
+    .question-count-options {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    
+    .count-option {
+      flex: 1;
+      min-width: 80px;
+      padding: 15px;
+      border: 2px solid #e0e0e0;
+      border-radius: 12px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    
+    .count-option.active {
+      border-color: #667eea;
+      background: linear-gradient(135deg, rgba(102,126,234,0.1), rgba(118,75,162,0.1));
+    }
+    
+    .count-option .number {
+      font-size: 24px;
+      font-weight: 700;
+      color: #333;
+    }
+    
+    .count-option.active .number {
+      color: #667eea;
+    }
+    
+    .count-option .label {
+      font-size: 12px;
+      color: #999;
+      margin-top: 4px;
+    }
+    
+    .difficulty-options {
+      display: flex;
+      gap: 12px;
+    }
+    
+    .difficulty-option {
+      flex: 1;
+      padding: 15px 10px;
+      border: 2px solid #e0e0e0;
+      border-radius: 12px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    
+    .difficulty-option.active {
+      border-color: #43e97b;
+      background: linear-gradient(135deg, rgba(67,233,123,0.1), rgba(56,249,215,0.1));
+    }
+    
+    .difficulty-option .icon {
+      font-size: 24px;
+      margin-bottom: 8px;
+    }
+    
+    .difficulty-option .name {
+      font-size: 14px;
+      font-weight: 600;
+      color: #333;
+    }
+    
+    .difficulty-option .desc {
+      font-size: 11px;
+      color: #999;
+      margin-top: 4px;
+    }
+    
+    .student-info {
+      margin-bottom: 15px;
+    }
+    
+    .info-input {
+      width: 100%;
+      padding: 15px;
+      border: 2px solid #e0e0e0;
+      border-radius: 12px;
+      font-size: 14px;
+      margin-bottom: 12px;
+      outline: none;
+      transition: border-color 0.3s;
+    }
+    
+    .info-input:focus {
+      border-color: #667eea;
+    }
+    
+    .start-btn {
+      width: 100%;
+      padding: 18px;
+      background: linear-gradient(135deg, #1a1a2e, #0f3460);
+      color: #fff;
+      border: none;
+      border-radius: 16px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      box-shadow: 0 4px 15px rgba(26,26,46,0.3);
+    }
+    
+    .start-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(26,26,46,0.4);
+    }
+    
+    /* AI批改页面 */
+    .page-ai-review {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      background: #f5f5f5;
+    }
+    
+    .ai-header {
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+      padding: 60px 20px 25px;
+      color: #fff;
+    }
+    
+    .ai-header .back {
+      font-size: 24px;
+      margin-bottom: 15px;
+    }
+    
+    .ai-header h2 {
+      font-size: 22px;
+      font-weight: 600;
+    }
+    
+    .ai-header p {
+      font-size: 13px;
+      opacity: 0.85;
+      margin-top: 5px;
+    }
+    
+    .ai-content {
+      flex: 1;
+      padding: 20px;
+      overflow-y: auto;
+    }
+    
+    .ai-score-card {
+      background: #fff;
+      border-radius: 20px;
+      padding: 25px;
+      margin-bottom: 15px;
+      box-shadow: 0 2px 15px rgba(0,0,0,0.05);
+    }
+    
+    .score-header {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+    
+    .score-circle {
+      width: 90px;
+      height: 90px;
+      background: conic-gradient(#667eea 0deg 252deg, #e0e0e0 252deg 360deg);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+    
+    .score-circle::before {
+      content: '';
+      position: absolute;
+      width: 70px;
+      height: 70px;
+      background: #fff;
+      border-radius: 50%;
+    }
+    
+    .score-value {
+      position: relative;
+      font-size: 28px;
+      font-weight: 700;
+      color: #667eea;
+    }
+    
+    .score-details {
+      flex: 1;
+    }
+    
+    .score-details h3 {
+      font-size: 18px;
+      color: #333;
+      margin-bottom: 8px;
+    }
+    
+    .score-details p {
+      font-size: 12px;
+      color: #666;
+    }
+    
+    .score-badge {
+      display: inline-block;
+      padding: 5px 12px;
+      background: linear-gradient(135deg, #43e97b, #38f9d7);
+      color: #fff;
+      border-radius: 15px;
+      font-size: 12px;
+      font-weight: 500;
+      margin-top: 8px;
+    }
+    
+    .ai-comment {
+      background: #f8f9ff;
+      border-radius: 15px;
+      padding: 18px;
+      margin-bottom: 20px;
+    }
+    
+    .ai-comment-title {
+      font-size: 15px;
+      font-weight: 600;
+      color: #333;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .ai-comment-title span {
+      font-size: 18px;
+    }
+    
+    .ai-comment p {
+      font-size: 13px;
+      color: #555;
+      line-height: 1.8;
+    }
+    
+    .reference-answer {
+      background: #fff;
+      border-radius: 15px;
+      padding: 18px;
+      border-left: 4px solid #667eea;
+    }
+    
+    .reference-title {
+      font-size: 15px;
+      font-weight: 600;
+      color: #333;
+      margin-bottom: 12px;
+    }
+    
+    .reference-content {
+      font-size: 13px;
+      color: #555;
+      line-height: 1.8;
+    }
+    
+    .ai-btn {
+      width: 100%;
+      padding: 15px;
+      background: linear-gradient(135deg, #1a1a2e, #0f3460);
+      color: #fff;
+      border: none;
+      border-radius: 25px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 15px;
+    }
+    
+    /* 申论题目列表页 */
+    .page-list {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      background: #f5f5f5;
+    }
+    
+    .list-header {
+      background: #fff;
+      padding: 55px 20px 20px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    }
+    
+    .list-header h2 {
+      font-size: 22px;
+      color: #333;
+      font-weight: 600;
+    }
+    
+    .list-header p {
+      font-size: 13px;
+      color: #999;
+      margin-top: 5px;
+    }
+    
+    .list-tabs {
+      display: flex;
+      gap: 10px;
+      margin-top: 15px;
+    }
+    
+    .list-tab {
+      padding: 8px 16px;
+      background: #f0f0f0;
+      border-radius: 20px;
+      font-size: 13px;
+      color: #666;
+    }
+    
+    .list-tab.active {
+      background: linear-gradient(135deg, #1a1a2e, #0f3460);
+      color: #fff;
+    }
+    
+    .list-content {
+      flex: 1;
+      padding: 15px 15px 100px;
+      overflow-y: auto;
+    }
+    
+    .list-card {
+      background: #fff;
+      border-radius: 16px;
+      padding: 18px;
+      margin-bottom: 12px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.03);
+    }
+    
+    .list-card-header {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+    
+    .list-badge {
+      padding: 4px 10px;
+      background: linear-gradient(135deg, #1a1a2e, #0f3460);
+      color: #fff;
+      border-radius: 8px;
+      font-size: 11px;
+      font-weight: 500;
+    }
+    
+    .list-title {
+      font-size: 15px;
+      color: #333;
+      font-weight: 600;
+      flex: 1;
+      line-height: 1.4;
+    }
+    
+    .list-meta {
+      display: flex;
+      gap: 15px;
+      font-size: 12px;
+      color: #999;
+    }
+    
+    .list-meta span {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    
+    .list-footer {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px solid #f0f0f0;
+    }
+    
+    .list-btn {
+      padding: 8px 18px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      border: none;
+    }
+    
+    .list-btn-primary {
+      background: linear-gradient(135deg, #1a1a2e, #0f3460);
+      color: #fff;
+    }
+    
+    .list-btn-outline {
+      background: #f5f5f5;
+      color: #1a1a2e;
+    }
+    
+    /* 底部导航 */
+    .bottom-nav {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: #fff;
+      display: flex;
+      padding: 10px 0 30px;
+      box-shadow: 0 -2px 10px rgba(0,0,0,0.05);
+    }
+    
+    .nav-item {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      color: #999;
+      font-size: 11px;
+    }
+    
+    .nav-item.active {
+      color: #1a1a2e;
+    }
+    
+    .nav-icon {
+      font-size: 24px;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <img src="juxing-engine/logo.png" alt="聚星引擎" class="logo">
+    <h1>聚星引擎</h1>
+    <p>聚星引擎 · 点亮前程 | AI智能批改 · 学员测评 · 科学备考</p>
+  </div>
+  
+  <div class="phones-container">
+    <!-- 启动页 -->
+    <div class="phone-wrapper">
+      <div class="phone-label">🚀 启动页</div>
+      <div class="phone-frame">
+        <div class="phone-notch"></div>
+        <div class="phone-screen">
+          <div class="page-splash">
+            <img src="juxing-engine/logo.png" alt="聚星引擎" class="splash-logo">
+            <div class="splash-brand">聚星引擎</div>
+            <div class="splash-slogan">聚星引擎 · 点亮前程</div>
+            <div class="splash-loading"></div>
+            <div class="splash-version">v1.0.0</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- 首页 -->
+    <div class="phone-wrapper">
+      <div class="phone-label">🏠 首页</div>
+      <div class="phone-frame">
+        <div class="phone-notch"></div>
+        <div class="phone-screen">
+          <div class="page-home">
+            <div class="home-header">
+              <div class="top-bar">
+                <img src="juxing-engine/logo.png" alt="聚星引擎" class="logo-small">
+                <div class="brand-name">聚星引擎</div>
+              </div>
+              <div class="greeting">你好，考公人 👋</div>
+              <div class="title">每日一练</div>
+              <div class="subtitle">聚星引擎 · 点亮前程</div>
+            </div>
+            <div class="home-content">
+              <div class="menu-grid">
+                <div class="menu-card">
+                  <div class="menu-icon">📝</div>
+                  <div class="menu-title">专项练习</div>
+                  <div class="menu-desc">针对薄弱环节突破</div>
+                </div>
+                <div class="menu-card">
+                  <div class="menu-icon">🎯</div>
+                  <div class="menu-title">学员测评</div>
+                  <div class="menu-desc">智能评估考生水平</div>
+                </div>
+                <div class="menu-card">
+                  <div class="menu-icon">🤖</div>
+                  <div class="menu-title">AI批改</div>
+                  <div class="menu-desc">智能评分详细点评</div>
+                </div>
+                <div class="menu-card">
+                  <div class="menu-icon">📊</div>
+                  <div class="menu-title">错题本</div>
+                  <div class="menu-desc">查漏补缺高效复习</div>
+                </div>
+                <div class="menu-card">
+                  <div class="menu-icon">🏆</div>
+                  <div class="menu-title">模考大赛</div>
+                  <div class="menu-desc">全真模拟实战演练</div>
+                </div>
+              </div>
+              
+              <div class="section-title">🔥 热门申论题目</div>
+              <div class="question-list">
+                <div class="question-item">
+                  <div class="question-num">1</div>
+                  <div class="question-info">
+                    <div class="question-title">2024年国考申论（地市级）</div>
+                    <div class="question-meta">基层治理 · 120分钟前</div>
+                  </div>
+                  <div class="question-arrow">›</div>
+                </div>
+                <div class="question-item">
+                  <div class="question-num">2</div>
+                  <div class="question-info">
+                    <div class="question-title">2024年省考申论（乡镇卷）</div>
+                    <div class="question-meta">乡村振兴 · 3小时前</div>
+                  </div>
+                  <div class="question-arrow">›</div>
+                </div>
+                <div class="question-item">
+                  <div class="question-num">3</div>
+                  <div class="question-info">
+                    <div class="question-title">2023年国考申论（副省级）</div>
+                    <div class="question-meta">创新发展 · 昨天</div>
+                  </div>
+                  <div class="question-arrow">›</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- 学员测评页面 -->
+    <div class="phone-wrapper">
+      <div class="phone-label">🎯 学员测评</div>
+      <div class="phone-frame">
+        <div class="phone-notch"></div>
+        <div class="phone-screen">
+          <div class="page-assessment">
+            <div class="assessment-header">
+              <div class="back">‹ 返回</div>
+              <h2>学员测评</h2>
+              <p>智能评估考生水平，制定个性化学习计划</p>
+            </div>
+            <div class="assessment-content">
+              <div class="assessment-card">
+                <div class="assessment-card-title">
+                  <span>👤</span> 学员信息
+                </div>
+                <input type="text" class="info-input" placeholder="请输入学员姓名">
+                <input type="text" class="info-input" placeholder="请输入联系电话">
+              </div>
+              
+              <div class="assessment-card">
+                <div class="assessment-card-title">
+                  <span>📋</span> 选择题目数量
+                </div>
+                <div class="question-count-options">
+                  <div class="count-option active">
+                    <div class="number">40</div>
+                    <div class="label">快速测评</div>
+                  </div>
+                  <div class="count-option">
+                    <div class="number">60</div>
+                    <div class="label">标准测评</div>
+                  </div>
+                  <div class="count-option">
+                    <div class="number">120</div>
+                    <div class="label">全面测评</div>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="assessment-card">
+                <div class="assessment-card-title">
+                  <span>⚡</span> 选择难度等级
+                </div>
+                <div class="difficulty-options">
+                  <div class="difficulty-option active">
+                    <div class="icon">🌱</div>
+                    <div class="name">简单</div>
+                    <div class="desc">基础入门</div>
+                  </div>
+                  <div class="difficulty-option">
+                    <div class="icon">⚖️</div>
+                    <div class="name">正常</div>
+                    <div class="desc">标准难度</div>
+                  </div>
+                  <div class="difficulty-option">
+                    <div class="icon">🔥</div>
+                    <div class="name">较难</div>
+                    <div class="desc">挑战提升</div>
+                  </div>
+                </div>
+              </div>
+              
+              <button class="start-btn">
+                <span>🚀</span> 开始测评
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- AI批改页面 -->
+    <div class="phone-wrapper">
+      <div class="phone-label">🤖 AI智能批改</div>
+      <div class="phone-frame">
+        <div class="phone-notch"></div>
+        <div class="phone-screen">
+          <div class="page-ai-review">
+            <div class="ai-header">
+              <div class="back">‹ 返回</div>
+              <h2>AI智能批改</h2>
+              <p>基于大模型的精准评分与专业点评</p>
+            </div>
+            <div class="ai-content">
+              <div class="ai-score-card">
+                <div class="score-header">
+                  <div class="score-circle">
+                    <div class="score-value">70</div>
+                  </div>
+                  <div class="score-details">
+                    <h3>综合得分</h3>
+                    <p>本次作答得分 70 分</p>
+                    <span class="score-badge">🌟 中等偏上</span>
+                  </div>
+                </div>
+                
+                <div class="ai-comment">
+                  <div class="ai-comment-title">
+                    <span>💬</span> AI总评
+                  </div>
+                  <p>您的作答结构完整，要素齐全，能够围绕给定资料展开分析。建议：对策部分可进一步细化，加强可操作性；论证过程可引用更多具体案例支撑观点。</p>
+                </div>
+                
+                <div class="reference-answer">
+                  <div class="reference-title">📖 参考答案</div>
+                  <div class="reference-content">
+                    1. 观点明确，总论点突出...<br>
+                    2. 论据充实，论证有力...<br>
+                    3. 对策具体，可操作性强...
+                  </div>
+                </div>
+                
+                <button class="ai-btn">📚 查看详细解析</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- 申论题目列表页 -->
+    <div class="phone-wrapper">
+      <div class="phone-label">📋 申论题目列表</div>
+      <div class="phone-frame">
+        <div class="phone-notch"></div>
+        <div class="phone-screen">
+          <div class="page-list">
+            <div class="list-header">
+              <h2>申论专项</h2>
+              <p>精选历年真题，AI智能批改</p>
+              <div class="list-tabs">
+                <div class="list-tab active">全部</div>
+                <div class="list-tab">未做</div>
+                <div class="list-tab">已做</div>
+                <div class="list-tab">收藏</div>
+              </div>
+            </div>
+            <div class="list-content">
+              <div class="list-card">
+                <div class="list-card-header">
+                  <div class="list-badge">国考</div>
+                  <div class="list-title">2024年国考申论（地市级）：谈谈你對"以新质生产力推动高质量发展"的理解</div>
+                </div>
+                <div class="list-meta">
+                  <span>⏱ 120分钟</span>
+                  <span>📝 5道小题</span>
+                </div>
+                <div class="list-footer">
+                  <button class="list-btn list-btn-outline">❤️ 收藏</button>
+                  <button class="list-btn list-btn-primary">开始答题</button>
+                </div>
+              </div>
+              
+              <div class="list-card">
+                <div class="list-card-header">
+                  <div class="list-badge">省考</div>
+                  <div class="list-title">2024年省考申论（乡镇卷）：基层治理现代化路径探析</div>
+                </div>
+                <div class="list-meta">
+                  <span>⏱ 120分钟</span>
+                  <span>📝 4道小题</span>
+                </div>
+                <div class="list-footer">
+                  <button class="list-btn list-btn-outline">❤️ 已收藏</button>
+                  <button class="list-btn list-btn-primary">开始答题</button>
+                </div>
+              </div>
+              
+              <div class="list-card">
+                <div class="list-card-header">
+                  <div class="list-badge">国考</div>
+                  <div class="list-title">2023年国考申论（副省级）：创新驱动发展的实践与启示</div>
+                </div>
+                <div class="list-meta">
+                  <span>⏱ 120分钟</span>
+                  <span>📝 5道小题</span>
+                </div>
+                <div class="list-footer">
+                  <button class="list-btn list-btn-outline">❤️ 收藏</button>
+                  <button class="list-btn list-btn-primary">开始答题</button>
+                </div>
+              </div>
+            </div>
+            <div class="bottom-nav">
+              <div class="nav-item">
+                <div class="nav-icon">🏠</div>
+                <span>首页</span>
+              </div>
+              <div class="nav-item active">
+                <div class="nav-icon">📝</div>
+                <span>练习</span>
+              </div>
+              <div class="nav-item">
+                <div class="nav-icon">🤖</div>
+                <span>AI批改</span>
+              </div>
+              <div class="nav-item">
+                <div class="nav-icon">👤</div>
+                <span>我的</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

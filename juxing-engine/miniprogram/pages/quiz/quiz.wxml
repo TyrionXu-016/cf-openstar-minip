@@ -1,0 +1,111 @@
+<!--pages/quiz/quiz.wxml-->
+<view class="container">
+  <!-- 顶部过滤栏 -->
+  <view class="filter-bar">
+    <scroll-view scroll-x class="filter-scroll">
+      <view class="filter-list">
+        <view
+          class="filter-item {{activeSubject === item.id ? 'active' : ''}}"
+          wx:for="{{subjects}}"
+          wx:key="id"
+          bindtap="switchSubject"
+          data-id="{{item.id}}"
+        >{{item.name}}</view>
+      </view>
+    </scroll-view>
+  </view>
+
+  <!-- 题目卡片 -->
+  <view class="quiz-wrap" wx:if="{{!loading && currentQuestion}}">
+    <!-- 进度指示 -->
+    <view class="quiz-progress">
+      <text class="progress-text">第 {{currentIndex + 1}} 题 / {{totalQuestions}} 题</text>
+      <view class="progress-dots">
+        <view
+          class="dot {{index < currentIndex ? 'done' : (index === currentIndex ? 'current' : '')}}"
+          wx:for="{{progressDots}}"
+          wx:key="index"
+        ></view>
+      </view>
+    </view>
+
+    <!-- 题目内容 -->
+    <view class="question-card card">
+      <view class="question-meta">
+        <text class="tag tag-blue">{{currentQuestion.subject}}</text>
+        <text class="tag tag-{{currentQuestion.difficulty === '简单' ? 'green' : (currentQuestion.difficulty === '困难' ? 'red' : 'gold')}}" style="margin-left:12rpx">{{currentQuestion.difficulty}}</text>
+      </view>
+      <text class="question-text">{{currentQuestion.question}}</text>
+    </view>
+
+    <!-- 选项 -->
+    <view class="options-list">
+      <view
+        class="option-item {{getOptionClass(item.key)}}"
+        wx:for="{{currentQuestion.options}}"
+        wx:key="index"
+        bindtap="selectOption"
+        data-key="{{item.key}}"
+        data-index="{{index}}"
+      >
+        <view class="option-key">{{item.key}}</view>
+        <text class="option-text">{{item.text}}</text>
+        <view class="option-check" wx:if="{{answered}}">
+          <text wx:if="{{item.key === currentQuestion.answer}}">✓</text>
+          <text wx:elif="{{item.key === selectedAnswer}}">✗</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 答案解析 -->
+    <view class="explanation-card card" wx:if="{{answered}}">
+      <view class="explanation-header">
+        <text class="expl-result {{isCorrect ? 'correct' : 'wrong'}}">
+          {{isCorrect ? '✓ 回答正确' : '✗ 回答错误'}}
+        </text>
+        <text class="expl-answer">正确答案：{{currentQuestion.answer}}</text>
+      </view>
+      <view class="divider"></view>
+      <text class="expl-title">📖 解析</text>
+      <text class="expl-content">{{currentQuestion.explanation}}</text>
+    </view>
+
+    <!-- 底部按钮 -->
+    <view class="quiz-actions">
+      <button class="btn-outline" bindtap="markWrong" wx:if="{{!answered}}">标记错题</button>
+      <button class="btn-primary {{answered ? 'full' : ''}}" bindtap="{{answered ? 'nextQuestion' : 'submitAnswer'}}">
+        {{answered ? (hasNext ? '下一题 ›' : '完成练习') : '提交答案'}}
+      </button>
+    </view>
+  </view>
+
+  <!-- 加载中 -->
+  <view class="loading-wrap" wx:if="{{loading}}">
+    <view class="loading-spinner"></view>
+    <text>加载题目中...</text>
+  </view>
+
+  <!-- 完成页 -->
+  <view class="finish-card card" wx:if="{{!loading && finished}}">
+    <text class="finish-emoji">🎉</text>
+    <text class="finish-title">本轮练习完成！</text>
+    <view class="finish-stats">
+      <view class="finish-stat">
+        <text class="finish-val">{{sessionStats.total}}</text>
+        <text class="finish-key">共答题</text>
+      </view>
+      <view class="finish-stat">
+        <text class="finish-val correct-color">{{sessionStats.correct}}</text>
+        <text class="finish-key">答对</text>
+      </view>
+      <view class="finish-stat">
+        <text class="finish-val accent-color">{{sessionStats.rate}}%</text>
+        <text class="finish-key">正确率</text>
+      </view>
+    </view>
+    <button class="btn-primary" style="margin-top:32rpx" bindtap="restartQuiz">再来一轮</button>
+    <button class="btn-outline" style="margin-top:20rpx" bindtap="goHome">返回首页</button>
+  </view>
+
+  <view class="safe-bottom"></view>
+</view>

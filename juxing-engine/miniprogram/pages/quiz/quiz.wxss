@@ -1,0 +1,130 @@
+/* pages/quiz/quiz.wxss */
+
+.container { background: var(--bg); min-height: 100vh; }
+
+/* 过滤栏 */
+.filter-bar {
+  background: #fff;
+  padding: 20rpx 0;
+  box-shadow: 0 2rpx 12rpx rgba(0,0,0,0.06);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+.filter-scroll { white-space: nowrap; }
+.filter-list { display: inline-flex; padding: 0 24rpx; gap: 16rpx; }
+.filter-item {
+  display: inline-block;
+  padding: 12rpx 28rpx;
+  border-radius: 30rpx;
+  font-size: 26rpx;
+  color: var(--text-secondary);
+  background: var(--bg);
+  white-space: nowrap;
+  transition: all 0.2s;
+}
+.filter-item.active {
+  background: var(--primary);
+  color: #fff;
+  font-weight: 600;
+}
+
+/* 刷题区域 */
+.quiz-wrap { padding: 32rpx 24rpx; }
+
+/* 进度 */
+.quiz-progress {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24rpx;
+}
+.progress-text { font-size: 26rpx; color: var(--text-secondary); }
+.progress-dots { display: flex; gap: 8rpx; }
+.dot {
+  width: 12rpx;
+  height: 12rpx;
+  border-radius: 50%;
+  background: var(--border);
+}
+.dot.done { background: var(--success); }
+.dot.current { background: var(--primary); width: 24rpx; border-radius: 6rpx; }
+
+/* 题目卡片 */
+.question-card { }
+.question-meta { margin-bottom: 20rpx; }
+.question-text { font-size: 30rpx; line-height: 1.8; color: var(--text-primary); }
+
+/* 选项 */
+.options-list { display: flex; flex-direction: column; gap: 20rpx; margin-top: 24rpx; }
+.option-item {
+  display: flex;
+  align-items: center;
+  gap: 20rpx;
+  background: #fff;
+  border-radius: var(--radius);
+  padding: 28rpx 28rpx;
+  border: 2rpx solid var(--border);
+  transition: all 0.2s;
+}
+.option-item.selected { border-color: var(--primary); background: rgba(26,31,94,0.05); }
+.option-item.correct { border-color: var(--success); background: rgba(7,193,96,0.08); }
+.option-item.wrong { border-color: var(--danger); background: rgba(238,10,36,0.06); }
+
+.option-key {
+  width: 52rpx;
+  height: 52rpx;
+  border-radius: 50%;
+  background: var(--bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 26rpx;
+  font-weight: 700;
+  color: var(--primary);
+  flex-shrink: 0;
+}
+.option-item.correct .option-key { background: var(--success); color: #fff; }
+.option-item.wrong .option-key { background: var(--danger); color: #fff; }
+
+.option-text { flex: 1; font-size: 28rpx; color: var(--text-primary); line-height: 1.5; }
+.option-check { font-size: 32rpx; }
+.option-item.correct .option-check { color: var(--success); }
+.option-item.wrong .option-check { color: var(--danger); }
+
+/* 解析 */
+.explanation-card { }
+.explanation-header { display: flex; align-items: center; justify-content: space-between; }
+.expl-result { font-size: 28rpx; font-weight: 700; }
+.expl-result.correct { color: var(--success); }
+.expl-result.wrong { color: var(--danger); }
+.expl-answer { font-size: 26rpx; color: var(--text-secondary); }
+.expl-title { display: block; font-size: 28rpx; font-weight: 600; color: var(--primary); margin-bottom: 12rpx; }
+.expl-content { font-size: 26rpx; color: var(--text-secondary); line-height: 1.8; }
+
+/* 操作按钮 */
+.quiz-actions {
+  display: flex;
+  gap: 20rpx;
+  margin-top: 32rpx;
+}
+.quiz-actions .btn-outline, .quiz-actions .btn-primary {
+  flex: 1;
+  padding: 28rpx;
+}
+.quiz-actions .btn-primary.full { flex: 2; }
+
+/* 完成页 */
+.finish-card {
+  margin: 80rpx 24rpx;
+  text-align: center;
+  padding: 64rpx 40rpx;
+}
+.finish-emoji { display: block; font-size: 80rpx; margin-bottom: 24rpx; }
+.finish-title { display: block; font-size: 36rpx; font-weight: 700; color: var(--text-primary); margin-bottom: 48rpx; }
+.finish-stats { display: flex; justify-content: center; gap: 60rpx; }
+.finish-stat { display: flex; flex-direction: column; align-items: center; gap: 8rpx; }
+.finish-val { font-size: 48rpx; font-weight: 700; color: var(--primary); }
+.finish-val.correct-color { color: var(--success); }
+.finish-val.accent-color { color: var(--accent); }
+.finish-key { font-size: 24rpx; color: var(--text-secondary); }

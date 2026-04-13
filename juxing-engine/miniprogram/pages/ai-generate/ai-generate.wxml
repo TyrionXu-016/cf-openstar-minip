@@ -1,0 +1,139 @@
+<!--pages/ai-generate/ai-generate.wxml-->
+<view class="container">
+  <!-- 顶部标题 -->
+  <view class="header gradient-bg">
+    <text class="header-title">🤖 AI 智能出题</text>
+    <text class="header-sub">根据你的需求，AI 为你定制专属题目</text>
+  </view>
+
+  <!-- 出题参数配置 -->
+  <view class="config-card card" wx:if="{{!generating && !generatedQuestions.length}}">
+    <view class="config-section">
+      <text class="config-label">📚 科目选择</text>
+      <view class="tag-group">
+        <view
+          class="tag-btn {{selectedSubject === item.id ? 'active' : ''}}"
+          wx:for="{{subjects}}"
+          wx:key="id"
+          bindtap="selectSubject"
+          data-id="{{item.id}}"
+        >{{item.name}}</view>
+      </view>
+    </view>
+
+    <view class="config-section">
+      <text class="config-label">🎯 题目类型</text>
+      <view class="tag-group">
+        <view
+          class="tag-btn {{selectedType === item.id ? 'active' : ''}}"
+          wx:for="{{questionTypes}}"
+          wx:key="id"
+          bindtap="selectType"
+          data-id="{{item.id}}"
+        >{{item.name}}</view>
+      </view>
+    </view>
+
+    <view class="config-section">
+      <text class="config-label">⚡ 难度设置</text>
+      <view class="difficulty-row">
+        <view
+          class="difficulty-item {{selectedDifficulty === item.id ? 'active' : ''}}"
+          wx:for="{{difficulties}}"
+          wx:key="id"
+          bindtap="selectDifficulty"
+          data-id="{{item.id}}"
+        >
+          <text class="diff-icon">{{item.icon}}</text>
+          <text class="diff-name">{{item.name}}</text>
+        </view>
+      </view>
+    </view>
+
+    <view class="config-section">
+      <text class="config-label">🏷️ 知识点（可选）</text>
+      <input
+        class="knowledge-input"
+        placeholder="输入考点，如：类比推理、数列规律..."
+        value="{{knowledgePoint}}"
+        bindinput="onKnowledgeInput"
+      />
+    </view>
+
+    <view class="config-section">
+      <text class="config-label">📊 生成数量</text>
+      <view class="count-row">
+        <view class="count-btn" bindtap="decreaseCount">−</view>
+        <text class="count-value">{{generateCount}}</text>
+        <view class="count-btn" bindtap="increaseCount">+</view>
+      </view>
+    </view>
+
+    <button class="btn-accent generate-btn" bindtap="startGenerate">
+      ✨ AI 开始生成
+    </button>
+  </view>
+
+  <!-- 生成中动画 -->
+  <view class="generating-wrap" wx:if="{{generating}}">
+    <view class="ai-orb">
+      <view class="orb-ring ring1"></view>
+      <view class="orb-ring ring2"></view>
+      <view class="orb-ring ring3"></view>
+      <text class="orb-icon">🤖</text>
+    </view>
+    <text class="gen-title">AI 正在为你生成题目...</text>
+    <text class="gen-sub">根据你的需求智能命题中</text>
+    <view class="gen-steps">
+      <view class="gen-step {{genStep >= 1 ? 'done' : ''}}">
+        <text>分析知识点</text>
+        <text wx:if="{{genStep >= 1}}">✓</text>
+      </view>
+      <view class="gen-step {{genStep >= 2 ? 'done' : ''}}">
+        <text>构建题目框架</text>
+        <text wx:if="{{genStep >= 2}}">✓</text>
+      </view>
+      <view class="gen-step {{genStep >= 3 ? 'done' : ''}}">
+        <text>生成选项与解析</text>
+        <text wx:if="{{genStep >= 3}}">✓</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 生成结果 -->
+  <view class="result-wrap" wx:if="{{!generating && generatedQuestions.length}}">
+    <view class="result-header">
+      <text class="result-title">已生成 {{generatedQuestions.length}} 道题目</text>
+      <view class="result-actions">
+        <button class="btn-sm" bindtap="resetGenerate">重新生成</button>
+        <button class="btn-sm btn-sm-primary" bindtap="startPractice">开始练习</button>
+      </view>
+    </view>
+
+    <view
+      class="gen-question-card card"
+      wx:for="{{generatedQuestions}}"
+      wx:key="index"
+    >
+      <view class="gen-q-header">
+        <text class="gen-q-num">第 {{index + 1}} 题</text>
+        <view>
+          <text class="tag tag-blue">{{item.subject || selectedSubjectName}}</text>
+          <text class="tag tag-gold" style="margin-left:8rpx">{{item.difficulty}}</text>
+        </view>
+      </view>
+      <text class="gen-q-text">{{item.question}}</text>
+      <view class="gen-options">
+        <text class="gen-option" wx:for="{{item.options}}" wx:key="key" wx:for-item="opt">
+          {{opt.key}}. {{opt.text}}
+        </text>
+      </view>
+      <view class="gen-answer-wrap">
+        <text class="gen-answer">答案：{{item.answer}}</text>
+        <text class="gen-expl">{{item.explanation}}</text>
+      </view>
+    </view>
+  </view>
+
+  <view class="safe-bottom"></view>
+</view>

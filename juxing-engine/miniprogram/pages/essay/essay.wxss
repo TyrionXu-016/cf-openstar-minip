@@ -1,0 +1,124 @@
+/* pages/essay/essay.wxss */
+
+.container { background: var(--bg); min-height: 100vh; }
+
+.header { padding: 60rpx 40rpx 48rpx; border-radius: 0 0 40rpx 40rpx; }
+.header-title { display: block; color: #fff; font-size: 40rpx; font-weight: 700; margin-bottom: 12rpx; }
+.header-sub { display: block; color: rgba(255,255,255,0.75); font-size: 26rpx; }
+
+/* 题目选择 */
+.topic-section { padding: 32rpx 24rpx; }
+.section-label { display: block; font-size: 28rpx; font-weight: 700; color: var(--text-primary); margin-bottom: 24rpx; }
+
+.topic-card { cursor: pointer; }
+.topic-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 16rpx;
+}
+.topic-words { margin-left: auto; font-size: 24rpx; color: var(--text-hint); }
+.topic-title { display: block; font-size: 30rpx; font-weight: 600; color: var(--text-primary); margin-bottom: 12rpx; }
+.topic-preview {
+  display: block;
+  font-size: 26rpx;
+  color: var(--text-secondary);
+  line-height: 1.7;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+/* 写作区 */
+.writing-area { padding: 24rpx; }
+.topic-display { }
+.topic-display-header { display: flex; align-items: center; margin-bottom: 20rpx; }
+.change-topic { margin-left: auto; font-size: 26rpx; color: var(--primary); }
+.topic-display-title { display: block; font-size: 30rpx; font-weight: 600; color: var(--text-primary); margin-bottom: 20rpx; }
+
+.material-wrap {
+  background: var(--bg);
+  border-radius: var(--radius);
+  padding: 20rpx;
+  margin-bottom: 20rpx;
+  border-left: 6rpx solid var(--primary);
+}
+.material-text { font-size: 26rpx; color: var(--text-secondary); line-height: 1.8; }
+
+.requirement-wrap { }
+.req-title { display: block; font-size: 26rpx; font-weight: 600; color: var(--text-primary); margin-bottom: 8rpx; }
+.req-text { display: block; font-size: 26rpx; color: var(--text-primary); line-height: 1.7; margin-bottom: 8rpx; }
+.req-word { display: block; font-size: 24rpx; color: var(--accent); font-weight: 500; }
+
+/* 写作输入 */
+.write-card { }
+.write-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20rpx; }
+.write-label { font-size: 28rpx; font-weight: 600; color: var(--text-primary); }
+.word-count { font-size: 26rpx; color: var(--text-hint); }
+.word-count.enough { color: var(--success); font-weight: 600; }
+
+.answer-input {
+  width: 100%;
+  min-height: 400rpx;
+  font-size: 28rpx;
+  color: var(--text-primary);
+  line-height: 1.8;
+  box-sizing: border-box;
+}
+
+/* 操作按钮 */
+.write-actions { display: flex; gap: 20rpx; margin-top: 16rpx; }
+.write-actions .btn-outline { flex: 1; padding: 28rpx; }
+.submit-btn { flex: 2; padding: 28rpx; font-size: 30rpx; }
+
+/* 批改动画 */
+.grading-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 100rpx 40rpx;
+}
+
+.grading-animation {
+  position: relative;
+  width: 160rpx;
+  height: 160rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 48rpx;
+}
+.grading-icon { font-size: 80rpx; z-index: 1; }
+.grading-pulse {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: var(--primary);
+  opacity: 0.1;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+@keyframes pulse {
+  0%, 100% { transform: scale(1); opacity: 0.1; }
+  50% { transform: scale(1.3); opacity: 0.2; }
+}
+
+.grading-title { font-size: 32rpx; font-weight: 700; color: var(--text-primary); margin-bottom: 48rpx; }
+
+.grading-progress { width: 100%; display: flex; flex-direction: column; gap: 16rpx; }
+.grading-step {
+  display: flex;
+  align-items: center;
+  gap: 20rpx;
+  font-size: 26rpx;
+  color: var(--text-hint);
+}
+.grading-step.active { color: var(--primary); font-weight: 600; }
+.step-dot {
+  width: 16rpx;
+  height: 16rpx;
+  border-radius: 50%;
+  background: var(--border);
+  flex-shrink: 0;
+}
+.grading-step.active .step-dot { background: var(--primary); }

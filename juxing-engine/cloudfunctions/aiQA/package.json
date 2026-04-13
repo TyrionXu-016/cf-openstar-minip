@@ -1,0 +1,9 @@
+{
+  "name": "aiQA",
+  "version": "1.0.0",
+  "description": "AI智能答疑云函数",
+  "main": "index.js",
+  "dependencies": {
+    "tencentcloud-sdk-nodejs": "^4.0.0"
+  }
+}

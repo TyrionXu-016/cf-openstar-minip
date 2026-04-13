@@ -1,0 +1,103 @@
+<!--pages/essay/essay.wxml-->
+<view class="container">
+  <!-- 顶部 -->
+  <view class="header gradient-bg">
+    <text class="header-title">✍️ 申论 AI 批改</text>
+    <text class="header-sub">写完提交，AI 秒出评分与详细批改意见</text>
+  </view>
+
+  <!-- 题目选择 -->
+  <view class="topic-section" wx:if="{{!selectedTopic}}">
+    <text class="section-label">选择申论题目</text>
+    <view
+      class="topic-card card"
+      wx:for="{{topics}}"
+      wx:key="id"
+      bindtap="selectTopic"
+      data-topic="{{item}}"
+    >
+      <view class="topic-header">
+        <text class="tag tag-blue">{{item.category}}</text>
+        <text class="tag tag-gold" style="margin-left:12rpx">{{item.difficulty}}</text>
+        <text class="topic-words">{{item.wordLimit}}字</text>
+      </view>
+      <text class="topic-title">{{item.title}}</text>
+      <text class="topic-preview">{{item.material}}</text>
+    </view>
+  </view>
+
+  <!-- 写作区域 -->
+  <view class="writing-area" wx:if="{{selectedTopic && !submitted}}">
+    <!-- 题目展示 -->
+    <view class="topic-display card">
+      <view class="topic-display-header">
+        <text class="tag tag-blue">{{selectedTopic.category}}</text>
+        <text class="change-topic" bindtap="changeTopic">换题 ›</text>
+      </view>
+      <text class="topic-display-title">{{selectedTopic.title}}</text>
+      <view class="material-wrap">
+        <text class="material-text">{{selectedTopic.material}}</text>
+      </view>
+      <view class="requirement-wrap">
+        <text class="req-title">作答要求：</text>
+        <text class="req-text">{{selectedTopic.question}}</text>
+        <text class="req-word">字数要求：{{selectedTopic.wordLimit}}字左右</text>
+      </view>
+    </view>
+
+    <!-- 写作输入框 -->
+    <view class="write-card card">
+      <view class="write-header">
+        <text class="write-label">📝 开始作答</text>
+        <text class="word-count {{wordCount >= selectedTopic.wordLimit * 0.9 ? 'enough' : ''}}">
+          {{wordCount}} / {{selectedTopic.wordLimit}}字
+        </text>
+      </view>
+      <textarea
+        class="answer-input"
+        placeholder="请在此输入你的申论答案..."
+        value="{{answerText}}"
+        bindinput="onAnswerInput"
+        maxlength="3000"
+        auto-height
+      ></textarea>
+    </view>
+
+    <!-- 操作按钮 -->
+    <view class="write-actions">
+      <button class="btn-outline" bindtap="saveDraft">💾 保存草稿</button>
+      <button class="btn-accent submit-btn" bindtap="submitEssay" disabled="{{!answerText.length}}">
+        🚀 提交 AI 批改
+      </button>
+    </view>
+  </view>
+
+  <!-- 批改中动画 -->
+  <view class="grading-wrap" wx:if="{{grading}}">
+    <view class="grading-animation">
+      <text class="grading-icon">🤖</text>
+      <view class="grading-pulse"></view>
+    </view>
+    <text class="grading-title">AI 批改专家正在阅卷...</text>
+    <view class="grading-progress">
+      <view class="grading-step {{gradingStep >= 1 ? 'active' : ''}}">
+        <text class="step-dot"></text>
+        <text>内容分析</text>
+      </view>
+      <view class="grading-step {{gradingStep >= 2 ? 'active' : ''}}">
+        <text class="step-dot"></text>
+        <text>逻辑评估</text>
+      </view>
+      <view class="grading-step {{gradingStep >= 3 ? 'active' : ''}}">
+        <text class="step-dot"></text>
+        <text>语言检测</text>
+      </view>
+      <view class="grading-step {{gradingStep >= 4 ? 'active' : ''}}">
+        <text class="step-dot"></text>
+        <text>生成报告</text>
+      </view>
+    </view>
+  </view>
+
+  <view class="safe-bottom"></view>
+</view>
