@@ -1,0 +1,20 @@
+<view class="container">
+  <view class="empty card" wx:if="{{list.length === 0}}">
+    <text class="empty-text">暂无错题，刷题时可点「标记错题」加入。</text>
+    <button class="btn-primary" bindtap="goQuiz">去刷题</button>
+  </view>
+
+  <scroll-view scroll-y class="scroll" wx:else>
+    <view class="card item" wx:for="{{list}}" wx:key="id">
+      <view class="item-head">
+        <text class="tag tag-blue">{{item.subject}}</text>
+        <text class="tag tag-gold">{{item.difficulty}}</text>
+      </view>
+      <text class="q-preview">{{item.question}}</text>
+      <view class="item-actions">
+        <button class="btn-outline sm" size="mini" data-index="{{index}}" bindtap="practiceOne">练这道题</button>
+        <button class="btn-outline sm danger" size="mini" data-id="{{item.id}}" bindtap="removeItem">删除</button>
+      </view>
+    </view>
+  </scroll-view>
+</view>

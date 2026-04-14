@@ -10,7 +10,12 @@
     "pages/ocr-scan/ocr-scan",
     "pages/student-info/student-info",
     "pages/job-match/job-match",
-    "pages/profile/profile"
+    "pages/profile/profile",
+    "pages/assessment-test/assessment-test",
+    "pages/wrong-list/wrong-list",
+    "pages/essay-history/essay-history",
+    "pages/favorites/favorites",
+    "pages/settings/settings"
   ],
   "window": {
     "backgroundTextStyle": "light",

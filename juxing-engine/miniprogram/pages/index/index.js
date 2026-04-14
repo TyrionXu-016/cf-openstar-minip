@@ -1,8 +1,11 @@
 // pages/index/index.js
+const { getCategoryCounts, getAllQuestions } = require('../../data/question-bank.js');
 const app = getApp();
 
 Page({
   data: {
+    navTopRpx: 96,
+    capsuleRightRpx: 200,
     currentDate: '',
     greetingText: '早上好',
     userName: '同学',
@@ -15,28 +18,46 @@ Page({
       { key: 'days', icon: '🔥', value: '0', label: '连续天数' },
       { key: 'essay', icon: '📝', value: '0', label: '申论篇数' },
     ],
-    categories: [
-      { id: 'lx', icon: '🧩', name: '逻辑推理', count: 1280, bgColor: 'rgba(26,31,94,0.1)' },
-      { id: 'sl', icon: '🔢', name: '数量关系', count: 860, bgColor: 'rgba(245,166,35,0.1)' },
-      { id: 'yc', icon: '📖', name: '言语理解', count: 1540, bgColor: 'rgba(7,193,96,0.1)' },
-      { id: 'cz', icon: '📊', name: '资料分析', count: 720, bgColor: 'rgba(100,100,255,0.1)' },
-      { id: 'cg', icon: '⚖️', name: '常识判断', count: 980, bgColor: 'rgba(238,10,36,0.1)' },
-      { id: 'sl2', icon: '📜', name: '申论专练', count: 320, bgColor: 'rgba(255,153,102,0.1)' },
-    ],
-    recommendQuestion: {
-      subject: '逻辑推理',
-      difficulty: '中等',
-      question: '某单位有员工甲、乙、丙三人，他们分别在行政部、技术部、财务部工作...',
-    }
+    categories: [],
+    recommendQuestion: null,
   },
 
   onLoad() {
+    const s = app.globalData.safeInsets || {};
+    this.setData({
+      navTopRpx: s.navTopRpx != null ? s.navTopRpx : 96,
+      capsuleRightRpx: s.capsuleRightRpx != null ? s.capsuleRightRpx : 200,
+    });
     this.initDate();
+    this.refreshLibraryMeta();
     this.loadStats();
   },
 
   onShow() {
     this.loadStats();
+  },
+
+  refreshLibraryMeta() {
+    const counts = getCategoryCounts();
+    const all = getAllQuestions();
+    const pick = all.length > 0 ? all[Math.floor(Math.random() * all.length)] : null;
+    let qText = '';
+    if (pick) {
+      qText = pick.question.length > 72 ? `${pick.question.slice(0, 72)}…` : pick.question;
+    }
+    this.setData({
+      categories: [
+        { id: 'lx', icon: '🧩', name: '逻辑推理', count: counts.lx, bgColor: 'rgba(26,31,94,0.1)' },
+        { id: 'sl', icon: '🔢', name: '数量关系', count: counts.sl, bgColor: 'rgba(245,166,35,0.1)' },
+        { id: 'yc', icon: '📖', name: '言语理解', count: counts.yc, bgColor: 'rgba(7,193,96,0.1)' },
+        { id: 'cz', icon: '📊', name: '资料分析', count: counts.cz, bgColor: 'rgba(100,100,255,0.1)' },
+        { id: 'cg', icon: '⚖️', name: '常识判断', count: counts.cg, bgColor: 'rgba(238,10,36,0.1)' },
+        { id: 'sl2', icon: '📜', name: '申论专练', count: counts.sl2, bgColor: 'rgba(255,153,102,0.1)' },
+      ],
+      recommendQuestion: pick
+        ? { subject: pick.subject, difficulty: pick.difficulty, question: qText }
+        : null,
+    });
   },
 
   initDate() {

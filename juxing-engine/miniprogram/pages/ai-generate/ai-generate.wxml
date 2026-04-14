@@ -55,6 +55,7 @@
       <input
         class="knowledge-input"
         placeholder="输入考点，如：类比推理、数列规律..."
+        placeholder-class="knowledge-placeholder"
         value="{{knowledgePoint}}"
         bindinput="onKnowledgeInput"
       />

@@ -50,12 +50,18 @@
 .knowledge-input {
   background: var(--bg);
   border-radius: var(--radius);
-  padding: 24rpx;
+  height: 88rpx;
+  line-height: 88rpx;
+  padding: 0 24rpx;
   font-size: 28rpx;
   color: var(--text-primary);
   border: 2rpx solid var(--border);
   width: 100%;
   box-sizing: border-box;
+  display: block;
+}
+.knowledge-placeholder {
+  color: var(--text-hint);
 }
 
 .count-row { display: flex; align-items: center; gap: 32rpx; }

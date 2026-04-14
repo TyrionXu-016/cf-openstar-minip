@@ -105,6 +105,7 @@
 /* 操作按钮 */
 .quiz-actions {
   display: flex;
+  flex-wrap: wrap;
   gap: 20rpx;
   margin-top: 32rpx;
 }

@@ -72,23 +72,30 @@ Page({
     }, 800);
 
     try {
-      const result = await wx.cloud.callFunction({
-        name: 'generateQuestion',
-        data: {
-          subject: this.data.selectedSubject,
-          difficulty: this.data.selectedDifficulty,
-          questionType: this.data.selectedType,
-          knowledgePoint: this.data.knowledgePoint || '综合',
-          count: this.data.generateCount,
-        },
-      });
+      const payload = {
+        subject: this.data.selectedSubject,
+        difficulty: this.data.selectedDifficulty,
+        questionType: this.data.selectedType,
+        knowledgePoint: this.data.knowledgePoint || '综合',
+        count: this.data.generateCount,
+      };
+      const result = await this.callGenerateFunction(payload);
+      const cloudResult = result && result.result ? result.result : {};
 
       clearInterval(stepTimer);
       this.setData({ genStep: 3 });
 
       await new Promise(resolve => setTimeout(resolve, 500));
 
-      const questions = result.result.questions || [result.result];
+      if (cloudResult.success === false) {
+        throw new Error(cloudResult.error || '云端生题失败');
+      }
+
+      const questions = this.normalizeQuestions(cloudResult);
+      if (!questions.length) {
+        throw new Error('云端返回题目为空');
+      }
+
       this.setData({
         generating: false,
         generatedQuestions: questions,
@@ -110,8 +117,59 @@ Page({
         generatedQuestions: this.getMockQuestions(),
       });
 
-      wx.showToast({ title: 'AI已生成题目', icon: 'success' });
+      if (!wx.getStorageSync('settings_quiet_cloud_fallback')) {
+        wx.showToast({ title: '已使用本地示例题目', icon: 'none' });
+      }
     }
+  },
+
+  async callGenerateFunction(data) {
+    const candidates = ['generateQuestionV2', 'generateQuestion'];
+    let lastErr = null;
+    for (const name of candidates) {
+      try {
+        const res = await wx.cloud.callFunction({ name, data });
+        return res;
+      } catch (err) {
+        lastErr = err;
+      }
+    }
+    throw lastErr || new Error('调用云函数失败');
+  },
+
+  normalizeQuestions(cloudResult) {
+    const list = cloudResult.questions || cloudResult.data || [];
+    const rawList = Array.isArray(list) ? list : [list];
+    return rawList
+      .map((q) => {
+        if (!q || typeof q !== 'object') return null;
+        const question = q.question || q.title || q.content || '';
+        if (!question) return null;
+
+        let options = q.options || [];
+        if (Array.isArray(options)) {
+          options = options.map((opt, idx) => {
+            if (typeof opt === 'string') {
+              const cleaned = opt.replace(/^[A-D]\.\s*/i, '').trim();
+              const key = String.fromCharCode(65 + idx);
+              return { key, text: cleaned || opt };
+            }
+            return opt;
+          });
+        } else {
+          options = [];
+        }
+
+        return {
+          ...q,
+          question,
+          options,
+          answer: q.answer || '',
+          explanation: q.explanation || q.analysis || '暂无解析',
+          difficulty: q.difficulty || '中等',
+        };
+      })
+      .filter(Boolean);
   },
 
   getMockQuestions() {

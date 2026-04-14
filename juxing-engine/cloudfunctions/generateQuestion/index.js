@@ -3,12 +3,25 @@
 
 const cloud = require('wx-server-sdk');
 cloud.init({ env: cloud.DYNAMIC_CURRENT_ENV });
-
-const TcbRouter = require('tcb-router');
 const tencentcloud = require('tencentcloud-sdk-nodejs');
 
-// 腾讯云认证配置
-const { SecretId, SecretKey } = cloud.getVC3Configuration();
+function getVC3Credentials() {
+  if (typeof cloud.getVC3Configuration === 'function') {
+    const cfg = cloud.getVC3Configuration() || {};
+    const secretId = cfg.SecretId || '';
+    const secretKey = cfg.SecretKey || '';
+    if (secretId && secretKey) {
+      return { secretId, secretKey };
+    }
+  }
+
+  const secretId = process.env.TC_SECRET_ID || process.env.SecretId || '';
+  const secretKey = process.env.TC_SECRET_KEY || process.env.SecretKey || '';
+  if (!secretId || !secretKey) {
+    throw new Error('缺少腾讯云凭证，请配置环境变量 TC_SECRET_ID/TC_SECRET_KEY');
+  }
+  return { secretId, secretKey };
+}
 
 // 难度映射
 const DIFFICULTY_MAP = { easy: '简单', medium: '中等', hard: '困难' };
@@ -83,9 +96,10 @@ function extractJSON(text) {
  * 调用混元大模型
  */
 async function callHunyuan(prompt) {
+  const credential = getVC3Credentials();
   const Hunyuan = tencentcloud.hunyuan.v20230901.Client;
   const client = new Hunyuan({
-    credential: { secretId: SecretId, secretKey: SecretKey },
+    credential,
     region: 'ap-beijing',
   });
 

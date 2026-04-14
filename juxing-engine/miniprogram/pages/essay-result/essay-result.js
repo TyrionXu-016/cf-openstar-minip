@@ -16,11 +16,6 @@ Page({
         answer: data.answer,
         topic: data.topic,
       });
-
-      // 更新申论计数
-      const total = wx.getStorageSync('study_total') || { total: 0, correct: 0, days: 0, essay: 0 };
-      total.essay = (total.essay || 0) + 1;
-      wx.setStorageSync('study_total', total);
     }
   },
 

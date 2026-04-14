@@ -1,8 +1,14 @@
 // pages/profile/profile.js
 
+const app = getApp();
+
 Page({
   data: {
+    profileHeroTopRpx: 136,
+    capsuleRightRpx: 200,
     userInfo: {},
+    draftUserInfo: { nickName: '', avatar: '' },
+    showProfileEditor: false,
     wrongCount: 0,
     stats: [
       { key: 'total', name: '累计刷题', value: '0' },
@@ -10,6 +16,15 @@ Page({
       { key: 'days', name: '学习天数', value: '0' },
       { key: 'essay', name: '申论篇数', value: '0' },
     ],
+  },
+
+  onLoad() {
+    const s = app.globalData.safeInsets || {};
+    const top = s.navTopRpx != null ? s.navTopRpx : 96;
+    this.setData({
+      profileHeroTopRpx: top + 40,
+      capsuleRightRpx: s.capsuleRightRpx != null ? s.capsuleRightRpx : 200,
+    });
   },
 
   onShow() {
@@ -46,36 +61,97 @@ Page({
     wx.getUserProfile({
       desc: '用于展示学习数据',
       success: (res) => {
-        const userInfo = res.userInfo;
-        this.setData({ userInfo });
-        wx.setStorageSync('userInfo', userInfo);
-        wx.showToast({ title: '授权成功', icon: 'success' });
-      }
+        const current = this.data.userInfo || {};
+        const profileNick = (res.userInfo.nickName || '').trim();
+        const currentNick = (current.nickName || '').trim();
+        const normalizedNick =
+          currentNick && currentNick !== '微信用户'
+            ? currentNick
+            : (profileNick && profileNick !== '微信用户' ? profileNick : '');
+        const merged = {
+          nickName: normalizedNick,
+          avatar: current.avatar || res.userInfo.avatarUrl || '',
+        };
+        this.setData({
+          draftUserInfo: merged,
+          showProfileEditor: true,
+        });
+      },
+      fail: () => {
+        wx.showToast({ title: '你取消了授权', icon: 'none' });
+      },
     });
+  },
+
+  closeProfileEditor() {
+    this.setData({ showProfileEditor: false });
+  },
+
+  onChooseAvatar(e) {
+    const avatar = e.detail.avatarUrl || '';
+    if (!avatar) return;
+    this.setData({
+      draftUserInfo: {
+        ...this.data.draftUserInfo,
+        avatar,
+      },
+    });
+  },
+
+  onNicknameBlur(e) {
+    const nickName = (e.detail.value || '').trim();
+    this.setData({
+      draftUserInfo: {
+        ...this.data.draftUserInfo,
+        nickName,
+      },
+    });
+  },
+
+  onNicknameInput(e) {
+    const nickName = (e.detail.value || '').trim();
+    this.setData({
+      draftUserInfo: {
+        ...this.data.draftUserInfo,
+        nickName,
+      },
+    });
+  },
+
+  noop() {},
+
+  saveUserInfo() {
+    const draft = this.data.draftUserInfo || {};
+    const nickName = (draft.nickName || '').trim();
+    const avatar = draft.avatar || '';
+    if (!nickName) {
+      wx.showToast({ title: '请填写昵称', icon: 'none' });
+      return;
+    }
+    if (!avatar) {
+      wx.showToast({ title: '请先选择头像', icon: 'none' });
+      return;
+    }
+
+    const userInfo = { nickName, avatar };
+    this.setData({
+      userInfo,
+      showProfileEditor: false,
+    });
+    wx.setStorageSync('userInfo', userInfo);
+    wx.showToast({ title: '保存成功', icon: 'success' });
   },
 
   goWrongList() {
-    wx.showModal({
-      title: '错题本',
-      content: '功能正在完善中...\n\n暂时可通过「首页→专项练习」查看题目，在答题时点击「标记错题」按钮添加。',
-      showCancel: false,
-    });
+    wx.navigateTo({ url: '/pages/wrong-list/wrong-list' });
   },
 
   goEssayHistory() {
-    wx.showModal({
-      title: '申论历史',
-      content: '申论练习记录功能正在完善中...\n\n暂时可通过「首页→申论AI批改」继续练习。',
-      showCancel: false,
-    });
+    wx.navigateTo({ url: '/pages/essay-history/essay-history' });
   },
 
   goFavorites() {
-    wx.showModal({
-      title: '我的收藏',
-      content: '收藏功能正在完善中...\n\n暂时可通过「首页→专项练习」继续刷题。',
-      showCancel: false,
-    });
+    wx.navigateTo({ url: '/pages/favorites/favorites' });
   },
 
   goAIGallery() {
@@ -83,11 +159,7 @@ Page({
   },
 
   goSettings() {
-    wx.showModal({
-      title: '设置',
-      content: '• 每日目标提醒\n• 消息通知\n• 深色模式\n等功能正在开发中...',
-      showCancel: false,
-    });
+    wx.navigateTo({ url: '/pages/settings/settings' });
   },
 
   goAbout() {

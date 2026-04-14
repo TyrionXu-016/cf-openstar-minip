@@ -1,6 +1,5 @@
 // 智能选岗推荐页面
 const positionsDB = require('../../data/positions.js');
-const app = getApp();
 
 Page({
   data: {
@@ -15,6 +14,9 @@ Page({
   },
 
   onLoad: function(options) {
+    this._offerCloudAfterLoad = !!(options && options.data);
+    this._cloudPromptShown = false;
+
     if (options.mode === 'history') {
       this.loadFromHistory();
     } else if (options.data) {
@@ -26,19 +28,21 @@ Page({
         wx.showToast({ title: '数据加载失败', icon: 'none' });
       }
     }
-    
-    // 显示本地数据数量
+
     this.setData({
       currentPositions: positionsDB.length,
-      totalPositions: 1776
+      totalPositions: 1776,
     });
   },
 
   onShow: function() {
-    // 检查云端数据是否可用
-    if (app.cloud) {
-      this.checkCloudData();
-    }
+    if (!wx.cloud || typeof wx.cloud.callFunction !== 'function') return;
+    if (!this._offerCloudAfterLoad || this._cloudPromptShown) return;
+    if (wx.getStorageSync('job_match_cloud_prompt_done')) return;
+    if (positionsDB.length >= 1776) return;
+
+    this._cloudPromptShown = true;
+    this.checkCloudData();
   },
 
   // 检查云端数据
@@ -49,10 +53,11 @@ Page({
       confirmText: '加载完整',
       cancelText: '使用本地',
       success: (res) => {
+        wx.setStorageSync('job_match_cloud_prompt_done', true);
         if (res.confirm) {
           this.loadCloudData();
         }
-      }
+      },
     });
   },
 

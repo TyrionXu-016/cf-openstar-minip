@@ -10,7 +10,7 @@ const QUICK_QUESTIONS = [
 ];
 
 const KNOWLEDGE_BASE = {
-  '行测': `行测备考技巧：
+  行测: `行测备考技巧：
 
 **1. 言语理解**
 • 关键词法：关注转折词（但是、然而）、因果词（因此、所以）
@@ -34,19 +34,19 @@ const KNOWLEDGE_BASE = {
 • 学会估算：减少计算量
 • 找准数据：注意时间范围和单位`,
 
-  '申论': `申论写作技巧：
+  申论: `申论写作技巧：
 
 **三段式结构：**
 
-📌 **开头（150字）**
+**开头（150字）**
 背景引入 → 问题陈述 → 亮明观点
 
-📌 **正文（500字）**
+**正文（500字）**
 • 分论点1 + 论据 + 对策
 • 分论点2 + 论据 + 对策
 • 分论点3 + 论据 + 对策
 
-📌 **结尾（100字）**
+**结尾（100字）**
 总结回扣 → 升华展望
 
 **高分技巧：**
@@ -55,19 +55,19 @@ const KNOWLEDGE_BASE = {
 • 多用政策语言和数据支撑
 • 字迹工整，卷面整洁`,
 
-  '备考': `科学备考计划（6个月）：
+  备考: `科学备考计划（6个月）：
 
-🔵 **第1-2月：基础阶段**
+**第1-2月：基础阶段**
 • 行测：每天3小时，学完5大模块
 • 申论：了解题型和基本答题思路
 • 公基：每天背诵30分钟
 
-🟡 **第3-4月：强化阶段**
+**第3-4月：强化阶段**
 • 专项突破薄弱模块
 • 申论每周写2篇
 • 开始积累时政素材
 
-🔴 **第5-6月：冲刺阶段**
+**第5-6月：冲刺阶段**
 • 每天1套真题
 • 严格计时训练
 • 错题复盘总结
@@ -77,7 +77,7 @@ const KNOWLEDGE_BASE = {
 • 申论：1篇/2天
 • 复盘：30分钟`,
 
-  '面试': `结构化面试技巧：
+  面试: `结构化面试技巧：
 
 **1. 综合分析类**
 • 表明观点（赞同/反对/辩证）
@@ -106,7 +106,7 @@ const KNOWLEDGE_BASE = {
 • 结合岗位实际
 • 展现为民服务意识`,
 
-  'default': `这是个好问题！关于公考备考，建议你从以下几个方面入手：
+  default: `这是个好问题！关于公考备考，建议你从以下几个方面入手：
 
 1. **了解考情**：先做一套真题，了解考试内容和自己的基础
 
@@ -124,11 +124,19 @@ const KNOWLEDGE_BASE = {
 • 备考计划制定
 • 面试技巧等
 
-我会给你详细的解答！💪`
+我会给你详细的解答！`,
 };
+
+function isQuietCloudFallback() {
+  return !!wx.getStorageSync('settings_quiet_cloud_fallback');
+}
+
+const app = getApp();
 
 Page({
   data: {
+    chatHeaderTopRpx: 116,
+    chatHeaderRightRpx: 200,
     messages: [],
     inputText: '',
     typing: false,
@@ -139,12 +147,19 @@ Page({
   },
 
   onLoad() {
-    // 添加欢迎消息
+    const s = app.globalData.safeInsets || {};
+    const top = s.navTopRpx != null ? s.navTopRpx : 96;
+    this.setData({
+      chatHeaderTopRpx: top + 20,
+      chatHeaderRightRpx: s.capsuleRightRpx != null ? s.capsuleRightRpx : 200,
+    });
+
     if (!wx.getStorageSync('chat_welcomed')) {
       const welcomeMsg = {
         id: 0,
         role: 'assistant',
-        content: '👋 你好！我是聚星引擎AI学习助手。\n\n我可以帮你解答：\n• 行测各模块的解题技巧\n• 申论写作方法和技巧\n• 公考备考计划制定\n• 面试技巧指导\n• 任何公考相关问题\n\n有什么想问的，直接说！'
+        content:
+          '你好！我是聚星引擎AI学习助手。\n\n我可以帮你解答：\n• 行测各模块的解题技巧\n• 申论写作方法和技巧\n• 公考备考计划制定\n• 面试技巧指导\n• 任何公考相关问题\n\n有什么想问的，直接说！',
       };
       this.setData({ messages: [welcomeMsg] });
       wx.setStorageSync('chat_welcomed', true);
@@ -153,6 +168,32 @@ Page({
       this.setData({ messages: savedMessages });
     }
     this.scrollToBottom();
+  },
+
+  onShow() {
+    this.flushPendingQuestionFromOcr();
+  },
+
+  flushPendingQuestionFromOcr() {
+    const pending = wx.getStorageSync('pending_question');
+    if (!pending || !String(pending).trim()) return;
+    wx.removeStorageSync('pending_question');
+    const text = String(pending).trim();
+    const nextId = (this.data.msgIdCounter || 0) + 1;
+    const newMessages = [...this.data.messages, { id: nextId, role: 'user', content: text }];
+    this.setData(
+      {
+        msgIdCounter: nextId,
+        messages: newMessages,
+        typing: true,
+        inputText: '',
+      },
+      () => {
+        wx.setStorageSync('chat_messages', this.data.messages);
+        this.scrollToBottom();
+        this.runAssistantReply(text);
+      }
+    );
   },
 
   onInput(e) {
@@ -165,61 +206,136 @@ Page({
     this.sendMessage();
   },
 
+  buildCloudChatHistory() {
+    const conv = this.data.messages.filter(
+      (m) => m.role === 'user' || m.role === 'assistant'
+    );
+    return conv
+      .slice(0, -1)
+      .slice(-6)
+      .map((m) => ({
+        Role: m.role === 'user' ? 'user' : 'assistant',
+        Content: m.content,
+      }));
+  },
+
+  async tryCloudAnswer(question) {
+    if (!wx.cloud || typeof wx.cloud.callFunction !== 'function') {
+      return { ok: false, reason: 'no_cloud' };
+    }
+    try {
+      const res = await wx.cloud.callFunction({
+        name: 'aiQA',
+        data: {
+          question,
+          chatHistory: this.buildCloudChatHistory(),
+        },
+      });
+      const r = res.result;
+      if (r && r.success && r.answer) {
+        return { ok: true, answer: r.answer };
+      }
+      return { ok: false, reason: 'api' };
+    } catch (err) {
+      console.error('aiQA fail', err);
+      return { ok: false, reason: 'network' };
+    }
+  },
+
+  async runAssistantReply(userText) {
+    try {
+      const cloud = await this.tryCloudAnswer(userText);
+      let answer = '';
+      if (cloud.ok) {
+        answer = cloud.answer;
+      } else {
+        answer = this.getLocalAnswer(userText);
+        const quiet = isQuietCloudFallback();
+        if (!quiet) {
+          if (cloud.reason === 'no_cloud') {
+            wx.showToast({ title: '云能力未开通，已使用本地答疑', icon: 'none' });
+          } else if (cloud.reason === 'network') {
+            wx.showToast({ title: '网络异常，已使用本地答疑', icon: 'none' });
+          } else {
+            wx.showToast({ title: '云端暂不可用，已使用本地答疑', icon: 'none' });
+          }
+        }
+      }
+      this.addAIMessage(answer);
+    } catch (e) {
+      console.error('runAssistantReply', e);
+      this.addAIMessage(this.getLocalAnswer(userText));
+      if (!isQuietCloudFallback()) {
+        wx.showToast({ title: '已使用本地答疑', icon: 'none' });
+      }
+    }
+  },
+
   async sendMessage() {
     const text = this.data.inputText.trim();
     if (!text || this.data.typing) return;
 
-    const msgId = ++this.data.msgIdCounter;
-    const userMsg = { id: msgId, role: 'user', content: text };
+    const nextId = (this.data.msgIdCounter || 0) + 1;
+    const userMsg = { id: nextId, role: 'user', content: text };
 
-    this.setData({
-      messages: [...this.data.messages, userMsg],
-      inputText: '',
-      typing: true,
-    });
-
-    this.scrollToBottom();
-
-    // 模拟AI思考延迟
-    setTimeout(() => {
-      const answer = this.getLocalAnswer(text);
-      this.addAIMessage(answer);
-    }, 800);
+    this.setData(
+      {
+        msgIdCounter: nextId,
+        messages: [...this.data.messages, userMsg],
+        inputText: '',
+        typing: true,
+      },
+      async () => {
+        this.scrollToBottom();
+        await this.runAssistantReply(text);
+      }
+    );
   },
 
   addAIMessage(content) {
-    const msgId = ++this.data.msgIdCounter;
-    const aiMsg = { id: msgId, role: 'assistant', content };
+    const nextId = (this.data.msgIdCounter || 0) + 1;
+    const aiMsg = { id: nextId, role: 'assistant', content };
+    const newMessages = [...this.data.messages, aiMsg];
 
-    this.setData({
-      messages: [...this.data.messages, aiMsg],
-      typing: false,
-    });
-
-    wx.setStorageSync('chat_messages', this.data.messages);
-    this.scrollToBottom();
+    this.setData(
+      {
+        msgIdCounter: nextId,
+        messages: newMessages,
+        typing: false,
+      },
+      () => {
+        wx.setStorageSync('chat_messages', this.data.messages);
+        this.scrollToBottom();
+      }
+    );
   },
 
   getLocalAnswer(question) {
     const q = question.toLowerCase();
-    
-    if (q.includes('行测') || q.includes('逻辑') || q.includes('言语') || q.includes('数量') || q.includes('资料')) {
-      return KNOWLEDGE_BASE['行测'];
+
+    if (
+      q.includes('行测') ||
+      q.includes('逻辑') ||
+      q.includes('言语') ||
+      q.includes('数量') ||
+      q.includes('资料')
+    ) {
+      return KNOWLEDGE_BASE.行测;
     }
-    
+
     if (q.includes('申论') || q.includes('写作') || q.includes('大作文')) {
-      return KNOWLEDGE_BASE['申论'];
+      return KNOWLEDGE_BASE.申论;
     }
-    
+
     if (q.includes('备考') || q.includes('计划') || q.includes('复习') || q.includes('准备')) {
-      return KNOWLEDGE_BASE['备考'];
+      return KNOWLEDGE_BASE.备考;
     }
-    
+
     if (q.includes('面试')) {
-      return KNOWLEDGE_BASE['面试'];
+      return KNOWLEDGE_BASE.面试;
     }
-    
-    return KNOWLEDGE_BASE['default'];
+
+    return KNOWLEDGE_BASE.default;
   },
 
   scrollToBottom() {
@@ -234,18 +350,15 @@ Page({
       content: '确定要清空所有对话记录吗？',
       success: (res) => {
         if (res.confirm) {
-          this.setData({ messages: [], chatHistory: [] });
-          wx.removeStorageSync('chat_messages');
-          
-          // 添加欢迎消息
           const welcomeMsg = {
             id: 0,
             role: 'assistant',
-            content: '👋 对话已清空！\n\n有什么公考问题，继续问我吧！'
+            content: '对话已清空！有什么公考问题，继续问我吧！',
           };
-          this.setData({ messages: [welcomeMsg] });
+          this.setData({ messages: [welcomeMsg], chatHistory: [], msgIdCounter: 0 });
+          wx.removeStorageSync('chat_messages');
         }
-      }
+      },
     });
   },
 });

@@ -1,7 +1,7 @@
 <!--pages/ai-chat/ai-chat.wxml-->
 <view class="container">
   <!-- 顶部 -->
-  <view class="chat-header gradient-bg">
+  <view class="chat-header gradient-bg" style="padding-top: {{chatHeaderTopRpx}}rpx; padding-right: {{chatHeaderRightRpx}}rpx;">
     <view class="ai-avatar">🤖</view>
     <view class="header-info">
       <text class="header-name">聚星AI助手</text>

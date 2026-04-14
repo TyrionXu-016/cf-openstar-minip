@@ -5,7 +5,21 @@ const cloud = require('wx-server-sdk');
 cloud.init({ env: cloud.DYNAMIC_CURRENT_ENV });
 
 const tencentcloud = require('tencentcloud-sdk-nodejs');
-const { SecretId, SecretKey } = cloud.getVC3Configuration();
+
+function getCredentials() {
+  if (typeof cloud.getVC3Configuration === 'function') {
+    const cfg = cloud.getVC3Configuration() || {};
+    if (cfg.SecretId && cfg.SecretKey) {
+      return { secretId: cfg.SecretId, secretKey: cfg.SecretKey };
+    }
+  }
+  const secretId = process.env.TC_SECRET_ID || process.env.SecretId || '';
+  const secretKey = process.env.TC_SECRET_KEY || process.env.SecretKey || '';
+  if (!secretId || !secretKey) {
+    throw new Error('缺少腾讯云凭证，请配置 TC_SECRET_ID/TC_SECRET_KEY');
+  }
+  return { secretId, secretKey };
+}
 
 const KNOWLEDGE_BASE = [
   { category: '行测', title: '类比推理', content: '类比推理解题方法：找逻辑关系（功能、因果、比喻、词性），逐一比对选项。常见关系：工具-功能、职业-工具、作品-作者等。' },
@@ -18,7 +32,7 @@ const KNOWLEDGE_BASE = [
 
 async function callHunyuanChat(messages) {
   const Hunyuan = tencentcloud.hunyuan.v20230901.Client;
-  const client = new Hunyuan({ credential: { secretId: SecretId, secretKey: SecretKey }, region: 'ap-beijing' });
+  const client = new Hunyuan({ credential: getCredentials(), region: 'ap-beijing' });
   const response = await client.ChatCompletions({
     Model: 'hunyuan-turbos-latest',
     Messages: messages,

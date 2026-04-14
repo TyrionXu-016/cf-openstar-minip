@@ -5,11 +5,25 @@ const cloud = require('wx-server-sdk');
 cloud.init({ env: cloud.DYNAMIC_CURRENT_ENV });
 
 const tencentcloud = require('tencentcloud-sdk-nodejs');
-const { SecretId, SecretKey } = cloud.getVC3Configuration();
+function getCredentials() {
+  if (typeof cloud.getVC3Configuration === 'function') {
+    const cfg = cloud.getVC3Configuration() || {};
+    if (cfg.SecretId && cfg.SecretKey) {
+      return { secretId: cfg.SecretId, secretKey: cfg.SecretKey };
+    }
+  }
+  const secretId = process.env.TC_SECRET_ID || process.env.SecretId || '';
+  const secretKey = process.env.TC_SECRET_KEY || process.env.SecretKey || '';
+  if (!secretId || !secretKey) {
+    throw new Error('缺少腾讯云凭证，请配置 TC_SECRET_ID/TC_SECRET_KEY');
+  }
+  return { secretId, secretKey };
+}
 
 async function callHunyuan(prompt) {
+  const credential = getCredentials();
   const Hunyuan = tencentcloud.hunyuan.v20230901.Client;
-  const client = new Hunyuan({ credential: { secretId: SecretId, secretKey: SecretKey }, region: 'ap-beijing' });
+  const client = new Hunyuan({ credential, region: 'ap-beijing' });
   const response = await client.ChatCompletions({
     Model: 'hunyuan-turbos-latest',
     Messages: [{ Role: 'system', Content: '你负责将OCR识别的原始文字整理为结构化题目格式。' }, { Role: 'user', Content: prompt }],
@@ -35,9 +49,10 @@ exports.main = async (event, context) => {
   }
 
   try {
+    const credential = getCredentials();
     // Step 1: 下载图片并调用腾讯云 OCR
     const OCR = tencentcloud.ocr.v20181119.Client;
-    const ocrClient = new OCR({ credential: { secretId: SecretId, secretKey: SecretKey }, region: 'ap-guangzhou' });
+    const ocrClient = new OCR({ credential, region: 'ap-guangzhou' });
 
     const downloadRes = await cloud.downloadFile({ fileID: imageUrl });
     const buffer = downloadRes.fileContent;

@@ -1,9 +1,9 @@
 <!--pages/index/index.wxml-->
 <view class="container">
   <!-- 顶部 Hero 区域 -->
-  <view class="hero gradient-bg">
+  <view class="hero gradient-bg" style="padding-top: {{navTopRpx}}rpx;">
     <view class="hero-inner">
-      <view class="hero-top">
+      <view class="hero-top" style="padding-right: {{capsuleRightRpx}}rpx;">
         <view class="brand">
           <text class="brand-icon">⭐</text>
           <text class="brand-name">聚星引擎</text>

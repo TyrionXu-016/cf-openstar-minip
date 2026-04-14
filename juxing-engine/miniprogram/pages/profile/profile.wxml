@@ -1,15 +1,39 @@
 <!--pages/profile/profile.wxml-->
 <view class="container">
   <!-- 用户卡片 -->
-  <view class="profile-hero gradient-bg">
-    <view class="user-card">
-      <view class="user-avatar" bindtap="getUserInfo">
-        <image src="{{userInfo.avatar || '/miniprogram/images/default_avatar.png'}}" class="avatar-img" mode="aspectFill"></image>
+  <view class="profile-hero gradient-bg" style="padding-top: {{profileHeroTopRpx}}rpx; padding-right: {{capsuleRightRpx}}rpx;">
+    <view class="user-card" bindtap="getUserInfo">
+      <view class="user-avatar">
+        <image src="{{userInfo.avatar || '/images/tab_profile.png'}}" class="avatar-img" mode="aspectFill"></image>
         <view class="avatar-edit">✏️</view>
       </view>
       <view class="user-info">
         <text class="user-name">{{userInfo.nickName || '点击授权登录'}}</text>
         <text class="user-level">⭐ 学习达人</text>
+      </view>
+    </view>
+  </view>
+
+  <view class="editor-mask" wx:if="{{showProfileEditor}}" bindtap="closeProfileEditor">
+    <view class="editor-card" catchtap="noop">
+      <text class="editor-title">完善微信资料</text>
+      <text class="editor-tip">微信新规则下，请手动选择头像并填写昵称</text>
+      <button class="avatar-picker" open-type="chooseAvatar" bindchooseavatar="onChooseAvatar">
+        <image class="avatar-preview" src="{{draftUserInfo.avatar || userInfo.avatar || '/images/tab_profile.png'}}" mode="aspectFill"></image>
+        <text>点击选择头像</text>
+      </button>
+      <input
+        class="nickname-input"
+        type="nickname"
+        placeholder="请输入昵称"
+        placeholder-class="nickname-placeholder"
+        value="{{draftUserInfo.nickName}}"
+        bindinput="onNicknameInput"
+        bindblur="onNicknameBlur"
+      />
+      <view class="editor-actions">
+        <button class="btn-outline" bindtap="closeProfileEditor">取消</button>
+        <button class="btn-primary" bindtap="saveUserInfo">保存</button>
       </view>
     </view>
   </view>
@@ -71,8 +95,8 @@
 
   <!-- 版本信息 -->
   <view class="version-info">
-    <text>聚星引擎 v1.0.0</text>
-    <text>Powered by AI · 腾讯混元</text>
+    <text class="version-line">聚星引擎 v1.0.0</text>
+    <text class="version-line">Powered by AI · 腾讯混元</text>
   </view>
 
   <view class="safe-bottom"></view>

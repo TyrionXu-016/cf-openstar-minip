@@ -1,23 +1,9 @@
-<!--pages/quiz/quiz.wxml-->
 <view class="container">
-  <!-- 顶部过滤栏 -->
-  <view class="filter-bar" wx:if="{{!aiSource}}">
-    <scroll-view scroll-x class="filter-scroll">
-      <view class="filter-list">
-        <view
-          class="filter-item {{activeSubject === item.id ? 'active' : ''}}"
-          wx:for="{{subjects}}"
-          wx:key="id"
-          bindtap="switchSubject"
-          data-id="{{item.id}}"
-        >{{item.name}}</view>
-      </view>
-    </scroll-view>
+  <view class="assess-banner" wx:if="{{meta && !finished && !loading && currentQuestion}}">
+    <text class="assess-banner-text">学员测评 · {{meta.studentName || '学员'}}</text>
   </view>
 
-  <!-- 题目卡片 -->
   <view class="quiz-wrap" wx:if="{{!loading && currentQuestion}}">
-    <!-- 进度指示 -->
     <view class="quiz-progress">
       <text class="progress-text">第 {{currentIndex + 1}} 题 / {{totalQuestions}} 题</text>
       <view class="progress-dots">
@@ -29,7 +15,6 @@
       </view>
     </view>
 
-    <!-- 题目内容 -->
     <view class="question-card card">
       <view class="question-meta">
         <text class="tag tag-blue">{{currentQuestion.subject}}</text>
@@ -38,7 +23,6 @@
       <text class="question-text">{{currentQuestion.question}}</text>
     </view>
 
-    <!-- 选项 -->
     <view class="options-list">
       <view
         class="option-item {{getOptionClass(item.key)}}"
@@ -46,7 +30,6 @@
         wx:key="index"
         bindtap="selectOption"
         data-key="{{item.key}}"
-        data-index="{{index}}"
       >
         <view class="option-key">{{item.key}}</view>
         <text class="option-text">{{item.text}}</text>
@@ -57,7 +40,6 @@
       </view>
     </view>
 
-    <!-- 答案解析 -->
     <view class="explanation-card card" wx:if="{{answered}}">
       <view class="explanation-header">
         <text class="expl-result {{isCorrect ? 'correct' : 'wrong'}}">
@@ -66,30 +48,25 @@
         <text class="expl-answer">正确答案：{{currentQuestion.answer}}</text>
       </view>
       <view class="divider"></view>
-      <text class="expl-title">📖 解析</text>
+      <text class="expl-title">解析</text>
       <text class="expl-content">{{currentQuestion.explanation}}</text>
     </view>
 
-    <!-- 底部按钮 -->
     <view class="quiz-actions">
-      <button class="btn-outline" bindtap="markWrong" wx:if="{{!answered}}">标记错题</button>
-      <button class="btn-outline" bindtap="markFavorite" wx:if="{{!answered}}">收藏</button>
       <button class="btn-primary {{answered ? 'full' : ''}}" bindtap="{{answered ? 'nextQuestion' : 'submitAnswer'}}">
-        {{answered ? (hasNext ? '下一题 ›' : '完成练习') : '提交答案'}}
+        {{answered ? (hasNext ? '下一题 ›' : '完成测评') : '提交答案'}}
       </button>
     </view>
   </view>
 
-  <!-- 加载中 -->
   <view class="loading-wrap" wx:if="{{loading}}">
     <view class="loading-spinner"></view>
-    <text>加载题目中...</text>
+    <text>准备题目中...</text>
   </view>
 
-  <!-- 完成页 -->
-  <view class="finish-card card" wx:if="{{!loading && finished}}">
-    <text class="finish-emoji">🎉</text>
-    <text class="finish-title">本轮练习完成！</text>
+  <view class="finish-card card" wx:if="{{!loading && finished && sessionStats.total > 0}}">
+    <text class="finish-emoji">📋</text>
+    <text class="finish-title">测评完成</text>
     <view class="finish-stats">
       <view class="finish-stat">
         <text class="finish-val">{{sessionStats.total}}</text>
@@ -104,8 +81,15 @@
         <text class="finish-key">正确率</text>
       </view>
     </view>
-    <button class="btn-primary" style="margin-top:32rpx" bindtap="restartQuiz">再来一轮</button>
-    <button class="btn-outline" style="margin-top:20rpx" bindtap="goHome">返回首页</button>
+    <text class="finish-hint">报告已保存，可在个人中心继续练习巩固。</text>
+    <button class="btn-primary" style="margin-top:32rpx" bindtap="goHome">返回首页</button>
+    <button class="btn-outline" style="margin-top:20rpx" bindtap="goBack">返回测评入口</button>
+  </view>
+
+  <view class="finish-card card" wx:if="{{!loading && finished && sessionStats.total === 0}}">
+    <text class="finish-title">暂无可用题目</text>
+    <text class="finish-hint">当前难度下题库为空，请稍后再试或联系管理员扩充题库。</text>
+    <button class="btn-primary" style="margin-top:32rpx" bindtap="goBack">返回</button>
   </view>
 
   <view class="safe-bottom"></view>

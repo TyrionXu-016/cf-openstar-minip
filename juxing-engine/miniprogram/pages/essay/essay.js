@@ -51,6 +51,24 @@ const ESSAY_TOPICS = [
   },
 ];
 
+function saveEssayResultAndHistory(payload) {
+  wx.setStorageSync('essay_result', payload);
+  const hist = wx.getStorageSync('essay_history') || [];
+  const score =
+    payload.result && payload.result.totalScore != null ? payload.result.totalScore : 0;
+  hist.unshift({
+    id: String(payload.createdAt),
+    topicTitle: payload.topic.title,
+    totalScore: score,
+    createdAt: payload.createdAt,
+    snapshot: payload,
+  });
+  wx.setStorageSync('essay_history', hist.slice(0, 30));
+  const total = wx.getStorageSync('study_total') || { total: 0, correct: 0, days: 0, essay: 0 };
+  total.essay = (total.essay || 0) + 1;
+  wx.setStorageSync('study_total', total);
+}
+
 Page({
   data: {
     topics: ESSAY_TOPICS,
@@ -126,16 +144,15 @@ Page({
 
       await new Promise(r => setTimeout(r, 500));
 
-      // 清除草稿
       wx.removeStorageSync('essay_draft');
 
-      // 保存结果并跳转
-      wx.setStorageSync('essay_result', {
+      const payload = {
         topic: this.data.selectedTopic,
         answer: this.data.answerText,
         result: result.result,
         createdAt: Date.now(),
-      });
+      };
+      saveEssayResultAndHistory(payload);
 
       this.setData({ grading: false });
       wx.navigateTo({ url: '/pages/essay-result/essay-result' });
@@ -150,12 +167,13 @@ Page({
       await new Promise(r => setTimeout(r, 500));
 
       const mockResult = this.getMockGradeResult();
-      wx.setStorageSync('essay_result', {
+      const payload = {
         topic: this.data.selectedTopic,
         answer: this.data.answerText,
         result: mockResult,
         createdAt: Date.now(),
-      });
+      };
+      saveEssayResultAndHistory(payload);
 
       this.setData({ grading: false });
       wx.navigateTo({ url: '/pages/essay-result/essay-result' });

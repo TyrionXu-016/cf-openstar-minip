@@ -5,7 +5,20 @@ const cloud = require('wx-server-sdk');
 cloud.init({ env: cloud.DYNAMIC_CURRENT_ENV });
 
 const tencentcloud = require('tencentcloud-sdk-nodejs');
-const { SecretId, SecretKey } = cloud.getVC3Configuration();
+function getCredentials() {
+  if (typeof cloud.getVC3Configuration === 'function') {
+    const cfg = cloud.getVC3Configuration() || {};
+    if (cfg.SecretId && cfg.SecretKey) {
+      return { secretId: cfg.SecretId, secretKey: cfg.SecretKey };
+    }
+  }
+  const secretId = process.env.TC_SECRET_ID || process.env.SecretId || '';
+  const secretKey = process.env.TC_SECRET_KEY || process.env.SecretKey || '';
+  if (!secretId || !secretKey) {
+    throw new Error('缺少腾讯云凭证，请配置 TC_SECRET_ID/TC_SECRET_KEY');
+  }
+  return { secretId, secretKey };
+}
 
 /**
  * 从文本中提取JSON
@@ -25,9 +38,10 @@ function extractJSON(text) {
  * 调用混元 Pro 模型进行批改
  */
 async function callHunyuanPro(prompt) {
+  const credential = getCredentials();
   const Hunyuan = tencentcloud.hunyuan.v20230901.Client;
   const client = new Hunyuan({
-    credential: { secretId: SecretId, secretKey: SecretKey },
+    credential,
     region: 'ap-beijing',
   });
 

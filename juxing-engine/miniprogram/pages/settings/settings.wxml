@@ -1,0 +1,17 @@
+<view class="container">
+  <view class="card row">
+    <view class="label-wrap">
+      <text class="label">云端失败时静默降级</text>
+      <text class="hint">关闭后，AI 答疑等云能力失败会弹出提示</text>
+    </view>
+    <switch checked="{{quietCloudFallback}}" bindchange="onQuietChange" color="#1a1f5e" />
+  </view>
+
+  <view class="card row">
+    <view class="label-wrap">
+      <text class="label">每日学习目标提醒</text>
+      <text class="hint">订阅消息与推送能力规划中</text>
+    </view>
+    <switch checked="{{dailyGoalReminder}}" bindchange="onDailyReminderChange" color="#1a1f5e" />
+  </view>
+</view>

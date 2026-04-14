@@ -1,0 +1,16 @@
+<view class="container">
+  <view class="empty card" wx:if="{{list.length === 0}}">
+    <text class="empty-text">暂无申论批改记录，去写一篇吧。</text>
+    <button class="btn-primary" bindtap="goEssay">去练习</button>
+  </view>
+
+  <scroll-view scroll-y class="scroll" wx:else>
+    <view class="card item" wx:for="{{list}}" wx:key="id" data-index="{{index}}" bindtap="openDetail">
+      <text class="title">{{item.topicTitle}}</text>
+      <view class="row">
+        <text class="score">得分 {{item.totalScore}}</text>
+        <text class="time">{{item.timeText}}</text>
+      </view>
+    </view>
+  </scroll-view>
+</view>

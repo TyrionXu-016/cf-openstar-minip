@@ -5,7 +5,6 @@
 /* Hero */
 .hero {
   padding: 0;
-  padding-top: env(safe-area-inset-top);
   border-radius: 0 0 40rpx 40rpx;
 }
 .hero-inner { padding: 32rpx 40rpx 48rpx; }
