@@ -5,6 +5,7 @@ const cloud = require('wx-server-sdk');
 cloud.init({ env: cloud.DYNAMIC_CURRENT_ENV });
 
 const tencentcloud = require('tencentcloud-sdk-nodejs');
+const HUNYUAN_TIMEOUT_MS = Math.max(5000, Number(process.env.HUNYUAN_TIMEOUT_MS || 20000));
 
 function getCredentials() {
   if (typeof cloud.getVC3Configuration === 'function') {
@@ -33,12 +34,17 @@ const KNOWLEDGE_BASE = [
 async function callHunyuanChat(messages) {
   const Hunyuan = tencentcloud.hunyuan.v20230901.Client;
   const client = new Hunyuan({ credential: getCredentials(), region: 'ap-beijing' });
-  const response = await client.ChatCompletions({
-    Model: 'hunyuan-turbos-latest',
-    Messages: messages,
-    Temperature: 0.5,
-    TopP: 0.9,
-  });
+  const response = await Promise.race([
+    client.ChatCompletions({
+      Model: 'hunyuan-turbos-latest',
+      Messages: messages,
+      Temperature: 0.5,
+      TopP: 0.9,
+    }),
+    new Promise((_, reject) =>
+      setTimeout(() => reject(new Error(`混元请求超时(${Math.round(HUNYUAN_TIMEOUT_MS / 1000)}s)`)), HUNYUAN_TIMEOUT_MS)
+    ),
+  ]);
   return response.Choices[0].Message.Content;
 }
 
@@ -58,10 +64,14 @@ function searchKnowledge(question) {
 }
 
 exports.main = async (event, context) => {
-  const { question, chatHistory = [] } = event;
+  const { question = '', chatHistory = [] } = event;
+  const ask = String(question).trim();
+  if (!ask) {
+    return { success: false, answer: '请输入要咨询的问题。', sources: [] };
+  }
 
   // 检索相关知识
-  const relevantDocs = searchKnowledge(question);
+  const relevantDocs = searchKnowledge(ask);
   const contextText = relevantDocs.map(d => `[${d.category}] ${d.title}：${d.content}`).join('\n\n');
 
   const systemPrompt = `你是公考学习助手"聚星AI"，专注帮助备考学生。
@@ -75,7 +85,7 @@ ${contextText ? '【参考知识】\n' + contextText + '\n\n' : ''}
   const messages = [
     { Role: 'system', Content: systemPrompt },
     ...chatHistory.slice(-6),
-    { Role: 'user', Content: question },
+    { Role: 'user', Content: ask },
   ];
 
   try {

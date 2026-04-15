@@ -5,6 +5,7 @@ const cloud = require('wx-server-sdk');
 cloud.init({ env: cloud.DYNAMIC_CURRENT_ENV });
 
 const tencentcloud = require('tencentcloud-sdk-nodejs');
+const HUNYUAN_TIMEOUT_MS = Math.max(8000, Number(process.env.HUNYUAN_TIMEOUT_MS || 25000));
 function getCredentials() {
   if (typeof cloud.getVC3Configuration === 'function') {
     const cfg = cloud.getVC3Configuration() || {};
@@ -45,32 +46,40 @@ async function callHunyuanPro(prompt) {
     region: 'ap-beijing',
   });
 
-  const response = await client.ChatCompletions({
-    Model: 'hunyuan-pro',
-    Messages: [
-      {
-        Role: 'system',
-        Content: `你是专业的公务员考试申论阅卷专家，有15年评卷经验。
+  const response = await Promise.race([
+    client.ChatCompletions({
+      Model: 'hunyuan-pro',
+      Messages: [
+        {
+          Role: 'system',
+          Content: `你是专业的公务员考试申论阅卷专家，有15年评卷经验。
 评分原则：
 1. 客观公正，严格按照评分标准打分
 2. 反馈要具体、有建设性
 3. 优点要明确肯定，不足要指出改进方向
 4. 始终输出标准JSON格式`
-      },
-      {
-        Role: 'user',
-        Content: prompt
-      }
-    ],
-    Temperature: 0.3,  // 评分用低温度保证稳定性
-    TopP: 0.85,
-  });
+        },
+        {
+          Role: 'user',
+          Content: prompt
+        }
+      ],
+      Temperature: 0.3,  // 评分用低温度保证稳定性
+      TopP: 0.85,
+    }),
+    new Promise((_, reject) =>
+      setTimeout(() => reject(new Error(`混元请求超时(${Math.round(HUNYUAN_TIMEOUT_MS / 1000)}s)`)), HUNYUAN_TIMEOUT_MS)
+    ),
+  ]);
 
   return response.Choices[0].Message.Content;
 }
 
 exports.main = async (event, context) => {
-  const { question, answer, scoringCriteria, wordLimit = 800 } = event;
+  const { question = '', answer = '', scoringCriteria = [], wordLimit = 800 } = event;
+  if (!String(question).trim() || !String(answer).trim()) {
+    return { success: false, error: '缺少题目或作答内容', fallback: true };
+  }
 
   // 字数检测
   const actualWords = answer.length;

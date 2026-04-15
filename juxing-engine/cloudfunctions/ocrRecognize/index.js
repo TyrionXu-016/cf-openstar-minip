@@ -5,6 +5,8 @@ const cloud = require('wx-server-sdk');
 cloud.init({ env: cloud.DYNAMIC_CURRENT_ENV });
 
 const tencentcloud = require('tencentcloud-sdk-nodejs');
+const HUNYUAN_TIMEOUT_MS = Math.max(8000, Number(process.env.HUNYUAN_TIMEOUT_MS || 25000));
+const OCR_TIMEOUT_MS = Math.max(8000, Number(process.env.OCR_TIMEOUT_MS || 20000));
 function getCredentials() {
   if (typeof cloud.getVC3Configuration === 'function') {
     const cfg = cloud.getVC3Configuration() || {};
@@ -24,11 +26,16 @@ async function callHunyuan(prompt) {
   const credential = getCredentials();
   const Hunyuan = tencentcloud.hunyuan.v20230901.Client;
   const client = new Hunyuan({ credential, region: 'ap-beijing' });
-  const response = await client.ChatCompletions({
-    Model: 'hunyuan-turbos-latest',
-    Messages: [{ Role: 'system', Content: '你负责将OCR识别的原始文字整理为结构化题目格式。' }, { Role: 'user', Content: prompt }],
-    Temperature: 0.3,
-  });
+  const response = await Promise.race([
+    client.ChatCompletions({
+      Model: 'hunyuan-turbos-latest',
+      Messages: [{ Role: 'system', Content: '你负责将OCR识别的原始文字整理为结构化题目格式。' }, { Role: 'user', Content: prompt }],
+      Temperature: 0.3,
+    }),
+    new Promise((_, reject) =>
+      setTimeout(() => reject(new Error(`混元请求超时(${Math.round(HUNYUAN_TIMEOUT_MS / 1000)}s)`)), HUNYUAN_TIMEOUT_MS)
+    ),
+  ]);
   return response.Choices[0].Message.Content;
 }
 
@@ -57,7 +64,12 @@ exports.main = async (event, context) => {
     const buffer = downloadRes.fileContent;
 
     // 调用通用文字识别
-    const ocrResult = await ocrClient.GeneralAccurateOCR({ ImageBase64: buffer.toString('base64') });
+    const ocrResult = await Promise.race([
+      ocrClient.GeneralAccurateOCR({ ImageBase64: buffer.toString('base64') }),
+      new Promise((_, reject) =>
+        setTimeout(() => reject(new Error(`OCR请求超时(${Math.round(OCR_TIMEOUT_MS / 1000)}s)`)), OCR_TIMEOUT_MS)
+      ),
+    ]);
     const rawText = ocrResult.TextDetections.map(t => t.DetectedText).join('\n');
 
     // Step 2: LLM 结构化解析
