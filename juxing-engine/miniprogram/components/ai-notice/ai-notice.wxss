@@ -1,0 +1,20 @@
+.ai-notice {
+  margin: 20rpx 24rpx 0;
+  padding: 16rpx 20rpx;
+  background: #fff6e8;
+  border: 1rpx solid #ffd8a8;
+  border-radius: 14rpx;
+}
+
+.ai-notice-tag {
+  font-size: 22rpx;
+  font-weight: 700;
+  color: #b45309;
+  margin-right: 10rpx;
+}
+
+.ai-notice-text {
+  font-size: 24rpx;
+  color: #92400e;
+  line-height: 1.6;
+}

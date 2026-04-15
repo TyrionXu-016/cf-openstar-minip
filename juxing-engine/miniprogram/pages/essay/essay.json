@@ -1,1 +1,6 @@
-{ "navigationBarTitleText": "申论 AI 批改" }
+{
+  "navigationBarTitleText": "申论 AI 批改",
+  "usingComponents": {
+    "ai-notice": "/components/ai-notice/ai-notice"
+  }
+}

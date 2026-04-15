@@ -10,7 +10,7 @@
 .header-sub { display: block; color: rgba(255,255,255,0.75); font-size: 26rpx; }
 
 /* 配置卡片 */
-.config-card { margin: 32rpx 24rpx; }
+.config-card { margin: 24rpx 24rpx 32rpx; }
 .config-section { margin-bottom: 40rpx; }
 .config-label { display: block; font-size: 28rpx; font-weight: 600; color: var(--text-primary); margin-bottom: 20rpx; }
 

@@ -1,1 +1,7 @@
-{ "navigationBarTitleText": "AI 答疑助手", "navigationStyle": "custom" }
+{
+  "navigationBarTitleText": "AI 答疑助手",
+  "navigationStyle": "custom",
+  "usingComponents": {
+    "ai-notice": "/components/ai-notice/ai-notice"
+  }
+}

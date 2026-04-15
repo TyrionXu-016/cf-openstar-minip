@@ -9,6 +9,10 @@
     </view>
     <view class="header-clear" bindtap="clearChat">清空</view>
   </view>
+  <ai-notice
+    tag="人工智能生成"
+    text="AI 回复内容仅供备考参考，请结合官方资料判断。"
+  />
 
   <!-- 消息列表 -->
   <scroll-view

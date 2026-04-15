@@ -1,1 +1,6 @@
-{ "navigationBarTitleText": "AI 智能出题" }
+{
+  "navigationBarTitleText": "AI 智能出题",
+  "usingComponents": {
+    "ai-notice": "/components/ai-notice/ai-notice"
+  }
+}
