@@ -14,4 +14,12 @@
     </view>
     <switch checked="{{dailyGoalReminder}}" bindchange="onDailyReminderChange" color="#1a1f5e" />
   </view>
+
+  <view class="card row link-row" bindtap="showPrivacyPolicy">
+    <view class="label-wrap">
+      <text class="label">隐私保护政策</text>
+      <text class="hint">查看个人信息采集范围、用途与保护方式</text>
+    </view>
+    <text class="link-arrow">›</text>
+  </view>
 </view>

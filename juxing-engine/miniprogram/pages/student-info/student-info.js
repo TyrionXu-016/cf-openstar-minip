@@ -163,7 +163,7 @@ Page({
   showPrivacy: function() {
     wx.showModal({
       title: '隐私保护政策',
-      content: '我们非常重视您的隐私保护。所有信息仅用于公考选岗推荐，不会泄露给第三方。',
+      content: '我们仅在提供学习服务时收集必要信息（如昵称头像、手机号、学员信息、题目作答与上传图片）。信息用于个性化推荐、学习记录与AI功能处理，不会在未经授权情况下向第三方披露。',
       showCancel: false,
       confirmText: '我知道了'
     });
