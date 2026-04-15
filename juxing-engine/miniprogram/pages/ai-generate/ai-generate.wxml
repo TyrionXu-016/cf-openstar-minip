@@ -85,6 +85,15 @@
     </view>
     <text class="gen-title">AI 正在为你生成题目...</text>
     <text class="gen-sub">根据你的需求智能命题中</text>
+    <view class="gen-progress-wrap" wx:if="{{genTotal > 0}}">
+      <view class="gen-progress-head">
+        <text class="gen-progress-text">{{genProgressText || ('正在生成第 ' + genCurrent + '/' + genTotal + ' 题')}}</text>
+        <text class="gen-progress-percent">{{genProgressPercent}}%</text>
+      </view>
+      <view class="gen-progress-bar">
+        <view class="gen-progress-fill" style="width: {{genProgressPercent}}%"></view>
+      </view>
+    </view>
     <view class="gen-steps">
       <view class="gen-step {{genStep >= 1 ? 'done' : ''}}">
         <text>分析知识点</text>

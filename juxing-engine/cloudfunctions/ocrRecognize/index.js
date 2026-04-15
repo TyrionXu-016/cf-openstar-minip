@@ -28,7 +28,6 @@ async function callHunyuan(prompt) {
     Model: 'hunyuan-turbos-latest',
     Messages: [{ Role: 'system', Content: '你负责将OCR识别的原始文字整理为结构化题目格式。' }, { Role: 'user', Content: prompt }],
     Temperature: 0.3,
-    MaxTokens: 1500,
   });
   return response.Choices[0].Message.Content;
 }

@@ -64,7 +64,6 @@ async function callHunyuanPro(prompt) {
     ],
     Temperature: 0.3,  // 评分用低温度保证稳定性
     TopP: 0.85,
-    MaxTokens: 3000,
   });
 
   return response.Choices[0].Message.Content;

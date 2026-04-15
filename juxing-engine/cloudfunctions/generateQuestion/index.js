@@ -5,20 +5,17 @@ const cloud = require('wx-server-sdk');
 cloud.init({ env: cloud.DYNAMIC_CURRENT_ENV });
 const tencentcloud = require('tencentcloud-sdk-nodejs');
 
-function getVC3Credentials() {
+function getCredentials() {
   if (typeof cloud.getVC3Configuration === 'function') {
     const cfg = cloud.getVC3Configuration() || {};
-    const secretId = cfg.SecretId || '';
-    const secretKey = cfg.SecretKey || '';
-    if (secretId && secretKey) {
-      return { secretId, secretKey };
+    if (cfg.SecretId && cfg.SecretKey) {
+      return { secretId: cfg.SecretId, secretKey: cfg.SecretKey };
     }
   }
-
   const secretId = process.env.TC_SECRET_ID || process.env.SecretId || '';
   const secretKey = process.env.TC_SECRET_KEY || process.env.SecretKey || '';
   if (!secretId || !secretKey) {
-    throw new Error('缺少腾讯云凭证，请配置环境变量 TC_SECRET_ID/TC_SECRET_KEY');
+    throw new Error('缺少腾讯云凭证，请配置 TC_SECRET_ID/TC_SECRET_KEY');
   }
   return { secretId, secretKey };
 }
@@ -96,7 +93,7 @@ function extractJSON(text) {
  * 调用混元大模型
  */
 async function callHunyuan(prompt) {
-  const credential = getVC3Credentials();
+  const credential = getCredentials();
   const Hunyuan = tencentcloud.hunyuan.v20230901.Client;
   const client = new Hunyuan({
     credential,
@@ -108,26 +105,26 @@ async function callHunyuan(prompt) {
     Messages: [
       {
         Role: 'system',
-        Content: '你是一位专业的公务员考试出题专家，擅长行测和申论命题。请严格按照要求的JSON格式输出题目。'
+        Content: '你是一位专业的公务员考试出题专家，擅长行测和申论命题。请严格按照要求的JSON格式输出题目。',
       },
       {
         Role: 'user',
-        Content: prompt
-      }
+        Content: prompt,
+      },
     ],
     Temperature: 0.7,
     TopP: 0.9,
-    MaxTokens: 2000,
   });
 
   return response.Choices[0].Message.Content;
 }
 
 exports.main = async (event, context) => {
-  const { subject = 'xingce', difficulty = 'medium', questionType = 'single', knowledgePoint = '综合', count = 3 } = event;
+  const { subject = 'xingce', difficulty = 'medium', questionType = 'single', knowledgePoint = '综合' } = event;
 
   try {
-    const prompt = buildQuestionPrompt(subject, difficulty, questionType, knowledgePoint, count);
+    // 单次仅生成 1 题，避免多题请求导致超时；多题由前端串行调用聚合。
+    const prompt = buildQuestionPrompt(subject, difficulty, questionType, knowledgePoint, 1);
     const rawResponse = await callHunyuan(prompt);
     const parsed = extractJSON(rawResponse);
 

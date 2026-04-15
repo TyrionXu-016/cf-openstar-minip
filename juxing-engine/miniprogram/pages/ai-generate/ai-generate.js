@@ -26,6 +26,10 @@ Page({
     generateCount: 3,
     generating: false,
     genStep: 0,
+    genCurrent: 0,
+    genTotal: 0,
+    genProgressPercent: 0,
+    genProgressText: '',
     generatedQuestions: [],
   },
 
@@ -60,7 +64,15 @@ Page({
   },
 
   async startGenerate() {
-    this.setData({ generating: true, genStep: 0, generatedQuestions: [] });
+    this.setData({
+      generating: true,
+      genStep: 0,
+      genCurrent: 0,
+      genTotal: 0,
+      genProgressPercent: 0,
+      genProgressText: '',
+      generatedQuestions: [],
+    });
 
     // 模拟进度步骤
     const stepTimer = setInterval(() => {
@@ -72,26 +84,21 @@ Page({
     }, 800);
 
     try {
+      const targetCount = this.data.selectedType === 'essay' ? 1 : this.data.generateCount;
       const payload = {
         subject: this.data.selectedSubject,
         difficulty: this.data.selectedDifficulty,
         questionType: this.data.selectedType,
         knowledgePoint: this.data.knowledgePoint || '综合',
-        count: this.data.generateCount,
+        count: 1,
       };
-      const result = await this.callGenerateFunction(payload);
-      const cloudResult = result && result.result ? result.result : {};
+      const questions = await this.generateQuestionsSerial(payload, targetCount);
 
       clearInterval(stepTimer);
-      this.setData({ genStep: 3 });
+      this.setData({ genStep: 3, genProgressPercent: 100, genProgressText: '题目生成完成' });
 
       await new Promise(resolve => setTimeout(resolve, 500));
 
-      if (cloudResult.success === false) {
-        throw new Error(cloudResult.error || '云端生题失败');
-      }
-
-      const questions = this.normalizeQuestions(cloudResult);
       if (!questions.length) {
         throw new Error('云端返回题目为空');
       }
@@ -114,7 +121,7 @@ Page({
 
       this.setData({
         generating: false,
-        generatedQuestions: this.getMockQuestions(),
+        generatedQuestions: this.getMockQuestions().slice(0, this.data.selectedType === 'essay' ? 1 : this.data.generateCount),
       });
 
       if (!wx.getStorageSync('settings_quiet_cloud_fallback')) {
@@ -135,6 +142,55 @@ Page({
       }
     }
     throw lastErr || new Error('调用云函数失败');
+  },
+
+  async generateQuestionsSerial(basePayload, targetCount) {
+    this.setData({
+      genTotal: targetCount,
+      genCurrent: 1,
+      genProgressPercent: 0,
+      genProgressText: `正在生成第 1/${targetCount} 题`,
+    });
+    const collected = [];
+    for (let i = 0; i < targetCount; i++) {
+      const current = i + 1;
+      this.setData({
+        genCurrent: current,
+        genProgressPercent: Math.round((i / targetCount) * 100),
+        genProgressText: `正在生成第 ${current}/${targetCount} 题`,
+      });
+
+      let lastErr = null;
+      for (let attempt = 0; attempt < 2; attempt++) {
+        try {
+          const result = await this.callGenerateFunction({ ...basePayload, count: 1 });
+          const cloudResult = result && result.result ? result.result : {};
+          if (cloudResult.success === false) {
+            throw new Error(cloudResult.error || '云端生题失败');
+          }
+          const normalized = this.normalizeQuestions(cloudResult);
+          if (!normalized.length) {
+            throw new Error('云端返回题目为空');
+          }
+          const question = { ...normalized[0], id: `${Date.now()}_${i}_${attempt}` };
+          collected.push(question);
+          this.setData({
+            genProgressPercent: Math.round((collected.length / targetCount) * 100),
+            genProgressText:
+              collected.length >= targetCount
+                ? '题目生成完成'
+                : `已完成 ${collected.length}/${targetCount} 题，继续生成中`,
+          });
+          break;
+        } catch (err) {
+          lastErr = err;
+          if (attempt === 1) {
+            throw lastErr;
+          }
+        }
+      }
+    }
+    return collected;
   },
 
   normalizeQuestions(cloudResult) {
@@ -214,7 +270,14 @@ Page({
   },
 
   resetGenerate() {
-    this.setData({ generatedQuestions: [], genStep: 0 });
+    this.setData({
+      generatedQuestions: [],
+      genStep: 0,
+      genCurrent: 0,
+      genTotal: 0,
+      genProgressPercent: 0,
+      genProgressText: '',
+    });
   },
 
   startPractice() {

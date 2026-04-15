@@ -38,7 +38,6 @@ async function callHunyuanChat(messages) {
     Messages: messages,
     Temperature: 0.5,
     TopP: 0.9,
-    MaxTokens: 1200,
   });
   return response.Choices[0].Message.Content;
 }
