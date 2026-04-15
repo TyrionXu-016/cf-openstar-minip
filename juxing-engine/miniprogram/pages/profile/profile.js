@@ -90,9 +90,10 @@ Page({
   onChooseAvatar(e) {
     const avatar = e.detail.avatarUrl || '';
     if (!avatar) return;
+    const draftUserInfo = this.data.draftUserInfo || {};
     this.setData({
       draftUserInfo: {
-        ...this.data.draftUserInfo,
+        nickName: draftUserInfo.nickName || '',
         avatar,
       },
     });
@@ -100,9 +101,10 @@ Page({
 
   onNicknameBlur(e) {
     const nickName = (e.detail.value || '').trim();
+    const draftUserInfo = this.data.draftUserInfo || {};
     this.setData({
       draftUserInfo: {
-        ...this.data.draftUserInfo,
+        avatar: draftUserInfo.avatar || '',
         nickName,
       },
     });
@@ -110,9 +112,10 @@ Page({
 
   onNicknameInput(e) {
     const nickName = (e.detail.value || '').trim();
+    const draftUserInfo = this.data.draftUserInfo || {};
     this.setData({
       draftUserInfo: {
-        ...this.data.draftUserInfo,
+        avatar: draftUserInfo.avatar || '',
         nickName,
       },
     });
