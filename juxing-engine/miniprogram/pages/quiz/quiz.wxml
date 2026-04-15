@@ -41,7 +41,7 @@
     <!-- 选项 -->
     <view class="options-list">
       <view
-        class="option-item {{getOptionClass(item.key)}}"
+        class="option-item {{answered ? (item.key === currentQuestion.answer ? 'correct' : (item.key === selectedAnswer ? 'wrong' : '')) : (selectedAnswer === item.key ? 'selected' : '')}}"
         wx:for="{{currentQuestion.options}}"
         wx:key="index"
         bindtap="selectOption"

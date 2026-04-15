@@ -282,7 +282,17 @@ Page({
 
   startPractice() {
     // 将生成的题目存入本地，跳转刷题页
-    wx.setStorageSync('ai_generated_questions', this.data.generatedQuestions);
-    wx.navigateTo({ url: '/pages/quiz/quiz?source=ai' });
+    const list = this.data.generatedQuestions || [];
+    if (!list.length) {
+      wx.showToast({ title: '暂无可练习题目', icon: 'none' });
+      return;
+    }
+    wx.setStorageSync('ai_generated_questions', list);
+    wx.setStorageSync('quiz_source', 'ai');
+    const app = getApp();
+    if (app && app.globalData) {
+      app.globalData.pendingQuizSource = 'ai';
+    }
+    wx.switchTab({ url: '/pages/quiz/quiz' });
   },
 });

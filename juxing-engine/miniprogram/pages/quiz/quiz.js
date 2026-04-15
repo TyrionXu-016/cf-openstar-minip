@@ -1,6 +1,7 @@
 // pages/quiz/quiz.js
 
 const { QUESTION_BANK } = require('../../data/question-bank.js');
+const app = getApp();
 
 Page({
   data: {
@@ -31,36 +32,54 @@ Page({
   },
 
   onLoad(options) {
-    if (options.source === 'ai') {
-      const list = wx.getStorageSync('ai_generated_questions') || [];
-      if (!list.length) {
-        wx.showToast({ title: '暂无题目，请先生成', icon: 'none' });
-        setTimeout(() => wx.switchTab({ url: '/pages/index/index' }), 1500);
-        return;
-      }
-      this.setData({ loading: true, aiSource: true });
-      setTimeout(() => {
-        const questions = list.slice().sort(() => Math.random() - 0.5);
-        this.setData({
-          loading: false,
-          finished: false,
-          questions,
-          totalQuestions: questions.length,
-          currentIndex: 0,
-          correctCount: 0,
-          progressDots: questions.map(() => ({})),
-          currentQuestion: questions[0] || null,
-          answered: false,
-          selectedAnswer: '',
-          hasNext: questions.length > 1,
-        });
-      }, 200);
+    if (this.tryLoadAISource(options)) {
       return;
     }
 
     const category = options.category || 'all';
     this.setData({ activeSubject: category, aiSource: false });
     this.loadQuestions(category);
+  },
+
+  onShow() {
+    this.tryLoadAISource({});
+  },
+
+  tryLoadAISource(options) {
+    const fromStorage = wx.getStorageSync('quiz_source');
+    const fromGlobal = app && app.globalData ? app.globalData.pendingQuizSource : '';
+    const source = (options && options.source) || fromStorage || fromGlobal;
+    if (source !== 'ai') return false;
+
+    wx.removeStorageSync('quiz_source');
+    if (app && app.globalData) {
+      app.globalData.pendingQuizSource = '';
+    }
+    const list = wx.getStorageSync('ai_generated_questions') || [];
+    if (!list.length) {
+      wx.showToast({ title: '暂无题目，请先生成', icon: 'none' });
+      setTimeout(() => wx.switchTab({ url: '/pages/index/index' }), 1500);
+      return true;
+    }
+
+    this.setData({ loading: true, aiSource: true });
+    setTimeout(() => {
+      const questions = list.slice();
+      this.setData({
+        loading: false,
+        finished: false,
+        questions,
+        totalQuestions: questions.length,
+        currentIndex: 0,
+        correctCount: 0,
+        progressDots: questions.map(() => ({})),
+        currentQuestion: questions[0] || null,
+        answered: false,
+        selectedAnswer: '',
+        hasNext: questions.length > 1,
+      });
+    }, 200);
+    return true;
   },
 
   loadQuestions(subject) {
@@ -103,18 +122,15 @@ Page({
     this.loadQuestions(id);
   },
 
-  getOptionClass(key) {
-    if (!this.data.answered) {
-      return this.data.selectedAnswer === key ? 'selected' : '';
-    }
-    if (key === this.data.currentQuestion.answer) return 'correct';
-    if (key === this.data.selectedAnswer) return 'wrong';
-    return '';
-  },
-
   selectOption(e) {
     if (this.data.answered) return;
-    const key = e.currentTarget.dataset.key;
+    let key = e.currentTarget.dataset.key;
+    if (!key) {
+      const idx = Number(e.currentTarget.dataset.index);
+      const list = (this.data.currentQuestion && this.data.currentQuestion.options) || [];
+      key = list[idx] && list[idx].key ? list[idx].key : '';
+    }
+    if (!key) return;
     this.setData({ selectedAnswer: key });
   },
 
