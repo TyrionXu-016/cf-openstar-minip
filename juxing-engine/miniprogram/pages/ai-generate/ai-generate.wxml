@@ -142,10 +142,6 @@
           {{opt.key}}. {{opt.text}}
         </text>
       </view>
-      <view class="gen-answer-wrap">
-        <text class="gen-answer">答案：{{item.answer}}</text>
-        <text class="gen-expl">{{item.explanation}}</text>
-      </view>
     </view>
   </view>
 

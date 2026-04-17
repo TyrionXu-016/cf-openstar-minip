@@ -41,6 +41,9 @@ App({
   globalData: {
     safeInsets: { navTopRpx: 96, capsuleRightRpx: 200 },
     userInfo: null,
+    // FastAPI 后端（nginx 反代后）的基础地址
+    // 生产环境需要换成你的域名，并在小程序后台配置域名白名单
+    backendBaseUrl: "http://127.0.0.1:8080",
     studyStats: {
       totalQuestions: 0,
       correctRate: 0,

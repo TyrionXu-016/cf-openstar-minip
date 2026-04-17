@@ -112,6 +112,9 @@ Page({
     // 保存历史记录
     this.saveHistory(studentInfo);
 
+    // 异步保存到后端，不阻塞后续跳转
+    this.saveToBackend(studentInfo);
+
     // 跳转到智能选岗页面
     setTimeout(() => {
       this.setData({ loading: false });
@@ -119,6 +122,31 @@ Page({
         url: `/pages/job-match/job-match?data=${encodeURIComponent(JSON.stringify(studentInfo))}`
       });
     }, 500);
+  },
+
+  // 提交学员信息到后端
+  saveToBackend: function(studentInfo) {
+    const baseUrl = app.globalData.backendBaseUrl;
+    if (!baseUrl) return;
+
+    wx.request({
+      url: `${baseUrl}/api/v1/mini/students`,
+      method: 'POST',
+      header: { 'Content-Type': 'application/json' },
+      data: {
+        name: studentInfo.name,
+        phone: studentInfo.phone,
+        age: studentInfo.age,
+        gender: studentInfo.gender,
+        education: studentInfo.education,
+        school: studentInfo.school,
+        major: studentInfo.major,
+        examType: studentInfo.examType
+      },
+      fail: (err) => {
+        console.warn('保存学员信息到后端失败', err);
+      }
+    });
   },
 
   // 加载历史记录

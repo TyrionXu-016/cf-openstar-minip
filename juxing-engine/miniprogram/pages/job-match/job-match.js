@@ -14,7 +14,6 @@ Page({
   },
 
   onLoad: function(options) {
-    this._offerCloudAfterLoad = !!(options && options.data);
     this._cloudPromptShown = false;
 
     if (options.mode === 'history') {
@@ -23,91 +22,132 @@ Page({
       try {
         const studentInfo = JSON.parse(decodeURIComponent(options.data));
         this.setData({ studentInfo });
-        this.calculateMatches(studentInfo);
+        this.loadCloudData(studentInfo);
       } catch (e) {
         wx.showToast({ title: '数据加载失败', icon: 'none' });
       }
     }
 
     this.setData({
-      currentPositions: positionsDB.length,
-      totalPositions: 1776,
+      currentPositions: 0,
+      totalPositions: 0,
     });
   },
 
   onShow: function() {
-    if (!wx.cloud || typeof wx.cloud.callFunction !== 'function') return;
-    if (!this._offerCloudAfterLoad || this._cloudPromptShown) return;
-    if (wx.getStorageSync('job_match_cloud_prompt_done')) return;
-    if (positionsDB.length >= 1776) return;
+    const app = getApp();
+    const baseUrl =
+      app && app.globalData && app.globalData.backendBaseUrl ? app.globalData.backendBaseUrl : '';
+    if (!baseUrl) return;
+    if (this._cloudPromptShown) return;
+    if (!this.data.studentInfo) return;
+    if (this.data.isLoading) return;
+    if (this.data.positions && this.data.positions.length > 0) return;
 
     this._cloudPromptShown = true;
-    this.checkCloudData();
+    this.loadCloudData(this.data.studentInfo);
   },
 
   // 检查云端数据
   checkCloudData: function() {
     wx.showModal({
-      title: '数据更新提示',
-      content: `本地有 ${positionsDB.length} 条岗位数据，是否加载完整 1776 条数据？`,
-      confirmText: '加载完整',
+      title: '岗位推荐更新',
+      content: `将使用后端语义推荐候选岗位并生成 Top15。是否继续？`,
+      confirmText: '继续推荐',
       cancelText: '使用本地',
       success: (res) => {
-        wx.setStorageSync('job_match_cloud_prompt_done', true);
-        if (res.confirm) {
-          this.loadCloudData();
-        }
+        if (res.confirm) this.loadCloudData(this.data.studentInfo);
       },
     });
   },
 
-  // 从云端加载完整数据
-  loadCloudData: function() {
+  // 从后端获取岗位候选（语义推荐），失败则回退全量岗位
+  loadCloudData: function(studentInfoOverride) {
     this.setData({ isLoading: true });
     wx.showLoading({ title: '加载数据中...' });
 
-    wx.cloud.callFunction({
-      name: 'getPositions',
-      data: { pageSize: 2000 },
+    const app = getApp();
+    const baseUrl =
+      app && app.globalData && app.globalData.backendBaseUrl ? app.globalData.backendBaseUrl : '';
+    if (!baseUrl) {
+      wx.hideLoading();
+      this.setData({ isLoading: false });
+      const info = studentInfoOverride || this.data.studentInfo;
+      if (info) {
+        this.setData({ currentPositions: positionsDB.length, totalPositions: 1776 });
+        this.calculateMatches(info);
+      }
+      return;
+    }
+
+    const studentInfo = studentInfoOverride || this.data.studentInfo;
+
+    // 1) 优先：语义推荐
+    wx.request({
+      url: `${baseUrl}/api/v1/mini/recommend`,
+      method: 'POST',
+      header: { 'content-type': 'application/json' },
+      data: { studentInfo, topK: 120 },
       success: (res) => {
         wx.hideLoading();
-        if (res.result && res.result.success) {
-          const cloudData = res.result.data;
-          // 合并数据
-          const existingIds = new Set(positionsDB.map(p => p.id));
-          const newData = cloudData.filter(p => !existingIds.has(p.id));
-          const allData = [...positionsDB, ...newData];
-          
-          wx.showToast({ 
-            title: `已加载 ${allData.length} 条数据`, 
-            icon: 'success' 
+        const payload = res.data;
+        if (payload && payload.success && payload.data && Array.isArray(payload.data)) {
+          const candidates = payload.data;
+          wx.showToast({
+            title: `获取推荐候选 ${candidates.length} 个`,
+            icon: 'success'
           });
-          
-          // 更新本地数据
-          this.setData({ currentPositions: allData.length });
-          
-          // 重新计算匹配
-          if (this.data.studentInfo) {
-            this.calculateMatches(this.data.studentInfo, allData);
-          }
-        } else {
-          wx.showToast({ 
-            title: '云端数据暂不可用', 
-            icon: 'none' 
-          });
+          this.setData({ currentPositions: candidates.length, totalPositions: candidates.length });
+          this.calculateMatches(studentInfo, candidates);
+          this.setData({ isLoading: false });
+          return;
         }
+
+        // 2) 兜底：全量岗位
+        this.loadAllPositionsFromBackend(studentInfo);
       },
       fail: (err) => {
         wx.hideLoading();
-        console.error('加载云端数据失败:', err);
-        wx.showToast({ 
-          title: '请先开通云开发', 
-          icon: 'none' 
-        });
+        console.error('推荐候选失败:', err);
+        wx.showToast({ title: '语义推荐失败，回退全量', icon: 'none' });
+        this.loadAllPositionsFromBackend(studentInfo);
       },
-      complete: () => {
+    });
+  },
+
+  loadAllPositionsFromBackend: function(studentInfo) {
+    wx.showLoading({ title: '加载完整岗位中...' });
+    const app = getApp();
+    const baseUrl =
+      app && app.globalData && app.globalData.backendBaseUrl ? app.globalData.backendBaseUrl : '';
+
+    wx.request({
+      url: `${baseUrl}/api/v1/mini/positions`,
+      method: 'GET',
+      data: { page: 1, page_size: 2000 },
+      success: (res) => {
+        wx.hideLoading();
+        const payload = res.data;
+        if (payload && payload.success) {
+          const cloudData = payload.data;
+          const existingIds = new Set(positionsDB.map(p => p.id));
+          const newData = cloudData.filter(p => !existingIds.has(p.id));
+          const allData = [...positionsDB, ...newData];
+
+          wx.showToast({ title: `已加载 ${allData.length} 条数据`, icon: 'success' });
+          this.setData({ currentPositions: allData.length, totalPositions: allData.length });
+          this.calculateMatches(studentInfo, allData);
+        } else {
+          wx.showToast({ title: '后端数据暂不可用', icon: 'none' });
+        }
         this.setData({ isLoading: false });
-      }
+      },
+      fail: (err) => {
+        wx.hideLoading();
+        console.error('加载后端全量数据失败:', err);
+        wx.showToast({ title: '请检查后端地址与域名配置', icon: 'none' });
+        this.setData({ isLoading: false });
+      },
     });
   },
 
@@ -116,7 +156,7 @@ Page({
       const history = wx.getStorageSync('student_history') || [];
       if (history.length > 0) {
         this.setData({ studentInfo: history[0] });
-        this.calculateMatches(history[0]);
+        this.loadCloudData(history[0]);
       } else {
         wx.showToast({ title: '暂无历史记录', icon: 'none' });
         setTimeout(() => wx.navigateBack(), 1500);
