@@ -11,7 +11,15 @@ ENV PIP_DISABLE_PIP_VERSION_CHECK=1
 
 COPY juxing-engine/backend/requirements.txt .
 RUN --mount=type=cache,target=/root/.cache/pip \
-    pip install --retries 5 --timeout 120 -r requirements.txt
+    set -eux; \
+    install_with_index() { \
+      idx="$1"; host="$2"; \
+      pip install --prefer-binary --progress-bar off --retries 20 --timeout 300 \
+        -i "$idx" --trusted-host "$host" -r requirements.txt; \
+    }; \
+    install_with_index "https://pypi.tuna.tsinghua.edu.cn/simple" "pypi.tuna.tsinghua.edu.cn" || \
+    install_with_index "https://mirrors.aliyun.com/pypi/simple/" "mirrors.aliyun.com" || \
+    install_with_index "https://pypi.org/simple" "pypi.org"
 
 COPY juxing-engine/backend/app ./app
 COPY juxing-engine/backend/alembic ./alembic
