@@ -1,9 +1,17 @@
+# syntax=docker/dockerfile:1.7
 FROM docker.m.daocloud.io/library/python:3.12-slim
 
 WORKDIR /app
 
+ARG PIP_INDEX_URL=https://pypi.tuna.tsinghua.edu.cn/simple
+ARG PIP_TRUSTED_HOST=pypi.tuna.tsinghua.edu.cn
+ENV PIP_INDEX_URL=${PIP_INDEX_URL}
+ENV PIP_TRUSTED_HOST=${PIP_TRUSTED_HOST}
+ENV PIP_DISABLE_PIP_VERSION_CHECK=1
+
 COPY juxing-engine/backend/requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+RUN --mount=type=cache,target=/root/.cache/pip \
+    pip install --retries 5 --timeout 120 -r requirements.txt
 
 COPY juxing-engine/backend/app ./app
 COPY juxing-engine/backend/alembic ./alembic
