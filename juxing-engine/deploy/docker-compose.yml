@@ -29,21 +29,12 @@ services:
     volumes:
       - ./data:/data
     restart: unless-stopped
+    ports:
+      - "4100:8000"
     expose:
       - "8000"
     depends_on:
       - redis
       - qdrant
 
-  admin-web:
-    build:
-      context: ../../
-      dockerfile: juxing-engine/admin-web/Dockerfile
-    environment:
-      - NEXT_PUBLIC_API_BASE_URL=/api/v1
-    restart: unless-stopped
-    expose:
-      - "3000"
-    depends_on:
-      - backend
 
