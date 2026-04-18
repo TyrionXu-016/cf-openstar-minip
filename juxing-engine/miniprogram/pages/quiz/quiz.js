@@ -1,6 +1,7 @@
 // pages/quiz/quiz.js
 
 const { QUESTION_BANK } = require('../../data/question-bank.js');
+const { pushStudyStats } = require('../../utils/study-stats-sync.js');
 const app = getApp();
 
 Page({
@@ -154,6 +155,11 @@ Page({
       correctCount: newCount,
     });
 
+    // 答错自动进入错题本
+    if (!isCorrect) {
+      this.addToWrongList(this.data.currentQuestion);
+    }
+
     if (isCorrect) {
       wx.vibrateShort({ type: 'light' });
     }
@@ -169,6 +175,7 @@ Page({
       totalData.correct += correct;
       totalData.days = totalData.days || 0;
       wx.setStorageSync('study_total', totalData);
+      pushStudyStats();
 
       this.setData({
         finished: true,
@@ -193,13 +200,18 @@ Page({
   },
 
   markWrong() {
+    this.addToWrongList(this.data.currentQuestion);
+    wx.showToast({ title: '已标记为错题', icon: 'success' });
+  },
+
+  addToWrongList(question) {
+    if (!question) return;
     const wrongList = wx.getStorageSync('wrong_list') || [];
-    const q = this.data.currentQuestion;
-    if (!wrongList.find((w) => w.id === q.id)) {
-      wrongList.push({ ...q, markedAt: Date.now() });
+    const exists = wrongList.find((w) => (w.id && question.id ? w.id === question.id : w.question === question.question));
+    if (!exists) {
+      wrongList.push({ ...question, markedAt: Date.now() });
       wx.setStorageSync('wrong_list', wrongList);
     }
-    wx.showToast({ title: '已标记为错题', icon: 'success' });
   },
 
   markFavorite() {

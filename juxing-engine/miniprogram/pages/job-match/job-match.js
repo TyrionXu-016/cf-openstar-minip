@@ -287,8 +287,8 @@ Page({
     }
   },
 
-  startPractice: function() {
-    wx.switchTab({ url: '/pages/quiz/quiz' });
+  restartAssessment: function() {
+    wx.navigateTo({ url: '/pages/student-info/student-info' });
   },
 
   shareResult: function() {
@@ -296,8 +296,57 @@ Page({
     wx.showToast({ title: '可分享此页面', icon: 'none' });
   },
 
-  practicePosition: function() {
-    this.closeModal();
-    wx.switchTab({ url: '/pages/quiz/quiz' });
+  saveCurrentPosition: function() {
+    const position = this.data.selectedPosition;
+    if (!position || !position.id) {
+      wx.showToast({ title: '未找到岗位信息', icon: 'none' });
+      return;
+    }
+    try {
+      const list = wx.getStorageSync('favorite_positions') || [];
+      const exists = list.some((item) => item.id === position.id);
+      if (exists) {
+        wx.showToast({ title: '已收藏过该岗位', icon: 'none' });
+        return;
+      }
+      list.unshift({
+        ...position,
+        savedAt: new Date().toISOString(),
+      });
+      wx.setStorageSync('favorite_positions', list.slice(0, 100));
+      // 兼容旧收藏页读取逻辑
+      wx.setStorageSync('favorite_list', list.slice(0, 100));
+      this.saveFavoriteToBackend(position);
+      wx.showToast({ title: '收藏成功', icon: 'success' });
+      this.closeModal();
+    } catch (e) {
+      wx.showToast({ title: '收藏失败', icon: 'none' });
+    }
+  },
+
+  saveFavoriteToBackend: function(position) {
+    const app = getApp();
+    const baseUrl = app && app.globalData ? app.globalData.backendBaseUrl : '';
+    if (!baseUrl) return;
+
+    const history = wx.getStorageSync('student_history') || [];
+    const phone = this.data.studentInfo?.phone || history?.[0]?.phone;
+    if (!phone) return;
+    wx.setStorageSync('favorite_student_phone', phone);
+
+    wx.request({
+      url: `${baseUrl}/api/v1/mini/favorites`,
+      method: 'POST',
+      header: { 'Content-Type': 'application/json' },
+      data: {
+        studentPhone: phone,
+        positionId: position.id,
+        positionName: position.name,
+        payload: position,
+      },
+      fail: (err) => {
+        console.warn('收藏写入后端失败', err);
+      },
+    });
   }
 });

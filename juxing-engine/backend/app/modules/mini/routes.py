@@ -6,8 +6,10 @@ from sqlalchemy.orm import Session
 
 from app.db.models import Position
 from app.db.session import get_db
+from app.modules.study_stats.routes import mini_router as study_stats_router
 
 router = APIRouter()
+router.include_router(study_stats_router)
 
 
 @router.get("/positions")

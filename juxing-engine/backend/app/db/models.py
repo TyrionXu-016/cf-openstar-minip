@@ -1,4 +1,4 @@
-from sqlalchemy import Boolean, Column, DateTime, ForeignKey, Integer, String, Table, Text, func
+from sqlalchemy import Boolean, Column, DateTime, ForeignKey, Integer, String, Table, Text, UniqueConstraint, func
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.db.session import Base
@@ -96,3 +96,32 @@ class StudentProfile(Base):
     exam_type: Mapped[str] = mapped_column(String(32), index=True)
     source: Mapped[str] = mapped_column(String(16), default="mini")
     created_at: Mapped[DateTime] = mapped_column(DateTime, server_default=func.now(), index=True)
+
+
+class FavoritePosition(Base):
+    __tablename__ = "favorite_positions"
+    __table_args__ = (UniqueConstraint("student_phone", "position_id", name="uq_favorite_phone_position"),)
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    student_phone: Mapped[str] = mapped_column(String(20), index=True)
+    position_id: Mapped[int] = mapped_column(Integer, index=True)
+    position_name: Mapped[str] = mapped_column(String(255))
+    payload: Mapped[str] = mapped_column(Text)
+    created_at: Mapped[DateTime] = mapped_column(DateTime, server_default=func.now(), index=True)
+
+
+class StudyStats(Base):
+    """小程序学习概览（按手机号），与本地 study_total / study_YYYY-MM-DD 对齐。"""
+
+    __tablename__ = "study_stats"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    student_phone: Mapped[str] = mapped_column(String(20), unique=True, index=True)
+    total_questions: Mapped[int] = mapped_column(Integer, default=0)
+    correct_count: Mapped[int] = mapped_column(Integer, default=0)
+    study_days: Mapped[int] = mapped_column(Integer, default=0)
+    essay_count: Mapped[int] = mapped_column(Integer, default=0)
+    today_study_date: Mapped[str | None] = mapped_column(String(10), nullable=True)
+    today_questions: Mapped[int] = mapped_column(Integer, default=0)
+    created_at: Mapped[DateTime] = mapped_column(DateTime, server_default=func.now())
+    updated_at: Mapped[DateTime] = mapped_column(DateTime, server_default=func.now(), onupdate=func.now())

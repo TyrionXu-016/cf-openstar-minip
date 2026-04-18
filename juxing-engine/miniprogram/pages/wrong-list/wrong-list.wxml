@@ -12,7 +12,7 @@
       </view>
       <text class="q-preview">{{item.question}}</text>
       <view class="item-actions">
-        <button class="btn-outline sm" size="mini" data-index="{{index}}" bindtap="practiceOne">练这道题</button>
+        <button class="btn-outline sm" size="mini" data-index="{{index}}" data-id="{{item.id}}" bindtap="practiceOne">练这道题</button>
         <button class="btn-outline sm danger" size="mini" data-id="{{item.id}}" bindtap="removeItem">删除</button>
       </view>
     </view>

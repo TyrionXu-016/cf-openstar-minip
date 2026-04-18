@@ -1,6 +1,7 @@
 // pages/profile/profile.js
 
 const app = getApp();
+const { pullStudyStats, pushStudyStats } = require('../../utils/study-stats-sync.js');
 
 Page({
   data: {
@@ -40,20 +41,23 @@ Page({
     const wrongList = wx.getStorageSync('wrong_list') || [];
     this.setData({ wrongCount: wrongList.length });
 
-    // 学习统计
-    const todayKey = `study_${new Date().toISOString().slice(0, 10)}`;
-    const todayData = wx.getStorageSync(todayKey) || { questions: 0 };
-    const totalData = wx.getStorageSync('study_total') || { total: 0, correct: 0, days: 0, essay: 0 };
+    const applyStudyStats = () => {
+      const totalData = wx.getStorageSync('study_total') || { total: 0, correct: 0, days: 0, essay: 0 };
+      const correctRate = totalData.total > 0 ? Math.round(totalData.correct / totalData.total * 100) : 0;
+      this.setData({
+        stats: [
+          { key: 'total', name: '累计刷题', value: totalData.total.toString() },
+          { key: 'rate', name: '正确率', value: correctRate + '%' },
+          { key: 'days', name: '学习天数', value: totalData.days.toString() },
+          { key: 'essay', name: '申论篇数', value: (totalData.essay || 0).toString() },
+        ],
+      });
+    };
 
-    const correctRate = totalData.total > 0 ? Math.round(totalData.correct / totalData.total * 100) : 0;
-
-    this.setData({
-      stats: [
-        { key: 'total', name: '累计刷题', value: totalData.total.toString() },
-        { key: 'rate', name: '正确率', value: correctRate + '%' },
-        { key: 'days', name: '学习天数', value: totalData.days.toString() },
-        { key: 'essay', name: '申论篇数', value: (totalData.essay || 0).toString() },
-      ]
+    applyStudyStats();
+    pullStudyStats(() => {
+      applyStudyStats();
+      pushStudyStats(() => applyStudyStats());
     });
   },
 

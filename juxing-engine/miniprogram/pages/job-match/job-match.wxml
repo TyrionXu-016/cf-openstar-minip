@@ -119,9 +119,9 @@
       <text class="bar-icon">💾</text>
       <text>保存结果</text>
     </view>
-    <view class="bar-btn primary" bindtap="startPractice">
-      <text class="bar-icon">📝</text>
-      <text>开始练习</text>
+    <view class="bar-btn primary" bindtap="restartAssessment">
+      <text class="bar-icon">🔄</text>
+      <text>重新测评</text>
     </view>
     <view class="bar-btn" bindtap="shareResult">
       <text class="bar-icon">📤</text>
@@ -216,7 +216,7 @@
 
       <view class="modal-footer">
         <button class="modal-btn" bindtap="closeModal">关闭</button>
-        <button class="modal-btn primary" bindtap="practicePosition">练习相关题目</button>
+        <button class="modal-btn primary" bindtap="saveCurrentPosition">收藏岗位</button>
       </view>
     </view>
   </view>

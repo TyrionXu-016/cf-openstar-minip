@@ -17,10 +17,31 @@ Page({
 
   practiceOne(e) {
     const index = e.currentTarget.dataset.index;
-    const item = this.data.list[index];
-    if (!item) return;
+    const id = e.currentTarget.dataset.id;
+    let item = this.data.list[index];
+    if (!item && id !== undefined) {
+      item = (this.data.list || []).find((q) => String(q.id) === String(id));
+    }
+    if (!item) {
+      wx.showToast({ title: '题目数据异常，请重试', icon: 'none' });
+      return;
+    }
     wx.setStorageSync('ai_generated_questions', [item]);
-    wx.navigateTo({ url: '/pages/quiz/quiz?source=ai' });
+    wx.setStorageSync('quiz_source', 'ai');
+    const app = getApp();
+    if (app && app.globalData) {
+      app.globalData.pendingQuizSource = 'ai';
+    }
+    wx.showLoading({ title: '正在打开题目...' });
+    wx.switchTab({
+      url: '/pages/quiz/quiz',
+      success: () => wx.hideLoading(),
+      fail: () => {
+        wx.hideLoading();
+        // 极端场景兜底：switchTab 失败时强制重启到刷题页
+        wx.reLaunch({ url: '/pages/quiz/quiz' });
+      },
+    });
   },
 
   goQuiz() {

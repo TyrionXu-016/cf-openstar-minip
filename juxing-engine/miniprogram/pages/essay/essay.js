@@ -1,5 +1,7 @@
 // pages/essay/essay.js
 
+const { pushStudyStats } = require('../../utils/study-stats-sync.js');
+
 const ESSAY_TOPICS = [
   {
     id: 'es001',
@@ -67,6 +69,7 @@ function saveEssayResultAndHistory(payload) {
   const total = wx.getStorageSync('study_total') || { total: 0, correct: 0, days: 0, essay: 0 };
   total.essay = (total.essay || 0) + 1;
   wx.setStorageSync('study_total', total);
+  pushStudyStats();
 }
 
 Page({

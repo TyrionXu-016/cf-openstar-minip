@@ -1,5 +1,6 @@
 // pages/index/index.js
 const { getCategoryCounts, getAllQuestions } = require('../../data/question-bank.js');
+const { pullStudyStats, pushStudyStats, getStudentPhone } = require('../../utils/study-stats-sync.js');
 const app = getApp();
 
 Page({
@@ -84,29 +85,39 @@ Page({
 
   loadStats() {
     const todayKey = new Date().toISOString().slice(0, 10);
-    const todayData = wx.getStorageSync(`study_${todayKey}`) || { questions: 0 };
-    const totalData = wx.getStorageSync('study_total') || {
-      total: 0, correct: 0, days: 0, essay: 0
+    const apply = () => {
+      const todayData = wx.getStorageSync(`study_${todayKey}`) || { questions: 0 };
+      const totalData = wx.getStorageSync('study_total') || {
+        total: 0, correct: 0, days: 0, essay: 0
+      };
+
+      const correctRate = totalData.total > 0
+        ? Math.round(totalData.correct / totalData.total * 100)
+        : 0;
+
+      const progressWidth = Math.min(
+        Math.round(todayData.questions / this.data.dailyGoal * 100), 100
+      );
+
+      this.setData({
+        todayQuestions: todayData.questions,
+        progressWidth,
+        stats: [
+          { key: 'total', icon: '📚', value: totalData.total.toString(), label: '累计刷题' },
+          { key: 'rate', icon: '🎯', value: correctRate + '%', label: '正确率' },
+          { key: 'days', icon: '🔥', value: totalData.days.toString(), label: '连续天数' },
+          { key: 'essay', icon: '📝', value: totalData.essay.toString(), label: '申论篇数' },
+        ]
+      });
     };
 
-    const correctRate = totalData.total > 0
-      ? Math.round(totalData.correct / totalData.total * 100)
-      : 0;
-
-    const progressWidth = Math.min(
-      Math.round(todayData.questions / this.data.dailyGoal * 100), 100
-    );
-
-    this.setData({
-      todayQuestions: todayData.questions,
-      progressWidth,
-      stats: [
-        { key: 'total', icon: '📚', value: totalData.total.toString(), label: '累计刷题' },
-        { key: 'rate', icon: '🎯', value: correctRate + '%', label: '正确率' },
-        { key: 'days', icon: '🔥', value: totalData.days.toString(), label: '连续天数' },
-        { key: 'essay', icon: '📝', value: totalData.essay.toString(), label: '申论篇数' },
-      ]
-    });
+    apply();
+    if (getStudentPhone()) {
+      pullStudyStats(() => {
+        apply();
+        pushStudyStats(() => apply());
+      });
+    }
   },
 
   goQuiz() {
