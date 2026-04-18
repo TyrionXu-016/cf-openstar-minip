@@ -1,3 +1,14 @@
 .omc/
 .workbuddy/
 juxing-engine/cloudfunctions/**/node_modules/
+
+# Python bytecode / caches（本地运行生成，不应入库）
+**/__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# 后端本地环境变量（密钥勿提交）
+juxing-engine/backend/.env
