@@ -82,7 +82,17 @@
         <text class="finish-key">正确率</text>
       </view>
     </view>
-    <text class="finish-hint">报告已保存，可在个人中心继续练习巩固。</text>
+
+    <view class="plan-card card" wx:if="{{learningPlanItems.length}}">
+      <text class="plan-card-title">个性化学习计划</text>
+      <text class="plan-card-sub">根据本次各模块正确率生成，可按周调整节奏。</text>
+      <view class="plan-item" wx:for="{{learningPlanItems}}" wx:for-item="plan" wx:for-index="pidx" wx:key="pidx">
+        <text class="plan-item-label">{{plan.label}}</text>
+        <text class="plan-item-text">{{plan.text}}</text>
+      </view>
+    </view>
+
+    <text class="finish-hint">报告与学习计划已保存，可在个人中心继续练习巩固。</text>
     <button class="btn-primary" style="margin-top:32rpx" bindtap="goHome">返回首页</button>
     <button class="btn-outline" style="margin-top:20rpx" bindtap="goBack">返回测评入口</button>
   </view>
