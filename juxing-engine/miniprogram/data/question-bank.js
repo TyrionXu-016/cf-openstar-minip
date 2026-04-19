@@ -177,7 +177,7 @@ function difficultyMatches(level, questionDifficulty) {
 
 /**
  * 为测评等场景抽题
- * @param {number} count 目标题量
+ * @param {number} count 目标题量（题库不足时实际题量为 min(count, 符合难度的题目数)）
  * @param {'easy'|'medium'|'hard'|'normal'} difficulty normal 与小程序测评页「正常」一致，等同 medium
  */
 function pickAssessmentQuestions(count, difficulty) {

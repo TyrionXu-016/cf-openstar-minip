@@ -10,7 +10,7 @@
         <view
           class="dot {{index < currentIndex ? 'done' : (index === currentIndex ? 'current' : '')}}"
           wx:for="{{progressDots}}"
-          wx:key="index"
+          wx:key="*this"
         ></view>
       </view>
     </view>
@@ -25,11 +25,12 @@
 
     <view class="options-list">
       <view
-        class="option-item {{getOptionClass(item.key)}}"
+        class="option-item {{answered ? (item.key === currentQuestion.answer ? 'correct' : (item.key === selectedAnswer ? 'wrong' : '')) : (selectedAnswer === item.key ? 'selected' : '')}}"
         wx:for="{{currentQuestion.options}}"
-        wx:key="index"
+        wx:key="key"
         bindtap="selectOption"
         data-key="{{item.key}}"
+        data-index="{{index}}"
       >
         <view class="option-key">{{item.key}}</view>
         <text class="option-text">{{item.text}}</text>
@@ -53,7 +54,7 @@
     </view>
 
     <view class="quiz-actions">
-      <button class="btn-primary {{answered ? 'full' : ''}}" bindtap="{{answered ? 'nextQuestion' : 'submitAnswer'}}">
+      <button class="btn-primary {{answered ? 'full' : ''}}" bindtap="onMainQuizAction">
         {{answered ? (hasNext ? '下一题 ›' : '完成测评') : '提交答案'}}
       </button>
     </view>

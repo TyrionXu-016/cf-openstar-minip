@@ -24,7 +24,7 @@
         <view
           class="dot {{index < currentIndex ? 'done' : (index === currentIndex ? 'current' : '')}}"
           wx:for="{{progressDots}}"
-          wx:key="index"
+          wx:key="*this"
         ></view>
       </view>
     </view>
@@ -43,7 +43,7 @@
       <view
         class="option-item {{answered ? (item.key === currentQuestion.answer ? 'correct' : (item.key === selectedAnswer ? 'wrong' : '')) : (selectedAnswer === item.key ? 'selected' : '')}}"
         wx:for="{{currentQuestion.options}}"
-        wx:key="index"
+        wx:key="key"
         bindtap="selectOption"
         data-key="{{item.key}}"
         data-index="{{index}}"

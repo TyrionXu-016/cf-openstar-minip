@@ -161,10 +161,6 @@ Page({
     wx.navigateTo({ url: '/pages/favorites/favorites' });
   },
 
-  goAIGallery() {
-    wx.navigateTo({ url: '/pages/ai-generate/ai-generate' });
-  },
-
   goSettings() {
     wx.navigateTo({ url: '/pages/settings/settings' });
   },

@@ -46,7 +46,7 @@ Page({
       totalQuestions: questions.length,
       currentIndex: 0,
       currentQuestion: questions[0],
-      progressDots: questions.map(() => ({})),
+      progressDots: questions.map((_, i) => i),
       answered: false,
       selectedAnswer: '',
       hasNext: questions.length > 1,
@@ -55,19 +55,25 @@ Page({
     });
   },
 
-  getOptionClass(key) {
-    if (!this.data.answered) {
-      return this.data.selectedAnswer === key ? 'selected' : '';
-    }
-    if (key === this.data.currentQuestion.answer) return 'correct';
-    if (key === this.data.selectedAnswer) return 'wrong';
-    return '';
-  },
-
   selectOption(e) {
     if (this.data.answered) return;
-    const key = e.currentTarget.dataset.key;
+    let key = e.currentTarget.dataset.key;
+    if (!key) {
+      const idx = Number(e.currentTarget.dataset.index);
+      const list = (this.data.currentQuestion && this.data.currentQuestion.options) || [];
+      key = list[idx] && list[idx].key ? list[idx].key : '';
+    }
+    if (!key) return;
     this.setData({ selectedAnswer: key });
+  },
+
+  /** 合并主按钮事件，避免 WXML 中动态 bindtap 方法名在部分基础库上异常 */
+  onMainQuizAction() {
+    if (this.data.answered) {
+      this.nextQuestion();
+    } else {
+      this.submitAnswer();
+    }
   },
 
   submitAnswer() {
