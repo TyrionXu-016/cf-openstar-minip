@@ -1,5 +1,6 @@
 <!--pages/essay-result/essay-result.wxml-->
 <view class="container">
+  <view class="ai-generated-mark">本服务为人工智能生成内容（AI生成），结果仅供参考</view>
   <view wx:if="{{result}}">
     <!-- 总分卡 -->
     <view class="score-hero gradient-bg">

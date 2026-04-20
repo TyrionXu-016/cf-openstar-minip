@@ -4,6 +4,7 @@
     <text class="header-title">📷 拍题识别</text>
     <text class="header-sub">拍照上传题目，AI 自动识别并给出解析</text>
   </view>
+  <view class="ai-generated-mark">本服务为人工智能生成内容（AI生成），结果仅供参考</view>
 
   <!-- 上传区域 -->
   <view class="upload-area" wx:if="{{!recognizedQuestion}}">

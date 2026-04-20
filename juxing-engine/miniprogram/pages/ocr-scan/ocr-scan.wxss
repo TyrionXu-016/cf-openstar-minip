@@ -111,3 +111,14 @@
 
 .result-actions { display: flex; gap: 20rpx; }
 .result-actions button { flex: 1; padding: 28rpx; }
+
+.ai-generated-mark {
+  margin: 16rpx 24rpx 0;
+  padding: 14rpx 18rpx;
+  border-radius: 14rpx;
+  background: rgba(255, 170, 0, 0.14);
+  color: #8a5a00;
+  font-size: 24rpx;
+  line-height: 1.5;
+  text-align: center;
+}
