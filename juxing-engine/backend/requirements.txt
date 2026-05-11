@@ -8,9 +8,9 @@ passlib[bcrypt]>=1.7.4
 python-multipart>=0.0.9
 qdrant-client>=1.11.0
 
-# 强制使用 CPU 版 torch，避免拉取一堆 nvidia/cuda 依赖（体积非常大）
---extra-index-url https://download.pytorch.org/whl/cpu
-torch==2.11.0+cpu
+# 本地/macOS：使用 PyPI 官方 torch（无 CUDA；Apple Silicon 为 MPS/CPU）
+# 注：linux 若需明确 CPU 轮子在 CI/Docker 中可改用 download.pytorch.org/whl/cpu 与对应 +cpu 版本
+torch==2.11.0
 
 sentence-transformers>=3.0.0
 openpyxl>=3.1.5

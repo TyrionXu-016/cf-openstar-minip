@@ -17,7 +17,23 @@ async function request<T>(path: string, method: HttpMethod, body?: unknown): Pro
 
   if (!resp.ok) {
     const errText = await resp.text();
-    throw new Error(errText || `请求失败: ${resp.status}`);
+    let message = errText || `请求失败: ${resp.status}`;
+    try {
+      const body = JSON.parse(errText) as { detail?: unknown };
+      if (body.detail !== undefined) {
+        message =
+          typeof body.detail === "string"
+            ? body.detail
+            : JSON.stringify(body.detail);
+      }
+    } catch {
+      /* 非 JSON 时沿用原文 */
+    }
+    if (resp.status === 404 && message === "Not Found") {
+      message =
+        "接口不存在（404）。若刚加了岗位详情接口，请重启后端服务后再试。";
+    }
+    throw new Error(message);
   }
 
   return resp.json() as Promise<T>;

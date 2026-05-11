@@ -1,5 +1,6 @@
 // 学员信息录入页面
 const app = getApp();
+const { request } = require('../../utils/http.js');
 
 Page({
   data: {
@@ -129,7 +130,7 @@ Page({
     const baseUrl = app.globalData.backendBaseUrl;
     if (!baseUrl) return;
 
-    wx.request({
+    request({
       url: `${baseUrl}/api/v1/mini/students`,
       method: 'POST',
       header: { 'Content-Type': 'application/json' },
@@ -143,9 +144,9 @@ Page({
         major: studentInfo.major,
         examType: studentInfo.examType
       },
-      fail: (err) => {
-        console.warn('保存学员信息到后端失败', err);
-      }
+      timeout: 15000,
+    }).catch((err) => {
+      console.warn('保存学员信息到后端失败', err && err.message);
     });
   },
 

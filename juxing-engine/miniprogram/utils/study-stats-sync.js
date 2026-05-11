@@ -1,3 +1,5 @@
+const { request } = require('./http.js');
+
 function getStudentPhone() {
   const history = wx.getStorageSync('student_history') || [];
   const fromHistory = history[0] && history[0].phone ? String(history[0].phone) : '';
@@ -54,21 +56,22 @@ function pullStudyStats(done) {
     if (typeof done === 'function') done(false);
     return;
   }
-  wx.request({
+  request({
     url: `${baseUrl}/api/v1/mini/study-stats`,
     method: 'GET',
     data: { student_phone: phone },
-    success: (res) => {
+    timeout: 20000,
+  })
+    .then((res) => {
       const payload = res.data;
       if (payload && payload.success && payload.data) {
         mergeRemoteIntoStorage(payload.data);
       }
       if (typeof done === 'function') done(true);
-    },
-    fail: () => {
+    })
+    .catch(() => {
       if (typeof done === 'function') done(false);
-    },
-  });
+    });
 }
 
 function pushStudyStats(done) {
@@ -80,7 +83,7 @@ function pushStudyStats(done) {
     return;
   }
   const body = readLocalPayload();
-  wx.request({
+  request({
     url: `${baseUrl}/api/v1/mini/study-stats`,
     method: 'POST',
     header: { 'Content-Type': 'application/json' },
@@ -93,17 +96,18 @@ function pushStudyStats(done) {
       todayDate: body.todayDate,
       todayQuestions: body.todayQuestions,
     },
-    success: (res) => {
+    timeout: 20000,
+  })
+    .then((res) => {
       const payload = res.data;
       if (payload && payload.success && payload.data) {
         mergeRemoteIntoStorage(payload.data);
       }
       if (typeof done === 'function') done(true);
-    },
-    fail: () => {
+    })
+    .catch(() => {
       if (typeof done === 'function') done(false);
-    },
-  });
+    });
 }
 
 module.exports = {

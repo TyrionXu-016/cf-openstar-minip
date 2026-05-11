@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent, useEffect, useMemo, useState } from "react";
+import { FormEvent, useCallback, useEffect, useMemo, useState } from "react";
 import { AdminShell } from "@/components/admin-shell";
 import { apiClient } from "@/lib/api/client";
 
@@ -25,6 +25,8 @@ type ListResponse = {
   pageSize: number;
 };
 
+const PAGE_SIZE = 50;
+
 export default function QuestionBankPage() {
   const [items, setItems] = useState<QuestionItem[]>([]);
   const [total, setTotal] = useState(0);
@@ -37,19 +39,20 @@ export default function QuestionBankPage() {
   const [recognizeMeta, setRecognizeMeta] = useState({ category: "lx", subject: "智能识别", difficulty: "中等" });
   const [message, setMessage] = useState("");
   const [filters, setFilters] = useState({ category: "", subject: "", difficulty: "", keyword: "" });
+  const [page, setPage] = useState(1);
 
   const query = useMemo(() => {
     const p = new URLSearchParams();
-    p.set("page", "1");
-    p.set("page_size", "50");
+    p.set("page", String(page));
+    p.set("page_size", String(PAGE_SIZE));
     if (filters.category) p.set("category", filters.category);
     if (filters.subject) p.set("subject", filters.subject);
     if (filters.difficulty) p.set("difficulty", filters.difficulty);
     if (filters.keyword) p.set("keyword", filters.keyword);
     return p.toString();
-  }, [filters]);
+  }, [filters, page]);
 
-  async function loadList() {
+  const loadList = useCallback(async () => {
     setLoading(true);
     try {
       const res = await apiClient.get<ListResponse>(`/admin/questions?${query}`);
@@ -63,11 +66,21 @@ export default function QuestionBankPage() {
     } finally {
       setLoading(false);
     }
-  }
+  }, [query]);
 
   useEffect(() => {
     loadList();
-  }, [query]);
+  }, [loadList]);
+
+  useEffect(() => {
+    const tp = Math.max(1, Math.ceil(total / PAGE_SIZE));
+    setPage((p) => (p > tp ? tp : p));
+  }, [total]);
+
+  const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE));
+  const safePage = Math.min(page, totalPages);
+  const rangeStart = total === 0 ? 0 : (safePage - 1) * PAGE_SIZE + 1;
+  const rangeEnd = total === 0 ? 0 : Math.min(safePage * PAGE_SIZE, total);
 
   async function createOne(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -201,22 +214,34 @@ export default function QuestionBankPage() {
           <input
             placeholder="类别（如 lx）"
             className="rounded-xl border border-slate-400/30 bg-slate-700/20 px-3 py-2 text-sm"
-            onChange={(e) => setFilters((v) => ({ ...v, category: e.target.value }))}
+            onChange={(e) => {
+              setFilters((v) => ({ ...v, category: e.target.value }));
+              setPage(1);
+            }}
           />
           <input
             placeholder="学科（如 逻辑推理）"
             className="rounded-xl border border-slate-400/30 bg-slate-700/20 px-3 py-2 text-sm"
-            onChange={(e) => setFilters((v) => ({ ...v, subject: e.target.value }))}
+            onChange={(e) => {
+              setFilters((v) => ({ ...v, subject: e.target.value }));
+              setPage(1);
+            }}
           />
           <input
             placeholder="难度（简单/中等/困难）"
             className="rounded-xl border border-slate-400/30 bg-slate-700/20 px-3 py-2 text-sm"
-            onChange={(e) => setFilters((v) => ({ ...v, difficulty: e.target.value }))}
+            onChange={(e) => {
+              setFilters((v) => ({ ...v, difficulty: e.target.value }));
+              setPage(1);
+            }}
           />
           <input
             placeholder="关键词（题干/解析）"
             className="rounded-xl border border-slate-400/30 bg-slate-700/20 px-3 py-2 text-sm"
-            onChange={(e) => setFilters((v) => ({ ...v, keyword: e.target.value }))}
+            onChange={(e) => {
+              setFilters((v) => ({ ...v, keyword: e.target.value }));
+              setPage(1);
+            }}
           />
         </div>
       </section>
@@ -303,9 +328,34 @@ export default function QuestionBankPage() {
       </section>
 
       <section className="mt-6 rounded-2xl border border-blue-200/20 bg-slate-900/40 p-4">
-        <div className="mb-2 flex items-center justify-between">
+        <div className="mb-2 flex flex-wrap items-center justify-between gap-3">
           <h3 className="text-white">题目列表</h3>
-          <span className="text-xs text-slate-300">共 {total} 条</span>
+          <div className="flex flex-wrap items-center gap-3 text-xs text-slate-300">
+            <span>共 {total} 条</span>
+            {total > 0 ? (
+              <span>
+                第 {safePage} / {totalPages} 页（{rangeStart}–{rangeEnd}）
+              </span>
+            ) : null}
+            <div className="flex gap-2">
+              <button
+                type="button"
+                disabled={page <= 1 || loading}
+                onClick={() => setPage((p) => Math.max(1, p - 1))}
+                className="rounded-lg border border-slate-500/50 px-2 py-1 text-slate-200 disabled:opacity-40"
+              >
+                上一页
+              </button>
+              <button
+                type="button"
+                disabled={page >= totalPages || loading}
+                onClick={() => setPage((p) => p + 1)}
+                className="rounded-lg border border-slate-500/50 px-2 py-1 text-slate-200 disabled:opacity-40"
+              >
+                下一页
+              </button>
+            </div>
+          </div>
         </div>
         <div className="max-h-[440px] overflow-auto rounded-xl border border-slate-600/20">
           <table className="min-w-full text-left text-sm">

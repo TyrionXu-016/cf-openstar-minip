@@ -1,5 +1,6 @@
 // 智能选岗推荐页面
 const positionsDB = require('../../data/positions.js');
+const { request, toastTitle } = require('../../utils/http.js');
 
 Page({
   data: {
@@ -82,13 +83,15 @@ Page({
 
     const studentInfo = studentInfoOverride || this.data.studentInfo;
 
-    // 1) 优先：语义推荐
-    wx.request({
+    // 1) 优先：语义推荐（较长超时，避免弱网误以为失败）
+    request({
       url: `${baseUrl}/api/v1/mini/recommend`,
       method: 'POST',
       header: { 'content-type': 'application/json' },
       data: { studentInfo, topK: 120 },
-      success: (res) => {
+      timeout: 45000,
+    })
+      .then((res) => {
         wx.hideLoading();
         const payload = res.data;
         if (payload && payload.success && payload.data && Array.isArray(payload.data)) {
@@ -105,14 +108,16 @@ Page({
 
         // 2) 兜底：全量岗位
         this.loadAllPositionsFromBackend(studentInfo);
-      },
-      fail: (err) => {
+      })
+      .catch((err) => {
         wx.hideLoading();
-        console.error('推荐候选失败:', err);
-        wx.showToast({ title: '语义推荐失败，回退全量', icon: 'none' });
+        console.error('推荐候选失败:', err && err.message);
+        wx.showToast({
+          title: toastTitle(err && err.message ? err.message : '推荐失败，改全量'),
+          icon: 'none'
+        });
         this.loadAllPositionsFromBackend(studentInfo);
-      },
-    });
+      });
   },
 
   loadAllPositionsFromBackend: function(studentInfo) {
@@ -121,11 +126,13 @@ Page({
     const baseUrl =
       app && app.globalData && app.globalData.backendBaseUrl ? app.globalData.backendBaseUrl : '';
 
-    wx.request({
+    request({
       url: `${baseUrl}/api/v1/mini/positions`,
       method: 'GET',
       data: { page: 1, page_size: 2000 },
-      success: (res) => {
+      timeout: 60000,
+    })
+      .then((res) => {
         wx.hideLoading();
         const payload = res.data;
         if (payload && payload.success) {
@@ -141,14 +148,16 @@ Page({
           wx.showToast({ title: '后端数据暂不可用', icon: 'none' });
         }
         this.setData({ isLoading: false });
-      },
-      fail: (err) => {
+      })
+      .catch((err) => {
         wx.hideLoading();
-        console.error('加载后端全量数据失败:', err);
-        wx.showToast({ title: '请检查后端地址与域名配置', icon: 'none' });
+        console.error('加载后端全量数据失败:', err && err.message);
+        wx.showToast({
+          title: toastTitle(err && err.message ? err.message : '加载失败'),
+          icon: 'none'
+        });
         this.setData({ isLoading: false });
-      },
-    });
+      });
   },
 
   loadFromHistory: function() {
@@ -334,7 +343,7 @@ Page({
     if (!phone) return;
     wx.setStorageSync('favorite_student_phone', phone);
 
-    wx.request({
+    request({
       url: `${baseUrl}/api/v1/mini/favorites`,
       method: 'POST',
       header: { 'Content-Type': 'application/json' },
@@ -344,9 +353,9 @@ Page({
         positionName: position.name,
         payload: position,
       },
-      fail: (err) => {
-        console.warn('收藏写入后端失败', err);
-      },
+      timeout: 20000,
+    }).catch((err) => {
+      console.warn('收藏写入后端失败', err && err.message);
     });
   }
 });

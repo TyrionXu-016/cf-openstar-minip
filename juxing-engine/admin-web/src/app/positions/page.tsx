@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent, useEffect, useMemo, useState } from "react";
+import { FormEvent, useCallback, useEffect, useMemo, useState } from "react";
 import { AdminShell } from "@/components/admin-shell";
 import { apiClient } from "@/lib/api/client";
 
@@ -21,23 +21,27 @@ type ListResponse = {
   pageSize: number;
 };
 
+const PAGE_SIZE = 100;
+
 export default function PositionsPage() {
   const [items, setItems] = useState<PositionItem[]>([]);
   const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
   const [filters, setFilters] = useState({ category: "", keyword: "" });
+  const [page, setPage] = useState(1);
+  const [detail, setDetail] = useState<PositionItem | null>(null);
 
   const query = useMemo(() => {
     const p = new URLSearchParams();
-    p.set("page", "1");
-    p.set("page_size", "100");
+    p.set("page", String(page));
+    p.set("page_size", String(PAGE_SIZE));
     if (filters.category) p.set("category", filters.category);
     if (filters.keyword) p.set("keyword", filters.keyword);
     return p.toString();
-  }, [filters]);
+  }, [filters, page]);
 
-  async function loadList() {
+  const loadList = useCallback(async () => {
     setLoading(true);
     try {
       const res = await apiClient.get<ListResponse>(`/admin/positions?${query}`);
@@ -48,11 +52,30 @@ export default function PositionsPage() {
     } finally {
       setLoading(false);
     }
-  }
+  }, [query]);
 
   useEffect(() => {
     loadList();
-  }, [query]);
+  }, [loadList]);
+
+  useEffect(() => {
+    if (!detail) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setDetail(null);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [detail]);
+
+  useEffect(() => {
+    const tp = Math.max(1, Math.ceil(total / PAGE_SIZE));
+    setPage((p) => (p > tp ? tp : p));
+  }, [total]);
+
+  const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE));
+  const safePage = Math.min(page, totalPages);
+  const rangeStart = total === 0 ? 0 : (safePage - 1) * PAGE_SIZE + 1;
+  const rangeEnd = total === 0 ? 0 : Math.min(safePage * PAGE_SIZE, total);
 
   async function createOne(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -113,12 +136,18 @@ export default function PositionsPage() {
           <input
             placeholder="类别（如 国考）"
             className="rounded-xl border border-slate-400/30 bg-slate-700/20 px-3 py-2 text-sm"
-            onChange={(e) => setFilters((v) => ({ ...v, category: e.target.value }))}
+            onChange={(e) => {
+              setFilters((v) => ({ ...v, category: e.target.value }));
+              setPage(1);
+            }}
           />
           <input
             placeholder="关键词（名称/子类/描述）"
             className="rounded-xl border border-slate-400/30 bg-slate-700/20 px-3 py-2 text-sm"
-            onChange={(e) => setFilters((v) => ({ ...v, keyword: e.target.value }))}
+            onChange={(e) => {
+              setFilters((v) => ({ ...v, keyword: e.target.value }));
+              setPage(1);
+            }}
           />
         </div>
       </section>
@@ -164,26 +193,56 @@ export default function PositionsPage() {
       </section>
 
       <section className="mt-6 rounded-2xl border border-blue-200/20 bg-slate-900/40 p-4">
-        <div className="mb-2 flex items-center justify-between">
+        <div className="mb-2 flex flex-wrap items-center justify-between gap-3">
           <h3 className="text-white">岗位列表</h3>
-          <span className="text-xs text-slate-300">共 {total} 条</span>
+          <div className="flex flex-wrap items-center gap-3 text-xs text-slate-300">
+            <span>共 {total} 条</span>
+            {total > 0 ? (
+              <span>
+                第 {safePage} / {totalPages} 页（{rangeStart}–{rangeEnd}）
+              </span>
+            ) : null}
+            <div className="flex gap-2">
+              <button
+                type="button"
+                disabled={page <= 1 || loading}
+                onClick={() => setPage((p) => Math.max(1, p - 1))}
+                className="rounded-lg border border-slate-500/50 px-2 py-1 text-slate-200 disabled:opacity-40"
+              >
+                上一页
+              </button>
+              <button
+                type="button"
+                disabled={page >= totalPages || loading}
+                onClick={() => setPage((p) => p + 1)}
+                className="rounded-lg border border-slate-500/50 px-2 py-1 text-slate-200 disabled:opacity-40"
+              >
+                下一页
+              </button>
+            </div>
+          </div>
         </div>
-        <div className="max-h-[480px] overflow-auto">
-          <table className="min-w-full text-left text-sm">
-            <thead className="text-slate-300">
+        <div className="max-h-[480px] overflow-auto rounded-xl border border-slate-600/20">
+          <table className="min-w-full border-collapse text-left text-sm">
+            <thead className="border-b border-slate-600/30 text-slate-300">
               <tr>
-                <th className="px-2 py-2">ID</th>
-                <th className="px-2 py-2">名称</th>
-                <th className="px-2 py-2">类别</th>
-                <th className="px-2 py-2">子类</th>
-                <th className="px-2 py-2">三不限</th>
-                <th className="px-2 py-2">描述</th>
+                <th className="sticky top-0 z-10 bg-slate-950/95 px-2 py-2 backdrop-blur supports-[backdrop-filter]:bg-slate-950/85">
+                  ID
+                </th>
+                <th className="sticky top-0 z-10 bg-slate-950/95 px-2 py-2 backdrop-blur supports-[backdrop-filter]:bg-slate-950/85">
+                  名称
+                </th>
+                <th className="sticky top-0 z-10 bg-slate-950/95 px-2 py-2 backdrop-blur supports-[backdrop-filter]:bg-slate-950/85">类别</th>
+                <th className="sticky top-0 z-10 bg-slate-950/95 px-2 py-2 backdrop-blur supports-[backdrop-filter]:bg-slate-950/85">子类</th>
+                <th className="sticky top-0 z-10 bg-slate-950/95 px-2 py-2 backdrop-blur supports-[backdrop-filter]:bg-slate-950/85">三不限</th>
+                <th className="sticky top-0 z-10 bg-slate-950/95 px-2 py-2 backdrop-blur supports-[backdrop-filter]:bg-slate-950/85">描述</th>
+                <th className="sticky top-0 z-10 bg-slate-950/95 px-2 py-2 backdrop-blur supports-[backdrop-filter]:bg-slate-950/85">操作</th>
               </tr>
             </thead>
             <tbody>
               {loading ? (
                 <tr>
-                  <td className="px-2 py-4 text-slate-300" colSpan={6}>
+                  <td className="px-2 py-4 text-slate-300" colSpan={7}>
                     加载中...
                   </td>
                 </tr>
@@ -191,11 +250,24 @@ export default function PositionsPage() {
                 items.map((it) => (
                   <tr key={it.id} className="border-t border-slate-600/30">
                     <td className="px-2 py-2">{it.id}</td>
-                    <td className="px-2 py-2">{it.name}</td>
+                    <td className="max-w-[14rem] px-2 py-2">
+                      <span className="line-clamp-2 break-all">{it.name}</span>
+                    </td>
                     <td className="px-2 py-2">{it.category}</td>
                     <td className="px-2 py-2">{it.subCategory || "-"}</td>
                     <td className="px-2 py-2">{it.isThreeFree ? "是" : "否"}</td>
-                    <td className="px-2 py-2 line-clamp-1">{it.description || "-"}</td>
+                    <td className="max-w-[min(20rem,36vw)] align-top px-2 py-2">
+                      <div className="line-clamp-2 whitespace-pre-wrap break-words text-slate-300">{it.description || "-"}</div>
+                    </td>
+                    <td className="whitespace-nowrap px-2 py-2 align-top">
+                      <button
+                        type="button"
+                        className="rounded-lg bg-blue-500/20 px-3 py-1 text-xs text-blue-100 hover:bg-blue-500/30"
+                        onClick={() => setDetail(it)}
+                      >
+                        详情
+                      </button>
+                    </td>
                   </tr>
                 ))
               )}
@@ -203,6 +275,70 @@ export default function PositionsPage() {
           </table>
         </div>
       </section>
+
+      {detail ? (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/70 p-4 backdrop-blur-sm"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="position-detail-title"
+          onClick={() => setDetail(null)}
+        >
+          <div
+            className="max-h-[85vh] w-full max-w-4xl overflow-hidden rounded-2xl border border-blue-300/20 bg-slate-900 shadow-2xl"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex items-start justify-between gap-3 border-b border-slate-600/40 px-5 py-4">
+              <h3 id="position-detail-title" className="text-lg font-medium text-white">
+                岗位详情 <span className="text-slate-400">#{detail.id}</span>
+              </h3>
+              <button
+                type="button"
+                className="shrink-0 rounded-lg border border-slate-500/40 px-3 py-1 text-xs text-slate-300 hover:bg-slate-800"
+                onClick={() => setDetail(null)}
+              >
+                关闭
+              </button>
+            </div>
+            <div className="max-h-[calc(85vh-5rem)] overflow-y-auto px-5 py-4 text-sm">
+              <dl className="grid gap-3 text-slate-200">
+                <div>
+                  <dt className="text-xs text-slate-500">名称</dt>
+                  <dd className="mt-0.5 break-words">{detail.name}</dd>
+                </div>
+                <div className="space-y-4">
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="min-w-0">
+                      <dt className="text-xs text-slate-500">类别</dt>
+                      <dd className="mt-0.5 break-words">{detail.category}</dd>
+                    </div>
+                    <div className="min-w-0">
+                      <dt className="text-xs text-slate-500">三不限</dt>
+                      <dd className="mt-0.5">{detail.isThreeFree ? "是" : "否"}</dd>
+                    </div>
+                  </div>
+                  <div className="min-w-0">
+                    <dt className="text-xs text-slate-500">子类</dt>
+                    <dd className="mt-0.5 break-words text-slate-200">{detail.subCategory || "—"}</dd>
+                  </div>
+                </div>
+                <div>
+                  <dt className="text-xs text-slate-500">描述</dt>
+                  <dd className="mt-1 whitespace-pre-wrap break-words text-slate-300">{detail.description || "—"}</dd>
+                </div>
+                <div>
+                  <dt className="text-xs text-slate-500">Payload（原始扩展字段）</dt>
+                  <dd className="mt-1">
+                    <pre className="max-h-48 overflow-auto rounded-lg border border-slate-600/30 bg-slate-950/80 p-3 text-xs text-slate-400">
+                      {JSON.stringify(detail.payload ?? {}, null, 2)}
+                    </pre>
+                  </dd>
+                </div>
+              </dl>
+            </div>
+          </div>
+        </div>
+      ) : null}
     </AdminShell>
   );
 }

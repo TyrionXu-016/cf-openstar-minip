@@ -1,3 +1,5 @@
+const { request } = require('../../utils/http.js');
+
 Page({
   data: {
     list: [],
@@ -27,11 +29,13 @@ Page({
       return;
     }
 
-    wx.request({
+    request({
       url: `${baseUrl}/api/v1/mini/favorites`,
       method: 'GET',
       data: { student_phone: studentPhone, limit: 200 },
-      success: (res) => {
+      timeout: 20000,
+    })
+      .then((res) => {
         const payload = res.data;
         const rows = payload && payload.success
           ? (Array.isArray(payload.data) ? payload.data : (payload.data ? [payload.data] : []))
@@ -47,12 +51,11 @@ Page({
           wx.setStorageSync('favorite_list', remoteList);
           this.setData({ list: remoteList });
         }
-      },
-      fail: (err) => {
-        console.warn('读取收藏失败，回退本地缓存', err);
-      },
-      complete: () => this.setData({ loading: false }),
-    });
+      })
+      .catch((err) => {
+        console.warn('读取收藏失败，回退本地缓存', err && err.message);
+      })
+      .then(() => this.setData({ loading: false }));
   },
 
   removeItem(e) {
@@ -70,12 +73,12 @@ Page({
     const baseUrl = app && app.globalData ? app.globalData.backendBaseUrl : '';
     const phone = this.data.studentPhone || this.getStudentPhone();
     if (!baseUrl || !phone) return;
-    wx.request({
+    request({
       url: `${baseUrl}/api/v1/mini/favorites/${positionId}?student_phone=${encodeURIComponent(phone)}`,
       method: 'DELETE',
-      fail: (err) => {
-        console.warn('后端取消收藏失败', err);
-      },
+      timeout: 15000,
+    }).catch((err) => {
+      console.warn('后端取消收藏失败', err && err.message);
     });
   },
 
