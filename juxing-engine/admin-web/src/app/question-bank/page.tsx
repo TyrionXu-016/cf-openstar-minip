@@ -3,6 +3,7 @@
 import { FormEvent, useCallback, useEffect, useMemo, useState } from "react";
 import { AdminShell } from "@/components/admin-shell";
 import { apiClient } from "@/lib/api/client";
+import { IMPORT_GUIDES } from "@/lib/import-guides";
 
 type Option = { key: string; text: string };
 type QuestionItem = {
@@ -324,6 +325,13 @@ export default function QuestionBankPage() {
               id, category, subject, difficulty, question, optionA, optionB, answer, explanation
             </p>
           </div>
+          <a
+            href={IMPORT_GUIDES.questionWordToCsv.href}
+            download={IMPORT_GUIDES.questionWordToCsv.downloadFileName}
+            className="mt-3 inline-flex w-full items-center justify-center rounded-xl border border-slate-400/40 px-3 py-2 text-center text-sm font-medium text-slate-200 hover:bg-white/5"
+          >
+            {IMPORT_GUIDES.questionWordToCsv.buttonLabel}
+          </a>
           <input name="file" type="file" accept=".csv,.xlsx,.xlsm" className="mt-4 text-sm text-slate-200" />
           <button
             disabled={submitting}
@@ -501,14 +509,23 @@ export default function QuestionBankPage() {
       {showCreateModal ? (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/70 p-4 backdrop-blur-sm">
           <div className="w-full max-w-2xl rounded-2xl border border-blue-300/20 bg-slate-900 p-5 shadow-2xl">
-            <div className="mb-4 flex items-center justify-between">
+            <div className="mb-4 flex flex-wrap items-center justify-between gap-2">
               <h3 className="text-lg text-white">新增单题</h3>
-              <button
-                onClick={() => setShowCreateModal(false)}
-                className="rounded-lg border border-slate-500/40 px-3 py-1 text-xs text-slate-300 hover:bg-slate-800"
-              >
-                关闭
-              </button>
+              <div className="flex flex-wrap items-center gap-2">
+                <a
+                  href={IMPORT_GUIDES.questionWordToCsv.href}
+                  download={IMPORT_GUIDES.questionWordToCsv.downloadFileName}
+                  className="rounded-lg border border-slate-400/40 px-3 py-1.5 text-xs font-medium text-slate-200 hover:bg-white/5"
+                >
+                  {IMPORT_GUIDES.questionWordToCsv.buttonLabel}
+                </a>
+                <button
+                  onClick={() => setShowCreateModal(false)}
+                  className="rounded-lg border border-slate-500/40 px-3 py-1 text-xs text-slate-300 hover:bg-slate-800"
+                >
+                  关闭
+                </button>
+              </div>
             </div>
             <form onSubmit={createOne}>
               <div className="grid gap-2 text-sm md:grid-cols-2">

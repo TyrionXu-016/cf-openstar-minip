@@ -3,6 +3,7 @@
 import { FormEvent, useCallback, useEffect, useMemo, useState } from "react";
 import { AdminShell } from "@/components/admin-shell";
 import { apiClient } from "@/lib/api/client";
+import { IMPORT_GUIDES } from "@/lib/import-guides";
 
 type PositionItem = {
   id: number;
@@ -229,6 +230,13 @@ export default function PositionsPage() {
         <form onSubmit={importFile} className="rounded-2xl border border-blue-200/20 bg-slate-900/40 p-4">
           <h3 className="text-white">Excel/CSV 批量导入</h3>
           <p className="mt-2 text-xs text-slate-300">必填列：id, name；可选：category, subCategory, description, isThreeFree, payload</p>
+          <a
+            href={IMPORT_GUIDES.positionListTable.href}
+            download={IMPORT_GUIDES.positionListTable.downloadFileName}
+            className="mt-3 inline-flex w-full items-center justify-center rounded-xl border border-slate-400/40 px-3 py-2 text-center text-sm font-medium text-slate-200 hover:bg-white/5"
+          >
+            {IMPORT_GUIDES.positionListTable.buttonLabel}
+          </a>
           <input name="file" type="file" accept=".csv,.xlsx,.xlsm" className="mt-4 text-sm" />
           <button className="mt-4 rounded-xl bg-blue-400 px-4 py-2 text-sm font-semibold text-slate-900">上传并导入</button>
         </form>
