@@ -125,6 +125,7 @@ page {
 
 ## 🔗 相关文档
 
+- **后端部署目录数据出问题时的追回说明**：[deploy/DATA_RECOVERY.md](deploy/DATA_RECOVERY.md)（与 `docker-compose.yml`、备份脚本同目录，便于运维查找）
 - 微信云开发：https://developers.weixin.qq.com/miniprogram/dev/wxcloud/
 - 腾讯混元 API：https://cloud.tencent.com/document/product/1729
 - 腾讯云 OCR：https://cloud.tencent.com/document/product/866
