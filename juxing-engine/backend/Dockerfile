@@ -9,13 +9,16 @@ ENV PIP_INDEX_URL=${PIP_INDEX_URL}
 ENV PIP_TRUSTED_HOST=${PIP_TRUSTED_HOST}
 ENV PIP_DISABLE_PIP_VERSION_CHECK=1
 
-COPY juxing-engine/backend/requirements.txt .
+COPY juxing-engine/backend/requirements.txt juxing-engine/backend/requirements.docker.txt ./
+# 先装 CPU 版 torch（~200MB 级），避免从默认 PyPI 拉 CUDA 全家桶（torch+cu12 等 ~1GB+，易构建数小时）
 RUN --mount=type=cache,target=/root/.cache/pip \
     set -eux; \
+    pip install --prefer-binary --progress-bar off --retries 20 --timeout 600 \
+      torch==2.11.0 --index-url https://download.pytorch.org/whl/cpu; \
     install_with_index() { \
       idx="$1"; host="$2"; \
       pip install --prefer-binary --progress-bar off --retries 20 --timeout 300 \
-        -i "$idx" --trusted-host "$host" -r requirements.txt; \
+        -i "$idx" --trusted-host "$host" -r requirements.docker.txt; \
     }; \
     install_with_index "https://pypi.tuna.tsinghua.edu.cn/simple" "pypi.tuna.tsinghua.edu.cn" || \
     install_with_index "https://mirrors.aliyun.com/pypi/simple/" "mirrors.aliyun.com" || \

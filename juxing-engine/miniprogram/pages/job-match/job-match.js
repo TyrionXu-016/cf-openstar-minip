@@ -1,28 +1,47 @@
 // 智能选岗推荐页面
 const positionsDB = require('../../data/positions.js');
-const { request, toastTitle } = require('../../utils/http.js');
+const { request, toastTitle, showRequestFailureModal } = require('../../utils/http.js');
+const {
+  setSyncStudentPhone,
+  getStudentPhone,
+  getCurrentStudentProfileForMatch,
+} = require('../../utils/study-stats-sync.js');
 
 Page({
   data: {
     studentInfo: null,
+    studentAvatarChar: '学',
     positions: [],
     matchRate: 0,
     showModal: false,
     selectedPosition: null,
     isLoading: false,
     totalPositions: 0,
-    currentPositions: 0
+    currentPositions: 0,
+    localFallbackVisible: false,
+  },
+
+  /** WXML 的 {{}} 不支持 .substring 等成员调用，头像字在 JS 里算好再绑定。 */
+  setStudentInfoWithAvatar: function(studentInfo) {
+    const name = studentInfo && studentInfo.name != null ? String(studentInfo.name).trim() : '';
+    const studentAvatarChar = name ? name.charAt(0) : '学';
+    this.setData({ studentInfo, studentAvatarChar });
   },
 
   onLoad: function(options) {
     this._cloudPromptShown = false;
+    const hl = options.highlight != null ? String(options.highlight).trim() : '';
+    this._pendingHighlightId = hl || '';
 
     if (options.mode === 'history') {
       this.loadFromHistory();
     } else if (options.data) {
       try {
         const studentInfo = JSON.parse(decodeURIComponent(options.data));
-        this.setData({ studentInfo });
+        this.setStudentInfoWithAvatar(studentInfo);
+        if (studentInfo && studentInfo.phone) {
+          setSyncStudentPhone(studentInfo.phone);
+        }
         this.loadCloudData(studentInfo);
       } catch (e) {
         wx.showToast({ title: '数据加载失败', icon: 'none' });
@@ -52,19 +71,54 @@ Page({
   // 检查云端数据
   checkCloudData: function() {
     wx.showModal({
-      title: '岗位推荐更新',
-      content: `将使用后端语义推荐候选岗位并生成 Top15。是否继续？`,
-      confirmText: '继续推荐',
-      cancelText: '使用本地',
+      title: '岗位数据来源',
+      content:
+        '云端语义推荐更准确；若网络不稳定或想先快速浏览，可使用本机内置岗位库生成 Top15。',
+      confirmText: '使用本地岗位库',
+      cancelText: '继续云端推荐',
       success: (res) => {
-        if (res.confirm) this.loadCloudData(this.data.studentInfo);
+        if (res.confirm) {
+          this.useLocalPositionsMatch(this.data.studentInfo, false);
+          wx.showToast({ title: '已加载本地岗位库', icon: 'success', duration: 1600 });
+        } else {
+          this.loadCloudData(this.data.studentInfo);
+        }
       },
     });
   },
 
+  /** 使用内置 positions.js；fromFailure 为 true 时展示「云端失败已回退」提示条 */
+  useLocalPositionsMatch: function(studentInfo, fromFailure) {
+    const info = studentInfo || this.data.studentInfo;
+    if (!info) return;
+    const showStrip = fromFailure === true;
+    this.setData({
+      isLoading: false,
+      localFallbackVisible: showStrip,
+      currentPositions: positionsDB.length,
+      totalPositions: positionsDB.length,
+    });
+    this.calculateMatches(info, null);
+    if (showStrip) {
+      wx.showToast({ title: '已改用本机内置岗位库', icon: 'none', duration: 2200 });
+    }
+  },
+
+  onTapUseLocalLibrary: function() {
+    this.useLocalPositionsMatch(this.data.studentInfo, false);
+    wx.showToast({ title: '已加载本地岗位库', icon: 'success', duration: 1600 });
+  },
+
+  retryCloudRecommend: function() {
+    const info = this.data.studentInfo;
+    if (!info) return;
+    this.setData({ localFallbackVisible: false });
+    this.loadCloudData(info);
+  },
+
   // 从后端获取岗位候选（语义推荐），失败则回退全量岗位
   loadCloudData: function(studentInfoOverride) {
-    this.setData({ isLoading: true });
+    this.setData({ isLoading: true, localFallbackVisible: false });
     wx.showLoading({ title: '加载数据中...' });
 
     const app = getApp();
@@ -72,7 +126,7 @@ Page({
       app && app.globalData && app.globalData.backendBaseUrl ? app.globalData.backendBaseUrl : '';
     if (!baseUrl) {
       wx.hideLoading();
-      this.setData({ isLoading: false });
+      this.setData({ isLoading: false, localFallbackVisible: false });
       const info = studentInfoOverride || this.data.studentInfo;
       if (info) {
         this.setData({ currentPositions: positionsDB.length, totalPositions: 1776 });
@@ -94,27 +148,38 @@ Page({
       .then((res) => {
         wx.hideLoading();
         const payload = res.data;
-        if (payload && payload.success && payload.data && Array.isArray(payload.data)) {
-          const candidates = payload.data;
+        const candidates =
+          payload && payload.success && payload.data && Array.isArray(payload.data)
+            ? payload.data
+            : null;
+        if (candidates && candidates.length > 0) {
           wx.showToast({
             title: `获取推荐候选 ${candidates.length} 个`,
             icon: 'success'
           });
-          this.setData({ currentPositions: candidates.length, totalPositions: candidates.length });
+          this.setData({
+            currentPositions: candidates.length,
+            totalPositions: candidates.length,
+            localFallbackVisible: false,
+          });
           this.calculateMatches(studentInfo, candidates);
           this.setData({ isLoading: false });
           return;
         }
 
-        // 2) 兜底：全量岗位
+        // 语义推荐无候选（向量库未建、无索引或与库无交集）时走全量接口，避免页面空白
+        if (candidates && candidates.length === 0) {
+          wx.showToast({ title: '云端推荐暂无结果，加载全量岗位', icon: 'none', duration: 2200 });
+        }
         this.loadAllPositionsFromBackend(studentInfo);
       })
       .catch((err) => {
         wx.hideLoading();
         console.error('推荐候选失败:', err && err.message);
         wx.showToast({
-          title: toastTitle(err && err.message ? err.message : '推荐失败，改全量'),
-          icon: 'none'
+          title: toastTitle(err && err.message ? err.message : '推荐失败，改全量', 36),
+          icon: 'none',
+          duration: 3200,
         });
         this.loadAllPositionsFromBackend(studentInfo);
       });
@@ -142,35 +207,70 @@ Page({
           const allData = [...positionsDB, ...newData];
 
           wx.showToast({ title: `已加载 ${allData.length} 条数据`, icon: 'success' });
-          this.setData({ currentPositions: allData.length, totalPositions: allData.length });
+          this.setData({
+            currentPositions: allData.length,
+            totalPositions: allData.length,
+            localFallbackVisible: false,
+          });
           this.calculateMatches(studentInfo, allData);
         } else {
-          wx.showToast({ title: '后端数据暂不可用', icon: 'none' });
+          showRequestFailureModal(
+            new Error('岗位接口未返回有效数据（success 为 false 或 data 为空）'),
+            '加载岗位失败',
+            '\n\n已自动切换为本机内置岗位库。'
+          );
+          this.useLocalPositionsMatch(studentInfo, true);
         }
         this.setData({ isLoading: false });
       })
       .catch((err) => {
         wx.hideLoading();
         console.error('加载后端全量数据失败:', err && err.message);
-        wx.showToast({
-          title: toastTitle(err && err.message ? err.message : '加载失败'),
-          icon: 'none'
-        });
+        showRequestFailureModal(
+          err,
+          '加载岗位失败',
+          '\n\n已自动切换为本机内置岗位库。'
+        );
+        this.useLocalPositionsMatch(studentInfo, true);
         this.setData({ isLoading: false });
       });
   },
 
   loadFromHistory: function() {
+    let history = [];
     try {
-      const history = wx.getStorageSync('student_history') || [];
-      if (history.length > 0) {
-        this.setData({ studentInfo: history[0] });
-        this.loadCloudData(history[0]);
-      } else {
-        wx.showToast({ title: '暂无历史记录', icon: 'none' });
-        setTimeout(() => wx.navigateBack(), 1500);
-      }
-    } catch (e) {}
+      history = wx.getStorageSync('student_history') || [];
+    } catch (e) {
+      history = [];
+    }
+    const row = getCurrentStudentProfileForMatch();
+    if (!row || !row.phone) {
+      const msg =
+        !Array.isArray(history) || history.length === 0
+          ? '暂无学员档案'
+          : '当前账号无匹配档案';
+      wx.showToast({ title: msg, icon: 'none' });
+      setTimeout(() => wx.navigateBack(), 1800);
+      return;
+    }
+    this.setStudentInfoWithAvatar(row);
+    setSyncStudentPhone(row.phone);
+    this.loadCloudData(row);
+  },
+
+  applyPendingHighlight: function(positionsOverride) {
+    const raw = this._pendingHighlightId;
+    if (!raw) return;
+    this._pendingHighlightId = '';
+    const list = Array.isArray(positionsOverride)
+      ? positionsOverride
+      : (this.data.positions || []);
+    const found = list.find((p) => String(p.id) === String(raw));
+    if (found) {
+      this.setData({ selectedPosition: found, showModal: true });
+    } else {
+      wx.showToast({ title: '该岗位未进入本次 Top15', icon: 'none' });
+    }
   },
 
   // 智能匹配算法
@@ -227,7 +327,9 @@ Page({
     const top = scored.slice(0, 15);
     const avgMatch = top.length > 0 ? Math.round(top.reduce((s, p) => s + p.matchScore, 0) / top.length) : 0;
 
-    this.setData({ positions: top, matchRate: avgMatch });
+    this.setData({ positions: top, matchRate: avgMatch }, () => {
+      this.applyPendingHighlight(top);
+    });
   },
 
   normalizeMajor: function(major) {
@@ -338,8 +440,7 @@ Page({
     const baseUrl = app && app.globalData ? app.globalData.backendBaseUrl : '';
     if (!baseUrl) return;
 
-    const history = wx.getStorageSync('student_history') || [];
-    const phone = this.data.studentInfo?.phone || history?.[0]?.phone;
+    const phone = this.data.studentInfo?.phone || getStudentPhone();
     if (!phone) return;
     wx.setStorageSync('favorite_student_phone', phone);
 

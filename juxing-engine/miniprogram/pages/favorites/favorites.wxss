@@ -1,1 +1,43 @@
 @import "../wrong-list/wrong-list.wxss";
+
+.phone-bar {
+  margin: 0 0 20rpx;
+  padding: 20rpx 24rpx;
+  border-radius: 16rpx;
+  background: rgba(26, 31, 94, 0.06);
+}
+.phone-bar-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16rpx;
+}
+.phone-bar-action {
+  flex-shrink: 0;
+  font-size: 24rpx;
+  color: #2d3494;
+  font-weight: 500;
+}
+.phone-bar.warn {
+  background: rgba(192, 128, 48, 0.12);
+}
+.phone-bar-text {
+  font-size: 24rpx;
+  color: var(--text-secondary);
+  line-height: 1.55;
+}
+.phone-bar.warn .phone-bar-text {
+  color: #8a5a18;
+}
+
+.empty-title {
+  display: block;
+  font-size: 32rpx;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 16rpx;
+}
+
+.retry-btn {
+  margin-top: 24rpx;
+}

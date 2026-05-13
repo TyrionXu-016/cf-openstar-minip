@@ -1,31 +1,72 @@
 const { request } = require('../../utils/http.js');
+const { getStudentPhone } = require('../../utils/study-stats-sync.js');
 
 Page({
   data: {
     list: [],
     loading: false,
     studentPhone: '',
+    emptyReason: '',
+    showPhoneHint: false,
+    hasArchiveHistory: false,
   },
 
   onShow() {
+    this._refreshHasArchiveHistory();
     this.loadFavorites();
   },
 
-  getStudentPhone() {
-    const history = wx.getStorageSync('student_history') || [];
-    return history?.[0]?.phone || wx.getStorageSync('favorite_student_phone') || '';
+  _refreshHasArchiveHistory() {
+    try {
+      const h = wx.getStorageSync('student_history') || [];
+      this.setData({ hasArchiveHistory: Array.isArray(h) && h.length > 0 });
+    } catch (e) {
+      this.setData({ hasArchiveHistory: false });
+    }
+  },
+
+  goArchiveSwitch() {
+    wx.navigateTo({ url: '/pages/student-history/student-history' });
+  },
+
+  _refreshMeta() {
+    const app = getApp();
+    const baseUrlRaw = app && app.globalData && app.globalData.backendBaseUrl;
+    const baseUrl = baseUrlRaw ? String(baseUrlRaw).trim() : '';
+    const phone = (this.data.studentPhone || '').trim();
+    const list = this.data.list || [];
+    let emptyReason = '';
+    let showPhoneHint = false;
+    if (list.length === 0) {
+      if (!phone) emptyReason = 'need_phone';
+      else if (!baseUrl) emptyReason = 'need_backend';
+      else emptyReason = 'no_favorites';
+    } else if (!phone) {
+      showPhoneHint = true;
+    }
+    this.setData({ emptyReason, showPhoneHint });
   },
 
   loadFavorites() {
     const localList = wx.getStorageSync('favorite_positions') || wx.getStorageSync('favorite_list') || [];
-    const studentPhone = this.getStudentPhone();
+    const studentPhone = getStudentPhone();
     const app = getApp();
-    const baseUrl = app && app.globalData ? app.globalData.backendBaseUrl : '';
+    const baseUrlRaw = app && app.globalData ? app.globalData.backendBaseUrl : '';
+    const baseUrl = baseUrlRaw ? String(baseUrlRaw).trim() : '';
 
     this.setData({ loading: true, list: localList, studentPhone });
 
-    if (!baseUrl || !studentPhone) {
+    const done = () => {
       this.setData({ loading: false });
+      this._refreshMeta();
+    };
+
+    if (!studentPhone) {
+      done();
+      return;
+    }
+    if (!baseUrl) {
+      done();
       return;
     }
 
@@ -55,7 +96,11 @@ Page({
       .catch((err) => {
         console.warn('读取收藏失败，回退本地缓存', err && err.message);
       })
-      .then(() => this.setData({ loading: false }));
+      .then(done);
+  },
+
+  goStudentInfo() {
+    wx.navigateTo({ url: '/pages/student-info/student-info' });
   },
 
   removeItem(e) {
@@ -64,14 +109,15 @@ Page({
     wx.setStorageSync('favorite_positions', list);
     wx.setStorageSync('favorite_list', list);
     this.setData({ list });
+    this._refreshMeta();
     this.removeFromBackend(id);
     wx.showToast({ title: '已取消收藏', icon: 'none' });
   },
 
   removeFromBackend(positionId) {
     const app = getApp();
-    const baseUrl = app && app.globalData ? app.globalData.backendBaseUrl : '';
-    const phone = this.data.studentPhone || this.getStudentPhone();
+    const baseUrl = app && app.globalData && app.globalData.backendBaseUrl ? String(app.globalData.backendBaseUrl).trim() : '';
+    const phone = this.data.studentPhone || getStudentPhone();
     if (!baseUrl || !phone) return;
     request({
       url: `${baseUrl}/api/v1/mini/favorites/${positionId}?student_phone=${encodeURIComponent(phone)}`,

@@ -84,10 +84,11 @@ class Question(Base):
 
 class StudentProfile(Base):
     __tablename__ = "student_profiles"
+    __table_args__ = (UniqueConstraint("phone", name="uq_student_profiles_phone"),)
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
     name: Mapped[str] = mapped_column(String(64), index=True)
-    phone: Mapped[str] = mapped_column(String(20), index=True)
+    phone: Mapped[str] = mapped_column(String(20))
     age: Mapped[int] = mapped_column(Integer)
     gender: Mapped[str] = mapped_column(String(16))
     education: Mapped[str] = mapped_column(String(32))

@@ -9,8 +9,11 @@ from app.modules.question_bank.routes import admin_router as question_admin_rout
 from app.modules.question_bank.routes import mini_router as question_mini_router
 from app.modules.student_profiles.routes import admin_router as student_admin_router
 from app.modules.student_profiles.routes import mini_router as student_mini_router
+from app.modules.study_stats.routes import admin_router as study_stats_admin_router
 from app.modules.position_admin.routes import router as position_admin_router
 from app.modules.favorite_positions.routes import mini_router as favorite_mini_router
+from app.modules.customer_support.routes import admin_router as customer_support_admin_router
+from app.modules.customer_support.routes import mini_router as customer_support_mini_router
 
 api_router = APIRouter()
 api_router.include_router(auth_router, prefix="/auth", tags=["auth"])
@@ -21,6 +24,9 @@ api_router.include_router(semantic_mini_router, prefix="/mini", tags=["mini"])
 api_router.include_router(question_admin_router, prefix="/admin", tags=["question-bank"])
 api_router.include_router(question_mini_router, prefix="/mini", tags=["question-bank"])
 api_router.include_router(student_admin_router, prefix="/admin", tags=["student-profiles"])
+api_router.include_router(study_stats_admin_router, prefix="/admin", tags=["study-stats"])
 api_router.include_router(student_mini_router, prefix="/mini", tags=["student-profiles"])
 api_router.include_router(position_admin_router, prefix="/admin", tags=["position-admin"])
 api_router.include_router(favorite_mini_router, prefix="/mini", tags=["favorite-positions"])
+api_router.include_router(customer_support_mini_router, prefix="/mini", tags=["customer-support"])
+api_router.include_router(customer_support_admin_router, prefix="/admin", tags=["customer-support"])

@@ -1,0 +1,25 @@
+<view class="wrap">
+  <view class="card" wx:if="{{loading}}">
+    <text class="tip">正在加载…</text>
+  </view>
+
+  <block wx:else>
+    <view class="tip-block">
+      <text class="tip">{{tip}}</text>
+    </view>
+
+    <view class="phone-card" wx:if="{{hasPhone && phone}}">
+      <text class="phone-label">客服电话</text>
+      <view class="phone-row" bindtap="copyPhone">
+        <text class="phone-num">{{phone}}</text>
+        <text class="phone-action">点击复制</text>
+      </view>
+    </view>
+
+    <view class="qr-card" wx:if="{{hasQr && qrSrc}}">
+      <text class="qr-label" wx:if="{{hasPhone && phone}}">微信二维码</text>
+      <image class="qr-img" src="{{qrSrc}}" mode="aspectFit" show-menu-by-longpress="{{true}}" />
+      <text class="sub-tip">长按图片可识别二维码或保存到相册</text>
+    </view>
+  </block>
+</view>

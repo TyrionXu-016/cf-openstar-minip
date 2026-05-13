@@ -29,6 +29,14 @@
     </view>
   </view>
 
+  <view class="goal-reminder-banner" wx:if="{{showGoalReminderBanner}}">
+    <view class="goal-reminder-main" bindtap="goQuiz">
+      <text class="goal-reminder-text">今日目标 {{dailyGoal}} 题，还差 {{goalReminderShortfall}} 题，去刷题</text>
+      <text class="goal-reminder-go">›</text>
+    </view>
+    <view class="goal-reminder-close" catchtap="dismissGoalReminderBanner">✕</view>
+  </view>
+
   <!-- 统计卡片行 -->
   <view class="stats-row">
     <view class="stat-card" wx:for="{{stats}}" wx:key="key">

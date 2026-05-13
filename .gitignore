@@ -16,3 +16,6 @@ juxing-engine/backend/.venv/
 
 # 本地 SQLite（脚本写入的验证数据也在此库中，勿提交）
 juxing-engine/backend/data/*.db
+# 管理端上传的「联系客服」展示图（勿提交）
+juxing-engine/backend/data/uploads/support_wechat_qr.*
+juxing-engine/backend/data/uploads/support_contact.json

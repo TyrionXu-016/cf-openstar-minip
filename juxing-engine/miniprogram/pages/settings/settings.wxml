@@ -7,12 +7,22 @@
     <switch checked="{{quietCloudFallback}}" bindchange="onQuietChange" color="#1a1f5e" />
   </view>
 
-  <view class="card row">
+  <view class="card row" wx:if="{{showDailyGoalReminderRow}}">
     <view class="label-wrap">
       <text class="label">每日学习目标提醒</text>
-      <text class="hint">订阅消息与推送能力规划中</text>
+      <text class="hint">仅应用内：回到首页且今日刷题未达标时显示提示条（不产生微信推送）</text>
     </view>
     <switch checked="{{dailyGoalReminder}}" bindchange="onDailyReminderChange" color="#1a1f5e" />
+  </view>
+
+  <view class="card row picker-row" wx:if="{{showDailyGoalReminderRow}}">
+    <view class="label-wrap">
+      <text class="label">每日刷题目标</text>
+      <text class="hint">与首页进度条、达标判断一致</text>
+    </view>
+    <picker mode="selector" range="{{dailyGoalPresets}}" value="{{dailyGoalPresetIndex}}" bindchange="onDailyGoalPresetChange">
+      <view class="picker-value">{{dailyGoalQuestions}} 题 ›</view>
+    </picker>
   </view>
 
   <view class="card row link-row" bindtap="showPrivacyPolicy">

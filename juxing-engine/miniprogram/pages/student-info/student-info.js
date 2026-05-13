@@ -1,6 +1,7 @@
 // 学员信息录入页面
 const app = getApp();
-const { request } = require('../../utils/http.js');
+const { request, formatErrorBody } = require('../../utils/http.js');
+const { setSyncStudentPhone } = require('../../utils/study-stats-sync.js');
 
 Page({
   data: {
@@ -97,7 +98,6 @@ Page({
 
     this.setData({ loading: true });
 
-    // 保存到本地存储
     const studentInfo = {
       name: this.data.name,
       phone: this.data.phone,
@@ -110,27 +110,49 @@ Page({
       createTime: new Date().toISOString()
     };
 
-    // 保存历史记录
     this.saveHistory(studentInfo);
+    setSyncStudentPhone(studentInfo.phone);
 
-    // 异步保存到后端，不阻塞后续跳转
-    this.saveToBackend(studentInfo);
+    const matchUrl = `/pages/job-match/job-match?data=${encodeURIComponent(JSON.stringify(studentInfo))}`;
+    const baseUrl = app.globalData.backendBaseUrl;
 
-    // 跳转到智能选岗页面
-    setTimeout(() => {
+    if (!baseUrl) {
       this.setData({ loading: false });
-      wx.navigateTo({
-        url: `/pages/job-match/job-match?data=${encodeURIComponent(JSON.stringify(studentInfo))}`
+      wx.showToast({ title: '未配置服务，已保存本机', icon: 'none', duration: 2200 });
+      wx.navigateTo({ url: matchUrl });
+      return;
+    }
+
+    this.saveToBackend(studentInfo)
+      .then(() => {
+        this.setData({ loading: false });
+        wx.showToast({ title: '已同步云端', icon: 'success', duration: 1200 });
+        setTimeout(() => wx.navigateTo({ url: matchUrl }), 350);
+      })
+      .catch((err) => {
+        this.setData({ loading: false });
+        const detail = (err && err.message) ? String(err.message) : '请检查网络后重试';
+        const content = formatErrorBody(
+          `本机已保存学员信息。\n\n${detail}\n\n是否仍进入智能选岗？`
+        );
+        wx.showModal({
+          title: '云端保存失败',
+          content,
+          confirmText: '仍进入',
+          cancelText: '留在本页',
+          success: (res) => {
+            if (res.confirm) wx.navigateTo({ url: matchUrl });
+          },
+        });
       });
-    }, 500);
   },
 
-  // 提交学员信息到后端
+  /** @returns {Promise<void>} */
   saveToBackend: function(studentInfo) {
     const baseUrl = app.globalData.backendBaseUrl;
-    if (!baseUrl) return;
+    if (!baseUrl) return Promise.resolve();
 
-    request({
+    return request({
       url: `${baseUrl}/api/v1/mini/students`,
       method: 'POST',
       header: { 'Content-Type': 'application/json' },
@@ -145,9 +167,7 @@ Page({
         examType: studentInfo.examType
       },
       timeout: 15000,
-    }).catch((err) => {
-      console.warn('保存学员信息到后端失败', err && err.message);
-    });
+    }).then(() => {});
   },
 
   // 加载历史记录
@@ -160,18 +180,19 @@ Page({
     }
   },
 
-  // 保存历史记录
+  // 保存历史记录：按「手机号 + 姓名」合并，与云端「一号」对齐，又避免同号代填不同人时被一条盖掉。
   saveHistory: function(info) {
     try {
       let history = wx.getStorageSync('student_history') || [];
-      // 去重：如果同姓名同专业已存在，更新
-      const index = history.findIndex(h => h.name === info.name && h.major === info.major);
-      if (index > -1) {
-        history[index] = info;
-      } else {
-        history.unshift(info);
+      const phone = String(info.phone || '').trim();
+      const name = String(info.name || '').trim();
+      const idx = history.findIndex(
+        (h) => String(h.phone || '').trim() === phone && String(h.name || '').trim() === name
+      );
+      if (idx > -1) {
+        history.splice(idx, 1);
       }
-      // 最多保存10条
+      history.unshift(info);
       if (history.length > 10) {
         history = history.slice(0, 10);
       }
@@ -181,10 +202,9 @@ Page({
     }
   },
 
-  // 查看历史
   goToHistory: function() {
     wx.navigateTo({
-      url: '/pages/job-match/job-match?mode=history'
+      url: '/pages/student-history/student-history'
     });
   },
 

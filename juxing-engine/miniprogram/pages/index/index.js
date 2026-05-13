@@ -13,6 +13,8 @@ Page({
     todayQuestions: 0,
     dailyGoal: 30,
     progressWidth: 0,
+    showGoalReminderBanner: false,
+    goalReminderShortfall: 0,
     stats: [
       { key: 'total', icon: '📚', value: '0', label: '累计刷题' },
       { key: 'rate', icon: '🎯', value: '0%', label: '正确率' },
@@ -85,6 +87,9 @@ Page({
 
   loadStats() {
     const todayKey = new Date().toISOString().slice(0, 10);
+    const savedGoal = Number(wx.getStorageSync('settings_daily_goal_questions'));
+    const dailyGoal = [10, 20, 30, 40, 50].includes(savedGoal) ? savedGoal : 30;
+
     const apply = () => {
       const todayData = wx.getStorageSync(`study_${todayKey}`) || { questions: 0 };
       const totalData = wx.getStorageSync('study_total') || {
@@ -95,12 +100,14 @@ Page({
         ? Math.round(totalData.correct / totalData.total * 100)
         : 0;
 
+      const q = Number(todayData.questions) || 0;
       const progressWidth = Math.min(
-        Math.round(todayData.questions / this.data.dailyGoal * 100), 100
+        Math.round(q / dailyGoal * 100), 100
       );
 
       this.setData({
-        todayQuestions: todayData.questions,
+        todayQuestions: q,
+        dailyGoal,
         progressWidth,
         stats: [
           { key: 'total', icon: '📚', value: totalData.total.toString(), label: '累计刷题' },
@@ -108,6 +115,8 @@ Page({
           { key: 'days', icon: '🔥', value: totalData.days.toString(), label: '连续天数' },
           { key: 'essay', icon: '📝', value: totalData.essay.toString(), label: '申论篇数' },
         ]
+      }, () => {
+        this.syncGoalReminderBanner(todayKey, q, dailyGoal);
       });
     };
 
@@ -118,6 +127,27 @@ Page({
         pushStudyStats(() => apply());
       });
     }
+  },
+
+  syncGoalReminderBanner(todayKey, todayQuestions, dailyGoal) {
+    const reminderOn = !!wx.getStorageSync('settings_daily_goal_reminder');
+    const dismissed = wx.getStorageSync('goal_reminder_banner_dismissed_date') === todayKey;
+    const goal = Number(dailyGoal) || 30;
+    const q = Number(todayQuestions) || 0;
+    const met = q >= goal;
+    const show = reminderOn && !dismissed && !met;
+    const goalReminderShortfall = met ? 0 : Math.max(goal - q, 0);
+    this.setData({ showGoalReminderBanner: show, goalReminderShortfall });
+  },
+
+  dismissGoalReminderBanner() {
+    const todayKey = new Date().toISOString().slice(0, 10);
+    try {
+      wx.setStorageSync('goal_reminder_banner_dismissed_date', todayKey);
+    } catch (e) {
+      /* ignore */
+    }
+    this.setData({ showGoalReminderBanner: false });
   },
 
   goQuiz() {

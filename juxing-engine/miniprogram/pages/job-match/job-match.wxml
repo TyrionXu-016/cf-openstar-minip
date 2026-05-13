@@ -4,7 +4,7 @@
   <view class="student-card" wx:if="{{studentInfo}}">
     <view class="card-header">
       <view class="student-avatar">
-        <text class="avatar-text">{{studentInfo.name.substring(0, 1)}}</text>
+        <text class="avatar-text">{{studentAvatarChar}}</text>
       </view>
       <view class="student-info">
         <text class="student-name">{{studentInfo.name}}</text>
@@ -33,6 +33,19 @@
       <text class="tip-title">专业匹配建议</text>
       <text class="tip-text" wx:for="{{matchTips}}" wx:key="index">{{item}}</text>
     </view>
+  </view>
+
+  <view class="local-fallback-strip" wx:if="{{localFallbackVisible}}">
+    <view class="local-fallback-text-wrap">
+      <text class="local-fallback-title">云端岗位暂不可用</text>
+      <text class="local-fallback-desc">已用本机内置岗位库生成推荐，列表可直接浏览。</text>
+    </view>
+    <button class="local-fallback-retry" size="mini" bindtap="retryCloudRecommend">重试云端</button>
+  </view>
+
+  <view class="quick-local-row" wx:if="{{studentInfo}}">
+    <text class="quick-local-hint">网络不稳或想离线浏览时</text>
+    <button class="quick-local-btn" size="mini" bindtap="onTapUseLocalLibrary">使用本地岗位库</button>
   </view>
 
   <!-- 筛选栏 -->
@@ -108,7 +121,10 @@
       <view class="empty-state" wx:if="{{positions.length === 0}}">
         <text class="empty-icon">🔍</text>
         <text class="empty-text">暂无符合条件的岗位</text>
-        <text class="empty-hint">试试调整筛选条件</text>
+        <text class="empty-hint">试试调整筛选条件，或使用本机内置岗位库</text>
+        <view class="empty-actions" wx:if="{{studentInfo && !isLoading}}">
+          <button class="btn-use-local" bindtap="onTapUseLocalLibrary">使用本地岗位库</button>
+        </view>
       </view>
     </view>
   </view>

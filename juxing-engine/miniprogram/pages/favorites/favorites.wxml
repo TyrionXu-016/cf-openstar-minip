@@ -1,11 +1,33 @@
 <view class="container">
+  <view class="phone-bar phone-bar-row" wx:if="{{studentPhone}}">
+    <text class="phone-bar-text">当前学习账号：{{studentPhone}}</text>
+    <text class="phone-bar-action" wx:if="{{hasArchiveHistory}}" bindtap="goArchiveSwitch">切换档案</text>
+  </view>
+  <view class="phone-bar warn" wx:if="{{showPhoneHint}}">
+    <text class="phone-bar-text">未识别到手机号，收藏仅保存在本机。请到学员信息填写手机号以便与云端同步。</text>
+  </view>
+
   <view class="card" wx:if="{{loading}}">
     <text class="empty-text">正在加载收藏岗位...</text>
   </view>
 
-  <view class="empty card" wx:if="{{!loading && list.length === 0}}">
-    <text class="empty-text">暂无收藏岗位，可在“智能选岗推荐”中点击“收藏岗位”。</text>
-    <button class="btn-primary" bindtap="loadFavorites">重新加载</button>
+  <view class="empty card" wx:elif="{{list.length === 0}}">
+    <block wx:if="{{emptyReason === 'need_phone'}}">
+      <text class="empty-title">需要先填写手机号</text>
+      <text class="empty-text">学员信息里的手机号用于云端同步收藏与学习统计。填写后即可从服务端拉取收藏列表。</text>
+      <button class="btn-primary" bindtap="goStudentInfo">去填写学员信息</button>
+      <button class="btn-outline retry-btn" bindtap="loadFavorites">重新检测</button>
+    </block>
+    <block wx:elif="{{emptyReason === 'need_backend'}}">
+      <text class="empty-title">未连接云端服务</text>
+      <text class="empty-text">当前未配置后端地址（如 app.js 中的 backendBaseUrl）。配置并重新编译后，可在此同步收藏。</text>
+      <button class="btn-primary" bindtap="loadFavorites">重新检测</button>
+    </block>
+    <block wx:else>
+      <text class="empty-title">暂无收藏岗位</text>
+      <text class="empty-text">在「智能选岗推荐」中点击「收藏岗位」即可保存到这里。</text>
+      <button class="btn-primary" bindtap="loadFavorites">重新加载</button>
+    </block>
   </view>
 
   <scroll-view scroll-y class="scroll" wx:else>

@@ -121,6 +121,17 @@ page {
   color: #5584e8;
 }
 
+/* 手机号说明：略区分于专业填写提示 */
+.input-hint.phone-hint {
+  background: #f7f5ff;
+  align-items: flex-start;
+}
+.input-hint.phone-hint text:last-child {
+  flex: 1;
+  color: #5c5c7a;
+  line-height: 1.55;
+}
+
 /* 单选按钮组 */
 .radio-group {
   display: flex;
@@ -255,4 +266,13 @@ page {
 .history-arrow {
   font-size: 36rpx;
   color: #ccc;
+}
+
+.history-hint {
+  display: block;
+  margin-top: 12rpx;
+  padding: 0 8rpx;
+  font-size: 22rpx;
+  color: #999;
+  line-height: 1.5;
 }

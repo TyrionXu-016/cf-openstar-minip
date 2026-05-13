@@ -1,13 +1,25 @@
+const DAILY_GOAL_PRESETS = [10, 20, 30, 40, 50];
+
 Page({
   data: {
     quietCloudFallback: false,
+    showDailyGoalReminderRow: true,
     dailyGoalReminder: false,
+    dailyGoalQuestions: 30,
+    dailyGoalPresets: ['10 题', '20 题', '30 题', '40 题', '50 题'],
+    dailyGoalPresetIndex: 2,
   },
 
   onShow() {
+    const savedGoal = Number(wx.getStorageSync('settings_daily_goal_questions'));
+    const dailyGoalQuestions =
+      DAILY_GOAL_PRESETS.includes(savedGoal) ? savedGoal : 30;
+    const dailyGoalPresetIndex = Math.max(0, DAILY_GOAL_PRESETS.indexOf(dailyGoalQuestions));
     this.setData({
       quietCloudFallback: !!wx.getStorageSync('settings_quiet_cloud_fallback'),
       dailyGoalReminder: !!wx.getStorageSync('settings_daily_goal_reminder'),
+      dailyGoalQuestions,
+      dailyGoalPresetIndex,
     });
   },
 
@@ -18,12 +30,35 @@ Page({
   },
 
   onDailyReminderChange(e) {
+    if (!this.data.showDailyGoalReminderRow) return;
     const v = !!e.detail.value;
     wx.setStorageSync('settings_daily_goal_reminder', v);
     this.setData({ dailyGoalReminder: v });
     if (v) {
-      wx.showToast({ title: '提醒功能后续版本开放', icon: 'none' });
+      try {
+        wx.removeStorageSync('goal_reminder_banner_dismissed_date');
+      } catch (e) {
+        /* ignore */
+      }
+      wx.showToast({
+        title: '打开首页时将提示未达标',
+        icon: 'none',
+        duration: 2200,
+      });
     }
+  },
+
+  onDailyGoalPresetChange(e) {
+    const ix = Number(e.detail.value);
+    if (isNaN(ix) || ix < 0 || ix >= DAILY_GOAL_PRESETS.length) return;
+    const dailyGoalQuestions = DAILY_GOAL_PRESETS[ix];
+    wx.setStorageSync('settings_daily_goal_questions', dailyGoalQuestions);
+    try {
+      wx.removeStorageSync('goal_reminder_banner_dismissed_date');
+    } catch (e) {
+      /* ignore */
+    }
+    this.setData({ dailyGoalPresetIndex: ix, dailyGoalQuestions });
   },
 
   showPrivacyPolicy() {

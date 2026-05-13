@@ -1,0 +1,22 @@
+<view class="wrap">
+  <view class="hint" wx:if="{{list.length > 0}}">
+    <text>选择一条档案后，将设为「当前同步」手机号（收藏、学习统计均按该号），并进入智能选岗。</text>
+  </view>
+
+  <scroll-view scroll-y class="scroll" wx:if="{{list.length > 0}}">
+    <view class="card" wx:for="{{list}}" wx:for-index="idx" wx:key="idx">
+      <view class="card-head">
+        <text class="name">{{item.name}}</text>
+        <text class="phone">{{item.phone}}</text>
+      </view>
+      <text class="row">{{item.major}} · {{item.education}} · {{item.examType}}</text>
+      <text class="time" wx:if="{{item.createTime}}">{{item.createTime}}</text>
+      <button class="btn-use" size="default" data-index="{{idx}}" bindtap="useItem">使用此档案</button>
+    </view>
+  </scroll-view>
+
+  <view class="empty" wx:else>
+    <text class="empty-text">暂无最近填写的档案</text>
+    <button class="btn-primary" bindtap="goFill">去填写学员信息</button>
+  </view>
+</view>

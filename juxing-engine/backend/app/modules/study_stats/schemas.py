@@ -24,3 +24,30 @@ class StudyStatsUpsert(BaseModel):
         ge=0,
         validation_alias=AliasChoices("todayQuestions", "today_questions"),
     )
+
+
+class StudyStatsAdminSet(BaseModel):
+    """管理端直接覆盖学习统计（非 max 合并）。"""
+
+    model_config = ConfigDict(populate_by_name=True)
+
+    student_phone: str = Field(
+        ...,
+        min_length=6,
+        max_length=20,
+        validation_alias=AliasChoices("studentPhone", "student_phone"),
+    )
+    total: int = Field(ge=0)
+    correct: int = Field(ge=0)
+    days: int = Field(ge=0)
+    essay: int = Field(ge=0)
+    today_date: str = Field(
+        default="",
+        max_length=10,
+        validation_alias=AliasChoices("todayDate", "today_date"),
+    )
+    today_questions: int = Field(
+        default=0,
+        ge=0,
+        validation_alias=AliasChoices("todayQuestions", "today_questions"),
+    )

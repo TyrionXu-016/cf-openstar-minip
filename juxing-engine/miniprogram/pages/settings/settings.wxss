@@ -41,3 +41,11 @@
   line-height: 1;
   color: var(--text-hint);
 }
+
+.picker-row .picker-value {
+  flex-shrink: 0;
+  font-size: 28rpx;
+  color: #2d3494;
+  font-weight: 500;
+  padding: 12rpx 0;
+}

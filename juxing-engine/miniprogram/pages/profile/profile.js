@@ -161,6 +161,10 @@ Page({
     wx.navigateTo({ url: '/pages/favorites/favorites' });
   },
 
+  goSupportWechat() {
+    wx.navigateTo({ url: '/pages/support-qrcode/support-qrcode' });
+  },
+
   goSettings() {
     wx.navigateTo({ url: '/pages/settings/settings' });
   },

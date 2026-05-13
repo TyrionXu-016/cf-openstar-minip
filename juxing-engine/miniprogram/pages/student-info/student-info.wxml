@@ -28,6 +28,10 @@
       <view class="input-item">
         <text class="input-label">手机号 <text class="required">*</text></text>
         <input class="input-field" type="number" maxlength="11" placeholder="请输入手机号码" value="{{phone}}" bindinput="onInput" data-field="phone" />
+        <view class="input-hint phone-hint">
+          <text class="hint-icon">ℹ️</text>
+          <text>学习记录与收藏按此号码在云端存档。更换手机号后，新号将视为新账号；如需合并旧号下的数据，请联系客服微信协助处理。</text>
+        </view>
       </view>
 
       <!-- 年龄 -->
@@ -139,8 +143,9 @@
   <view class="history-section" wx:if="{{hasHistory}}">
     <view class="history-item" bindtap="goToHistory">
       <text class="history-icon">📜</text>
-      <text>查看历史记录</text>
+      <text>最近档案与切换</text>
       <text class="history-arrow">›</text>
     </view>
+    <text class="history-hint">选择一条设为当前，用于收藏与学习统计的手机号同步。</text>
   </view>
 </view>
