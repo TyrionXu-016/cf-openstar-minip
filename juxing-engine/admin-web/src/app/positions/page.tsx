@@ -23,6 +23,17 @@ type ListResponse = {
 
 const PAGE_SIZE = 100;
 
+type ImportSummary = {
+  total: number;
+  created: number;
+  updated: number;
+  skipped: number;
+  errors?: string[];
+  created_ids?: number[];
+};
+
+type UndoImportSummary = { deleted: number; missing: number; batch_size: number };
+
 export default function PositionsPage() {
   const [items, setItems] = useState<PositionItem[]>([]);
   const [total, setTotal] = useState(0);
@@ -72,6 +83,19 @@ export default function PositionsPage() {
     setPage((p) => (p > tp ? tp : p));
   }, [total]);
 
+  async function deleteOne(id: number, name: string) {
+    const ok = typeof window !== "undefined" ? window.confirm(`确定删除岗位「${name}」（#${id}）？`) : false;
+    if (!ok) return;
+    try {
+      await apiClient.delete<{ ok: boolean }>(`/admin/positions/${id}`);
+      setMessage(`已删除岗位 #${id}`);
+      if (detail?.id === id) setDetail(null);
+      loadList();
+    } catch (e) {
+      setMessage(e instanceof Error ? e.message : "删除失败");
+    }
+  }
+
   const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE));
   const safePage = Math.min(page, totalPages);
   const rangeStart = total === 0 ? 0 : (safePage - 1) * PAGE_SIZE + 1;
@@ -101,11 +125,12 @@ export default function PositionsPage() {
     const form = new FormData(event.currentTarget);
     const text = String(form.get("jsonText") || "[]");
     const parsed = JSON.parse(text);
-    const res = await apiClient.post<{ total: number; created: number; updated: number; skipped: number; errors: string[] }>(
-      "/admin/positions/import/json",
-      { items: parsed, on_conflict: "upsert" },
-    );
-    setMessage(`JSON 导入完成: 总${res.total}，新建${res.created}，更新${res.updated}，跳过${res.skipped}`);
+    const res = await apiClient.post<ImportSummary>("/admin/positions/import/json", {
+      items: parsed,
+      on_conflict: "upsert",
+    });
+    const undoHint = res.created > 0 ? " 本次新建已记入撤销栈，可在列表上方「撤销上次批量导入」按批次回退。" : "";
+    setMessage(`JSON 导入完成: 总${res.total}，新建${res.created}，更新${res.updated}，跳过${res.skipped}${undoHint}`);
     loadList();
   }
 
@@ -116,12 +141,29 @@ export default function PositionsPage() {
     if (!(file instanceof File)) return;
     const fd = new FormData();
     fd.append("file", file);
-    const res = await apiClient.post<{ total: number; created: number; updated: number; skipped: number; errors: string[] }>(
-      "/admin/positions/import/file?on_conflict=upsert",
-      fd,
-    );
-    setMessage(`文件导入完成: 总${res.total}，新建${res.created}，更新${res.updated}，跳过${res.skipped}`);
+    const res = await apiClient.post<ImportSummary>("/admin/positions/import/file?on_conflict=upsert", fd);
+    const undoHint = res.created > 0 ? " 本次新建已记入撤销栈，可在列表上方「撤销上次批量导入」按批次回退。" : "";
+    setMessage(`文件导入完成: 总${res.total}，新建${res.created}，更新${res.updated}，跳过${res.skipped}${undoHint}`);
     loadList();
+  }
+
+  async function undoLastBatchImport() {
+    const ok =
+      typeof window !== "undefined"
+        ? window.confirm(
+            "确定撤销「最近一次」批量导入中新建的记录？\n每次点击只回退一批；再点一次会回退再上一批。\n不会恢复当次导入里被「更新」覆盖的旧内容。",
+          )
+        : false;
+    if (!ok) return;
+    try {
+      const res = await apiClient.post<UndoImportSummary>("/admin/positions/import/undo", {});
+      setMessage(
+        `已撤销上一批导入：删除 ${res.deleted} 条岗位（该批新建共 ${res.batch_size} 条，其中 ${res.missing} 条此前已不存在或已删）`,
+      );
+      loadList();
+    } catch (e) {
+      setMessage(e instanceof Error ? e.message : "撤销失败");
+    }
   }
 
   return (
@@ -195,7 +237,15 @@ export default function PositionsPage() {
       <section className="mt-6 rounded-2xl border border-blue-200/20 bg-slate-900/40 p-4">
         <div className="mb-2 flex flex-wrap items-center justify-between gap-3">
           <h3 className="text-white">岗位列表</h3>
-          <div className="flex flex-wrap items-center gap-3 text-xs text-slate-300">
+          <div className="flex flex-wrap items-center gap-2">
+            <button
+              type="button"
+              onClick={() => void undoLastBatchImport()}
+              className="rounded-lg border border-amber-400/50 bg-amber-500/10 px-3 py-1.5 text-xs font-medium text-amber-100 hover:bg-amber-500/20"
+            >
+              撤销上次批量导入
+            </button>
+            <div className="flex flex-wrap items-center gap-3 text-xs text-slate-300">
             <span>共 {total} 条</span>
             {total > 0 ? (
               <span>
@@ -220,6 +270,7 @@ export default function PositionsPage() {
                 下一页
               </button>
             </div>
+          </div>
           </div>
         </div>
         <div className="max-h-[480px] overflow-auto rounded-xl border border-slate-600/20">
@@ -260,13 +311,22 @@ export default function PositionsPage() {
                       <div className="line-clamp-2 whitespace-pre-wrap break-words text-slate-300">{it.description || "-"}</div>
                     </td>
                     <td className="whitespace-nowrap px-2 py-2 align-top">
-                      <button
-                        type="button"
-                        className="rounded-lg bg-blue-500/20 px-3 py-1 text-xs text-blue-100 hover:bg-blue-500/30"
-                        onClick={() => setDetail(it)}
-                      >
-                        详情
-                      </button>
+                      <div className="flex flex-wrap gap-1">
+                        <button
+                          type="button"
+                          className="rounded-lg bg-blue-500/20 px-3 py-1 text-xs text-blue-100 hover:bg-blue-500/30"
+                          onClick={() => setDetail(it)}
+                        >
+                          详情
+                        </button>
+                        <button
+                          type="button"
+                          className="rounded-lg border border-red-500/40 px-3 py-1 text-xs text-red-200 hover:bg-red-500/10"
+                          onClick={() => void deleteOne(it.id, it.name)}
+                        >
+                          删除
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 ))
@@ -292,13 +352,22 @@ export default function PositionsPage() {
               <h3 id="position-detail-title" className="text-lg font-medium text-white">
                 岗位详情 <span className="text-slate-400">#{detail.id}</span>
               </h3>
-              <button
-                type="button"
-                className="shrink-0 rounded-lg border border-slate-500/40 px-3 py-1 text-xs text-slate-300 hover:bg-slate-800"
-                onClick={() => setDetail(null)}
-              >
-                关闭
-              </button>
+              <div className="flex shrink-0 gap-2">
+                <button
+                  type="button"
+                  className="rounded-lg border border-red-500/40 px-3 py-1 text-xs text-red-200 hover:bg-red-500/10"
+                  onClick={() => void deleteOne(detail.id, detail.name)}
+                >
+                  删除
+                </button>
+                <button
+                  type="button"
+                  className="rounded-lg border border-slate-500/40 px-3 py-1 text-xs text-slate-300 hover:bg-slate-800"
+                  onClick={() => setDetail(null)}
+                >
+                  关闭
+                </button>
+              </div>
             </div>
             <div className="max-h-[calc(85vh-5rem)] overflow-y-auto px-5 py-4 text-sm">
               <dl className="grid gap-3 text-slate-200">

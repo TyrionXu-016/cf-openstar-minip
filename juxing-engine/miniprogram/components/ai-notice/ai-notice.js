@@ -2,11 +2,11 @@ Component({
   properties: {
     tag: {
       type: String,
-      value: "AI生成",
+      value: "",
     },
     text: {
       type: String,
-      value: "本页内容由人工智能生成，仅供参考。",
+      value: "内容由 AI 生成，仅供参考",
     },
   },
 });

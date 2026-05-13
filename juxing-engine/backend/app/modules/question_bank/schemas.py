@@ -36,6 +36,7 @@ class ImportResult(BaseModel):
     updated: int
     skipped: int
     errors: list[str] = []
+    created_ids: list[str] = Field(default_factory=list)
 
 
 class RecognizeQuestionsRequest(BaseModel):

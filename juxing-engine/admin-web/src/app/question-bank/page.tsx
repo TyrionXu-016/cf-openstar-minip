@@ -27,6 +27,17 @@ type ListResponse = {
 
 const PAGE_SIZE = 50;
 
+type ImportSummary = {
+  total: number;
+  created: number;
+  updated: number;
+  skipped: number;
+  errors?: string[];
+  created_ids?: string[];
+};
+
+type UndoImportSummary = { deleted: number; missing: number; batch_size: number };
+
 export default function QuestionBankPage() {
   const [items, setItems] = useState<QuestionItem[]>([]);
   const [total, setTotal] = useState(0);
@@ -82,6 +93,23 @@ export default function QuestionBankPage() {
   const rangeStart = total === 0 ? 0 : (safePage - 1) * PAGE_SIZE + 1;
   const rangeEnd = total === 0 ? 0 : Math.min(safePage * PAGE_SIZE, total);
 
+  async function deleteOne(id: string, preview: string) {
+    const label = preview.length > 48 ? `${preview.slice(0, 48)}…` : preview;
+    const ok = typeof window !== "undefined" ? window.confirm(`确定删除题目「${id}」？\n${label}`) : false;
+    if (!ok) return;
+    try {
+      setSubmitting(true);
+      await apiClient.delete<{ ok: boolean }>(`/admin/questions/${encodeURIComponent(id)}`);
+      setMessage(`已删除题目 ${id}`);
+      if (detail?.id === id) setDetail(null);
+      loadList();
+    } catch (e) {
+      setMessage(e instanceof Error ? e.message : "删除失败");
+    } finally {
+      setSubmitting(false);
+    }
+  }
+
   async function createOne(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const form = new FormData(event.currentTarget);
@@ -119,11 +147,9 @@ export default function QuestionBankPage() {
     try {
       setSubmitting(true);
       const parsed = JSON.parse(jsonText || "[]");
-      const res = await apiClient.post<{ total: number; created: number; updated: number; skipped: number; errors: string[] }>(
-        "/admin/questions/import/json",
-        { items: parsed, on_conflict: "upsert" },
-      );
-      setMessage(`JSON 导入完成: 总${res.total}，新建${res.created}，更新${res.updated}，跳过${res.skipped}`);
+      const res = await apiClient.post<ImportSummary>("/admin/questions/import/json", { items: parsed, on_conflict: "upsert" });
+      const undoHint = res.created > 0 ? " 本次新建已记入撤销栈，可在题目列表上方「撤销上次批量导入」按批次回退。" : "";
+      setMessage(`JSON 导入完成: 总${res.total}，新建${res.created}，更新${res.updated}，跳过${res.skipped}${undoHint}`);
       loadList();
     } catch (e) {
       setMessage(e instanceof Error ? e.message : "JSON 导入失败");
@@ -166,14 +192,34 @@ export default function QuestionBankPage() {
       setSubmitting(true);
       const fd = new FormData();
       fd.append("file", file);
-      const res = await apiClient.post<{ total: number; created: number; updated: number; skipped: number; errors: string[] }>(
-        "/admin/questions/import/file?on_conflict=upsert",
-        fd,
-      );
-      setMessage(`文件导入完成: 总${res.total}，新建${res.created}，更新${res.updated}，跳过${res.skipped}`);
+      const res = await apiClient.post<ImportSummary>("/admin/questions/import/file?on_conflict=upsert", fd);
+      const undoHint = res.created > 0 ? " 本次新建已记入撤销栈，可在题目列表上方「撤销上次批量导入」按批次回退。" : "";
+      setMessage(`文件导入完成: 总${res.total}，新建${res.created}，更新${res.updated}，跳过${res.skipped}${undoHint}`);
       loadList();
     } catch (e) {
       setMessage(e instanceof Error ? e.message : "文件导入失败");
+    } finally {
+      setSubmitting(false);
+    }
+  }
+
+  async function undoLastBatchImport() {
+    const ok =
+      typeof window !== "undefined"
+        ? window.confirm(
+            "确定撤销「最近一次」批量导入中新建的题目？\n每次点击只回退一批；再点一次会回退再上一批。\n不会恢复当次导入里被「更新」覆盖的旧内容。",
+          )
+        : false;
+    if (!ok) return;
+    try {
+      setSubmitting(true);
+      const res = await apiClient.post<UndoImportSummary>("/admin/questions/import/undo", {});
+      setMessage(
+        `已撤销上一批导入：删除 ${res.deleted} 道题目（该批新建共 ${res.batch_size} 道，其中 ${res.missing} 道此前已不存在或已删）`,
+      );
+      loadList();
+    } catch (e) {
+      setMessage(e instanceof Error ? e.message : "撤销失败");
     } finally {
       setSubmitting(false);
     }
@@ -330,7 +376,16 @@ export default function QuestionBankPage() {
       <section className="mt-6 rounded-2xl border border-blue-200/20 bg-slate-900/40 p-4">
         <div className="mb-2 flex flex-wrap items-center justify-between gap-3">
           <h3 className="text-white">题目列表</h3>
-          <div className="flex flex-wrap items-center gap-3 text-xs text-slate-300">
+          <div className="flex flex-wrap items-center gap-2">
+            <button
+              type="button"
+              disabled={submitting}
+              onClick={() => void undoLastBatchImport()}
+              className="rounded-lg border border-amber-400/50 bg-amber-500/10 px-3 py-1.5 text-xs font-medium text-amber-100 hover:bg-amber-500/20 disabled:cursor-not-allowed disabled:opacity-50"
+            >
+              撤销上次批量导入
+            </button>
+            <div className="flex flex-wrap items-center gap-3 text-xs text-slate-300">
             <span>共 {total} 条</span>
             {total > 0 ? (
               <span>
@@ -355,6 +410,7 @@ export default function QuestionBankPage() {
                 下一页
               </button>
             </div>
+          </div>
           </div>
         </div>
         <div className="max-h-[440px] overflow-auto rounded-xl border border-slate-600/20">
@@ -385,12 +441,23 @@ export default function QuestionBankPage() {
                     <td className="px-3 py-3">{it.difficulty}</td>
                     <td className="max-w-[440px] truncate px-3 py-3">{it.question}</td>
                     <td className="px-3 py-3">
-                      <button
-                        className="rounded-lg bg-blue-500/20 px-3 py-1 text-xs text-blue-100 hover:bg-blue-500/30"
-                        onClick={() => setDetail(it)}
-                      >
-                        预览
-                      </button>
+                      <div className="flex flex-wrap gap-1">
+                        <button
+                          type="button"
+                          className="rounded-lg bg-blue-500/20 px-3 py-1 text-xs text-blue-100 hover:bg-blue-500/30"
+                          onClick={() => setDetail(it)}
+                        >
+                          预览
+                        </button>
+                        <button
+                          type="button"
+                          className="rounded-lg border border-red-500/40 px-3 py-1 text-xs text-red-200 hover:bg-red-500/10 disabled:opacity-50"
+                          disabled={submitting}
+                          onClick={() => void deleteOne(it.id, it.question)}
+                        >
+                          删除
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 ))
@@ -402,9 +469,21 @@ export default function QuestionBankPage() {
 
       {detail ? (
         <section className="mt-5 rounded-2xl border border-blue-200/20 bg-slate-900/40 p-4">
-          <div className="flex items-center justify-between">
+          <div className="flex flex-wrap items-center justify-between gap-2">
             <h3 className="text-white">题目详情：{detail.id}</h3>
-            <button className="rounded bg-slate-700 px-2 py-1 text-xs" onClick={() => setDetail(null)}>关闭</button>
+            <div className="flex gap-2">
+              <button
+                type="button"
+                className="rounded-lg border border-red-500/40 px-3 py-1 text-xs text-red-200 hover:bg-red-500/10 disabled:opacity-50"
+                disabled={submitting}
+                onClick={() => void deleteOne(detail.id, detail.question)}
+              >
+                删除
+              </button>
+              <button type="button" className="rounded bg-slate-700 px-2 py-1 text-xs" onClick={() => setDetail(null)}>
+                关闭
+              </button>
+            </div>
           </div>
           <p className="mt-2 text-sm text-slate-200">{detail.question}</p>
           <ul className="mt-2 list-disc space-y-1 pl-5 text-sm text-slate-300">

@@ -32,4 +32,5 @@ class ImportResult(BaseModel):
     updated: int
     skipped: int
     errors: list[str]
+    created_ids: list[int] = Field(default_factory=list)
 

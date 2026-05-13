@@ -1,30 +1,32 @@
 const API_BASE_URL =
   process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:8080/api/v1";
 
-type HttpMethod = "GET" | "POST";
+type HttpMethod = "GET" | "POST" | "DELETE";
 
 async function request<T>(path: string, method: HttpMethod, body?: unknown): Promise<T> {
   const token = typeof window !== "undefined" ? localStorage.getItem("admin_access_token") : "";
   const isFormData = typeof FormData !== "undefined" && body instanceof FormData;
+  const hasJsonBody = method === "POST" && body != null && !isFormData;
+
   const resp = await fetch(`${API_BASE_URL}${path}`, {
     method,
     headers: {
-      ...(isFormData ? {} : { "Content-Type": "application/json" }),
+      ...(hasJsonBody ? { "Content-Type": "application/json" } : {}),
       ...(token ? { Authorization: `Bearer ${token}` } : {}),
     },
-    body: body ? (isFormData ? body : JSON.stringify(body)) : undefined,
+    body: method === "POST" && body != null ? (isFormData ? body : JSON.stringify(body)) : undefined,
   });
 
   if (!resp.ok) {
     const errText = await resp.text();
     let message = errText || `请求失败: ${resp.status}`;
     try {
-      const body = JSON.parse(errText) as { detail?: unknown };
-      if (body.detail !== undefined) {
+      const errBody = JSON.parse(errText) as { detail?: unknown };
+      if (errBody.detail !== undefined) {
         message =
-          typeof body.detail === "string"
-            ? body.detail
-            : JSON.stringify(body.detail);
+          typeof errBody.detail === "string"
+            ? errBody.detail
+            : JSON.stringify(errBody.detail);
       }
     } catch {
       /* 非 JSON 时沿用原文 */
@@ -36,12 +38,22 @@ async function request<T>(path: string, method: HttpMethod, body?: unknown): Pro
     throw new Error(message);
   }
 
-  return resp.json() as Promise<T>;
+  if (resp.status === 204) {
+    return undefined as T;
+  }
+
+  const text = await resp.text();
+  if (!text) {
+    return undefined as T;
+  }
+
+  return JSON.parse(text) as T;
 }
 
 export const apiClient = {
   get: <T>(path: string) => request<T>(path, "GET"),
   post: <T>(path: string, body?: unknown) => request<T>(path, "POST", body),
+  delete: <T>(path: string) => request<T>(path, "DELETE"),
 };
 
 export type LoginResponse = {

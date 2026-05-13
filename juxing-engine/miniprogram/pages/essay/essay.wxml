@@ -5,7 +5,7 @@
     <text class="header-title">✍️ 申论 AI 批改</text>
     <text class="header-sub">写完提交，AI 秒出评分与详细批改意见</text>
   </view>
-  <view class="ai-generated-mark">本服务为人工智能生成内容（AI生成），结果仅供参考</view>
+  <view class="ai-generated-mark">内容由 AI 生成，仅供参考</view>
 
   <!-- 题目选择 -->
   <view class="topic-section" wx:if="{{!selectedTopic}}">

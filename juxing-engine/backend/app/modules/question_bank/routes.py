@@ -8,6 +8,8 @@ from sqlalchemy.orm import Session
 
 from app.api.deps import require_permission
 from app.db.session import get_db
+from app.modules.admin_import_undo.schemas import UndoImportResponse
+from app.modules.admin_import_undo.service import RESOURCE_QUESTIONS, undo_last_import_batch
 from app.modules.question_bank.schemas import (
     ImportJsonRequest,
     ImportResult,
@@ -17,6 +19,7 @@ from app.modules.question_bank.schemas import (
     QuestionItem,
 )
 from app.modules.question_bank.service import (
+    delete_question_by_id,
     get_question,
     import_questions,
     list_questions,
@@ -107,6 +110,20 @@ async def import_file(
     return import_questions(db, items, source="excel" if ext != ".csv" else "csv", on_conflict=on_conflict)
 
 
+@admin_router.post(
+    "/questions/import/undo",
+    response_model=UndoImportResponse,
+    dependencies=[Depends(require_permission("role:write"))],
+)
+def undo_question_import(db: Session = Depends(get_db)) -> UndoImportResponse:
+    try:
+        deleted, missing, batch_size = undo_last_import_batch(db, resource=RESOURCE_QUESTIONS)
+    except ValueError as exc:
+        raise HTTPException(status_code=400, detail=str(exc)) from exc
+    db.commit()
+    return UndoImportResponse(deleted=deleted, missing=missing, batch_size=batch_size)
+
+
 @admin_router.get(
     "/questions",
     dependencies=[Depends(require_permission("role:read"))],
@@ -142,6 +159,17 @@ def get_question_api(question_id: str, db: Session = Depends(get_db)) -> Questio
     if not item:
         raise HTTPException(status_code=404, detail="题目不存在")
     return item
+
+
+@admin_router.delete(
+    "/questions/{question_id}",
+    dependencies=[Depends(require_permission("role:write"))],
+)
+def delete_question(question_id: str, db: Session = Depends(get_db)) -> dict[str, bool]:
+    if not delete_question_by_id(db, question_id):
+        raise HTTPException(status_code=404, detail="题目不存在")
+    db.commit()
+    return {"ok": True}
 
 
 @mini_router.get("/questions")

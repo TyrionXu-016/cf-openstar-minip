@@ -125,3 +125,14 @@ class StudyStats(Base):
     today_questions: Mapped[int] = mapped_column(Integer, default=0)
     created_at: Mapped[DateTime] = mapped_column(DateTime, server_default=func.now())
     updated_at: Mapped[DateTime] = mapped_column(DateTime, server_default=func.now(), onupdate=func.now())
+
+
+class AdminImportUndoBatch(Base):
+    """记录管理端批量导入时「新建」的实体 ID，用于按批次撤销（后进先出）。"""
+
+    __tablename__ = "admin_import_undo_batches"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    resource: Mapped[str] = mapped_column(String(32), index=True)
+    entity_ids_json: Mapped[str] = mapped_column(Text, nullable=False)
+    created_at: Mapped[DateTime] = mapped_column(DateTime, server_default=func.now())

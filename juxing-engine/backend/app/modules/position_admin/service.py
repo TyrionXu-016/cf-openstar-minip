@@ -5,10 +5,11 @@ import io
 import json
 
 from openpyxl import load_workbook
-from sqlalchemy import func, or_, select
+from sqlalchemy import delete, func, or_, select
 from sqlalchemy.orm import Session
 
-from app.db.models import Position
+from app.db.models import FavoritePosition, Position
+from app.modules.admin_import_undo.service import RESOURCE_POSITIONS, record_import_batch
 from app.modules.position_admin.schemas import ImportResult, PositionInput, PositionItem
 
 
@@ -44,12 +45,15 @@ def import_positions(db: Session, items: list[PositionInput], on_conflict: str =
     updated = 0
     skipped = 0
     errors: list[str] = []
+    created_ids: list[int] = []
 
     for idx, item in enumerate(items, start=1):
         try:
-            action, _ = upsert_one(db, item, on_conflict=on_conflict)
+            action, row = upsert_one(db, item, on_conflict=on_conflict)
             if action == "created":
                 created += 1
+                if row is not None:
+                    created_ids.append(row.id)
             elif action == "updated":
                 updated += 1
             else:
@@ -57,8 +61,16 @@ def import_positions(db: Session, items: list[PositionInput], on_conflict: str =
         except Exception as exc:
             errors.append(f"第{idx}条导入失败: {exc}")
 
+    record_import_batch(db, resource=RESOURCE_POSITIONS, created_ids=created_ids)
     db.commit()
-    return ImportResult(total=len(items), created=created, updated=updated, skipped=skipped, errors=errors)
+    return ImportResult(
+        total=len(items),
+        created=created,
+        updated=updated,
+        skipped=skipped,
+        errors=errors,
+        created_ids=created_ids,
+    )
 
 
 def list_positions(
@@ -94,6 +106,15 @@ def get_position(db: Session, position_id: int) -> PositionItem | None:
     if not row:
         return None
     return _to_item(row)
+
+
+def delete_position_by_id(db: Session, position_id: int) -> bool:
+    row = db.get(Position, position_id)
+    if not row:
+        return False
+    db.execute(delete(FavoritePosition).where(FavoritePosition.position_id == position_id))
+    db.delete(row)
+    return True
 
 
 def parse_csv_bytes(content: bytes) -> list[PositionInput]:

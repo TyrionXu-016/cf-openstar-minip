@@ -7,8 +7,11 @@ from sqlalchemy.orm import Session
 
 from app.api.deps import require_permission
 from app.db.session import get_db
+from app.modules.admin_import_undo.schemas import UndoImportResponse
+from app.modules.admin_import_undo.service import RESOURCE_POSITIONS, undo_last_import_batch
 from app.modules.position_admin.schemas import ImportJsonRequest, ImportResult, PositionInput, PositionItem
 from app.modules.position_admin.service import (
+    delete_position_by_id,
     get_position,
     import_positions,
     list_positions,
@@ -33,6 +36,17 @@ def create_position(payload: PositionInput, db: Session = Depends(get_db)) -> Po
     if not item:
         raise HTTPException(status_code=500, detail="岗位保存成功但读取失败")
     return item
+
+
+@router.delete(
+    "/positions/{position_id}",
+    dependencies=[Depends(require_permission("role:write"))],
+)
+def delete_position(position_id: int, db: Session = Depends(get_db)) -> dict[str, bool]:
+    if not delete_position_by_id(db, position_id):
+        raise HTTPException(status_code=404, detail="岗位不存在")
+    db.commit()
+    return {"ok": True}
 
 
 @router.post(
@@ -68,6 +82,20 @@ async def import_position_file(
     except Exception as exc:
         raise HTTPException(status_code=400, detail=f"文件解析失败: {exc}") from exc
     return import_positions(db, items, on_conflict=on_conflict)
+
+
+@router.post(
+    "/positions/import/undo",
+    response_model=UndoImportResponse,
+    dependencies=[Depends(require_permission("role:write"))],
+)
+def undo_position_import(db: Session = Depends(get_db)) -> UndoImportResponse:
+    try:
+        deleted, missing, batch_size = undo_last_import_batch(db, resource=RESOURCE_POSITIONS)
+    except ValueError as exc:
+        raise HTTPException(status_code=400, detail=str(exc)) from exc
+    db.commit()
+    return UndoImportResponse(deleted=deleted, missing=missing, batch_size=batch_size)
 
 
 @router.get(

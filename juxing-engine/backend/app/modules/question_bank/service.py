@@ -12,6 +12,7 @@ from sqlalchemy.orm import Session
 
 from app.core.config import settings
 from app.db.models import Question
+from app.modules.admin_import_undo.service import RESOURCE_QUESTIONS, record_import_batch
 from app.modules.question_bank.schemas import ImportResult, QuestionInput, QuestionItem, QuestionOption
 
 
@@ -80,13 +81,15 @@ def import_questions(db: Session, items: Iterable[QuestionInput], *, source: str
     skipped = 0
     errors: list[str] = []
     count = 0
+    created_ids: list[str] = []
 
     for idx, item in enumerate(items, start=1):
         count += 1
         try:
-            action, _ = upsert_one(db, item, source=source, on_conflict=on_conflict)
+            action, row = upsert_one(db, item, source=source, on_conflict=on_conflict)
             if action == "created":
                 created += 1
+                created_ids.append(row.id)
             elif action == "updated":
                 updated += 1
             else:
@@ -94,8 +97,16 @@ def import_questions(db: Session, items: Iterable[QuestionInput], *, source: str
         except Exception as exc:
             errors.append(f"第 {idx} 条导入失败: {exc}")
 
+    record_import_batch(db, resource=RESOURCE_QUESTIONS, created_ids=created_ids)
     db.commit()
-    return ImportResult(total=count, created=created, updated=updated, skipped=skipped, errors=errors)
+    return ImportResult(
+        total=count,
+        created=created,
+        updated=updated,
+        skipped=skipped,
+        errors=errors,
+        created_ids=created_ids,
+    )
 
 
 def _row_to_input_from_tabular(row: dict[str, str]) -> QuestionInput:
@@ -198,6 +209,14 @@ def get_question(db: Session, question_id: str) -> QuestionItem | None:
     if not row:
         return None
     return _to_item(row)
+
+
+def delete_question_by_id(db: Session, question_id: str) -> bool:
+    row = db.get(Question, question_id)
+    if not row:
+        return False
+    db.delete(row)
+    return True
 
 
 def recognize_questions_by_llm(

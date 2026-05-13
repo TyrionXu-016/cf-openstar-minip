@@ -5,7 +5,7 @@
     <text class="header-title">🤖 AI 智能出题</text>
     <text class="header-sub">根据你的需求，AI 为你定制专属题目</text>
   </view>
-  <view class="ai-generated-mark">本服务为人工智能生成内容（AI生成），结果仅供参考</view>
+  <view class="ai-generated-mark">内容由 AI 生成，仅供参考</view>
 
   <!-- 出题参数配置 -->
   <view class="config-card card" wx:if="{{!generating && !generatedQuestions.length}}">

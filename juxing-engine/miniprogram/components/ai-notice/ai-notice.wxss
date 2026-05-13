@@ -1,20 +1,19 @@
 .ai-notice {
-  margin: 20rpx 24rpx 0;
-  padding: 16rpx 20rpx;
-  background: #fff6e8;
-  border: 1rpx solid #ffd8a8;
-  border-radius: 14rpx;
+  margin: 0 24rpx;
+  padding: 12rpx 0;
+  text-align: center;
+  background: transparent;
 }
 
 .ai-notice-tag {
   font-size: 22rpx;
-  font-weight: 700;
-  color: #b45309;
-  margin-right: 10rpx;
+  font-weight: 600;
+  color: rgba(0, 0, 0, 0.42);
+  margin-right: 8rpx;
 }
 
 .ai-notice-text {
-  font-size: 24rpx;
-  color: #92400e;
-  line-height: 1.6;
+  font-size: 22rpx;
+  color: rgba(0, 0, 0, 0.42);
+  line-height: 1.4;
 }
