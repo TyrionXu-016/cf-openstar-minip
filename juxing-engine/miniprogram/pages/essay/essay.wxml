@@ -18,8 +18,9 @@
       data-topic="{{item}}"
     >
       <view class="topic-header">
-        <text class="tag tag-blue">{{item.category}}</text>
-        <text class="tag tag-gold" style="margin-left:12rpx">{{item.difficulty}}</text>
+        <text class="tag tag-purple">申论题</text>
+        <text class="tag tag-blue" style="margin-left:8rpx">{{item.category}}</text>
+        <text class="tag tag-gold" style="margin-left:8rpx">{{item.difficulty}}</text>
         <text class="topic-words">{{item.wordLimit}}字</text>
       </view>
       <text class="topic-title">{{item.title}}</text>
@@ -32,7 +33,8 @@
     <!-- 题目展示 -->
     <view class="topic-display card">
       <view class="topic-display-header">
-        <text class="tag tag-blue">{{selectedTopic.category}}</text>
+        <text class="tag tag-purple">申论题</text>
+        <text class="tag tag-blue" style="margin-left:8rpx">{{selectedTopic.category}}</text>
         <text class="change-topic" bindtap="changeTopic">换题 ›</text>
       </view>
       <text class="topic-display-title">{{selectedTopic.title}}</text>

@@ -22,6 +22,9 @@
 .item {
   margin-bottom: 24rpx;
 }
+.item-meta {
+  margin-bottom: 12rpx;
+}
 .title {
   font-size: 30rpx;
   font-weight: 600;

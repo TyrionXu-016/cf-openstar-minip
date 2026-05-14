@@ -1,0 +1,116 @@
+<!--pages/quiz-focus/quiz-focus.wxml-->
+<wxs src="./quiz-focus.wxs" module="m" />
+<view class="container">
+  <view class="focus-head" wx:if="{{subTitle}}">{{subTitle}}</view>
+
+  <view class="quiz-wrap" wx:if="{{!loading && currentQuestion}}">
+    <view class="quiz-progress">
+      <text class="progress-text">第 {{currentIndex + 1}} 题 / {{totalQuestions}} 题</text>
+      <view class="progress-dots">
+        <view
+          class="dot {{index < currentIndex ? 'done' : (index === currentIndex ? 'current' : '')}}"
+          wx:for="{{progressDots}}"
+          wx:key="*this"
+        ></view>
+      </view>
+    </view>
+
+    <view class="question-card card">
+      <view class="question-meta">
+        <text class="tag tag-purple" wx:if="{{currentQuestion.questionTypeName}}">{{currentQuestion.questionTypeName}}</text>
+        <text class="tag tag-blue" style="margin-left:12rpx">{{currentQuestion.subject}}</text>
+        <text class="tag tag-{{currentQuestion.difficulty === '简单' ? 'green' : (currentQuestion.difficulty === '困难' ? 'red' : 'gold')}}" style="margin-left:12rpx">{{currentQuestion.difficulty}}</text>
+        <text class="tag tag-gray" wx:if="{{currentQuestion.knowledgeTag}}" style="margin-left:12rpx">{{currentQuestion.knowledgeTag}}</text>
+      </view>
+      <text class="question-text">{{currentQuestion.question}}</text>
+      <text class="multi-hint" wx:if="{{!answered && m.isJudge(currentQuestion)}}">判断题：根据题干陈述，选择「正确」或「错误」</text>
+      <text class="multi-hint" wx:if="{{!answered && m.isMulti(currentQuestion)}}">本题为多选题，可多次点选多个选项</text>
+    </view>
+
+    <view class="options-list" wx:if="{{!m.isEssay(currentQuestion)}}">
+      <view
+        class="option-item {{answered ? (m.includesKey(currentQuestion.answer, item.key) ? 'correct' : (m.includesKey(selectedAnswer, item.key) && !m.includesKey(currentQuestion.answer, item.key) ? 'wrong' : '')) : (m.isMulti(currentQuestion) ? (m.includesKey(selectedAnswer, item.key) ? 'selected' : '') : (selectedAnswer === item.key ? 'selected' : ''))}}"
+        wx:for="{{currentQuestion.options}}"
+        wx:key="key"
+        bindtap="selectOption"
+        data-key="{{item.key}}"
+        data-index="{{index}}"
+      >
+        <view class="option-key">{{item.key}}</view>
+        <text class="option-text">{{item.text}}</text>
+        <view class="option-check" wx:if="{{answered}}">
+          <text wx:if="{{m.includesKey(currentQuestion.answer, item.key)}}">✓</text>
+          <text wx:elif="{{m.includesKey(selectedAnswer, item.key) && !m.includesKey(currentQuestion.answer, item.key)}}">✗</text>
+        </view>
+      </view>
+    </view>
+
+    <view class="explanation-card card" wx:if="{{answered}}">
+      <view class="explanation-header">
+        <text class="expl-result {{isCorrect ? 'correct' : 'wrong'}}">
+          {{isCorrect ? '✓ 回答正确' : '✗ 回答错误'}}
+        </text>
+        <text class="expl-answer">正确答案：{{currentQuestion.answer}}</text>
+      </view>
+      <view class="divider"></view>
+      <text class="expl-title">📖 解析</text>
+      <text class="expl-content">{{currentQuestion.explanation}}</text>
+    </view>
+
+    <view class="quiz-nav-row">
+      <button class="btn-outline btn-nav" disabled="{{currentIndex === 0}}" bindtap="prevQuestion">
+        上一题
+      </button>
+      <button
+        class="btn-outline btn-nav"
+        disabled="{{currentIndex >= totalQuestions - 1 && !answered}}"
+        bindtap="jumpNextQuestion"
+      >
+        下一题
+      </button>
+    </view>
+
+    <view class="quiz-actions">
+      <button class="btn-outline" bindtap="markWrong" wx:if="{{!answered}}">标记错题</button>
+      <button class="btn-outline" bindtap="markFavorite" wx:if="{{!answered}}">收藏</button>
+      <button class="btn-primary {{answered ? 'full' : ''}}" bindtap="{{answered ? 'nextQuestion' : 'submitAnswer'}}">
+        {{answered ? (hasNext ? '下一题 ›' : '完成练习') : '提交答案'}}
+      </button>
+    </view>
+  </view>
+
+  <view class="loading-wrap" wx:if="{{loading}}">
+    <view class="loading-spinner"></view>
+    <text>加载题目中...</text>
+  </view>
+
+  <view class="quiz-empty card" wx:if="{{!loading && !finished && !currentQuestion}}">
+    <text class="quiz-empty-title">暂无题目</text>
+    <text class="quiz-empty-desc">该知识点下暂无「{{bankLabel}}」题目，请返回首页重选</text>
+    <button class="btn-primary" style="margin-top:28rpx" bindtap="goBack">返回</button>
+  </view>
+
+  <view class="finish-card card" wx:if="{{!loading && finished}}">
+    <text class="finish-emoji">🎉</text>
+    <text class="finish-title">本轮练习完成！</text>
+    <view class="finish-stats">
+      <view class="finish-stat">
+        <text class="finish-val">{{sessionStats.total}}</text>
+        <text class="finish-key">共答题</text>
+      </view>
+      <view class="finish-stat">
+        <text class="finish-val correct-color">{{sessionStats.correct}}</text>
+        <text class="finish-key">答对</text>
+      </view>
+      <view class="finish-stat">
+        <text class="finish-val accent-color">{{sessionStats.rate}}%</text>
+        <text class="finish-key">正确率</text>
+      </view>
+    </view>
+    <button class="btn-primary" style="margin-top:32rpx" bindtap="restartRound">再来一轮</button>
+    <button class="btn-outline" style="margin-top:20rpx" bindtap="goQuizTab">打开刷题 Tab</button>
+    <button class="btn-outline" style="margin-top:20rpx" bindtap="goBack">返回首页</button>
+  </view>
+
+  <view class="safe-bottom"></view>
+</view>

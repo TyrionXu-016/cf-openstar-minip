@@ -1,5 +1,7 @@
 // pages/ocr-scan/ocr-scan.js
 
+const { enrichQuestionTypeFields } = require('../../utils/question-type-meta.js');
+
 Page({
   data: {
     imagePath: '',
@@ -56,7 +58,7 @@ Page({
       this.setData({
         recognizing: false,
         rawOCR: result.result.rawText,
-        recognizedQuestion: result.result.parsed,
+        recognizedQuestion: enrichQuestionTypeFields(result.result.parsed),
       });
 
     } catch (err) {
@@ -71,7 +73,7 @@ Page({
       this.setData({
         recognizing: false,
         rawOCR: '某单位组织员工体检，甲、乙、丙、丁四人血型各不相同。已知：(1)甲不是A型；(2)乙不是B型；(3)丙不是AB型；(4)丁是O型。则甲的血型是？',
-        recognizedQuestion: {
+        recognizedQuestion: enrichQuestionTypeFields({
           question: '某单位组织员工体检，甲、乙、丙、丁四人血型各不相同。已知：(1)甲不是A型；(2)乙不是B型；(3)丙不是AB型；(4)丁是O型。则甲的血型是？',
           options: [
             { key: 'A', text: 'A型' },
@@ -85,7 +87,7 @@ Page({
           knowledgePoint: '简单逻辑推理',
           explanation: '丁是O型。甲不是A型，乙不是B型，丙不是AB型。所以甲是B型，乙是A型，丙是AB型。验证：甲B型（非A），乙A型（非B），丙AB型（非AB），丁O型。答案选C。',
           ocrConfidence: 92,
-        },
+        }),
       });
     }
   },
@@ -104,7 +106,12 @@ Page({
     const q = this.data.recognizedQuestion;
     if (q) {
       wx.setStorageSync('ai_generated_questions', [q]);
-      wx.navigateTo({ url: '/pages/quiz/quiz?source=ai' });
+      wx.setStorageSync('quiz_source', 'ai');
+      const app = getApp();
+      if (app && app.globalData) {
+        app.globalData.pendingQuizSource = 'ai';
+      }
+      wx.switchTab({ url: '/pages/quiz/quiz' });
     }
   },
 

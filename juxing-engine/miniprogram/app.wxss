@@ -87,9 +87,11 @@ page {
 }
 
 .tag-blue { background: rgba(26, 31, 94, 0.1); color: var(--primary); }
+.tag-purple { background: rgba(99, 102, 241, 0.12); color: #4f46e5; }
 .tag-gold { background: rgba(245, 166, 35, 0.15); color: #c88000; }
 .tag-green { background: rgba(7, 193, 96, 0.1); color: #07c160; }
 .tag-red { background: rgba(238, 10, 36, 0.1); color: #ee0a24; }
+.tag-gray { background: rgba(0, 0, 0, 0.06); color: var(--text-secondary); }
 
 /* 分隔线 */
 .divider {

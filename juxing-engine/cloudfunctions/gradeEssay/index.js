@@ -84,6 +84,14 @@ exports.main = async (event, context) => {
   // 字数检测
   const actualWords = answer.length;
 
+  const criteriaList = Array.isArray(scoringCriteria) ? scoringCriteria : [];
+  const sumMax =
+    criteriaList.reduce((s, x) => s + (Number(x && x.score) || 0), 0) || 100;
+  const maxScoreHint =
+    sumMax > 0
+      ? `【重要】本题各维度满分之和为 **${sumMax} 分**。totalScore 必须为 **0～${sumMax}** 的整数；dimensions 中每项 score 不得超过该项 maxScore，各维度 score 之和应与 totalScore 基本一致（允许±2 分误差）。`
+      : '';
+
   const prompt = `【题目】
 ${question}
 
@@ -93,12 +101,16 @@ ${answer}
 【字数要求】${wordLimit}字
 【实际字数】${actualWords}字
 
-请从以下5个维度进行评分：
-${scoringCriteria.map(s => `- ${s.dimension}（满分${s.score}分）：${s.description}`).join('\n')}
+请从以下维度进行评分（各维度满分见后）：
+${criteriaList.map((s) => `- ${s.dimension}（满分${s.score}分）：${s.description}`).join('\n')}
+
+${maxScoreHint}
+
+请**必须**输出可操作的改进信息：weaknesses 至少 2 条（指出具体不足）；keyMissedPoints 至少 1 条（若确实无遗漏可写「题干要点基本覆盖」）；每个 dimension 的 improvements 至少 1 条。
 
 输出格式（严格JSON）：
 {
-  "totalScore": 85,
+  "totalScore": <0到${sumMax}之间的整数>,
   "grade": "良好",
   "dimensions": [
     {

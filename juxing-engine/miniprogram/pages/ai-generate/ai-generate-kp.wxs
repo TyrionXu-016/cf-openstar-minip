@@ -1,0 +1,11 @@
+/** 判断当前考点片段数组中是否包含某快捷标签 value（与 JS 拆分规则一致） */
+function isKpSelected(parts, val) {
+  if (!parts || !val) return false;
+  var i = 0;
+  var len = parts.length;
+  for (i = 0; i < len; i++) {
+    if (parts[i] === val) return true;
+  }
+  return false;
+}
+module.exports.isKpSelected = isKpSelected;

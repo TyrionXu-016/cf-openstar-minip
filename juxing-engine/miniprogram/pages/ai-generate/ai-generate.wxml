@@ -1,4 +1,5 @@
 <!--pages/ai-generate/ai-generate.wxml-->
+<wxs src="./ai-generate-kp.wxs" module="kp" />
 <view class="container">
   <!-- 顶部标题 -->
   <view class="header gradient-bg">
@@ -37,16 +38,15 @@
 
     <view class="config-section">
       <text class="config-label">⚡ 难度设置</text>
-      <view class="difficulty-row">
+      <view class="tag-group">
         <view
-          class="difficulty-item {{selectedDifficulty === item.id ? 'active' : ''}}"
+          class="tag-btn {{selectedDifficulty === item.id ? 'active' : ''}}"
           wx:for="{{difficulties}}"
           wx:key="id"
           bindtap="selectDifficulty"
           data-id="{{item.id}}"
         >
-          <text class="diff-icon">{{item.icon}}</text>
-          <text class="diff-name">{{item.name}}</text>
+          <text>{{item.icon}} {{item.name}}</text>
         </view>
       </view>
     </view>
@@ -55,15 +55,58 @@
       <text class="config-label">🏷️ 知识点（可选）</text>
       <input
         class="knowledge-input"
-        placeholder="输入考点，如：类比推理、数列规律..."
+        placeholder="{{knowledgeInputPlaceholder}}"
         placeholder-class="knowledge-placeholder"
         value="{{knowledgePoint}}"
         bindinput="onKnowledgeInput"
       />
+      <text class="knowledge-quick-hint" wx:if="{{selectedSubject === 'shenlun'}}">申论按「五大题型」选一类命题：点题型后出现小考点，小考点为单选（再点同一小考点可取消）；只点题型则 AI 在该题型内随机小考点。一次生成一题勿混用多种题型；上框可手填主题等，顿号或逗号分隔。</text>
+      <text class="knowledge-quick-hint" wx:elif="{{selectedSubject === 'xingce'}}">行测：「五大知识模块」与「全模块」为并列选项——点某一知识模块可再点小考点；只点该知识模块则 AI 在模块内随机小考点。点「全模块」则在全部小考点中随机。切换单选/多选/判断会更新标签。上框可手填考点，多段用顿号或逗号分隔。</text>
+      <text class="knowledge-quick-hint" wx:else>公基：各「知识模块」与「全模块」并列——点某一模块可再点小考点；只点该模块则 AI 在模块内随机考点。点「全模块」则在各模块考点中随机。切换题型会更新标签。上框可手填，多段用顿号或逗号分隔。</text>
+      <text class="knowledge-rotate-hint" wx:if="{{selectedSubject === 'shenlun'}}">五大题型对应归纳概括、综合分析、提出对策、公文写作、大作文；小题侧重材料作答，大作文侧重议论文写作。</text>
+      <text class="knowledge-rotate-hint" wx:else>行测/公基：只生成 1 题且上框有多段考点时，仅取第一段出题（一题一主考点）；生成 2 题及以上时按题轮换各段。</text>
+
+      <block wx:if="{{selectedSubject === 'xingce' || selectedSubject === 'shenlun' || selectedSubject === 'gongjiti'}}">
+        <text class="knowledge-tier-label" wx:if="{{selectedSubject === 'xingce'}}">五大知识模块</text>
+        <text class="knowledge-tier-label" wx:elif="{{selectedSubject === 'shenlun'}}">申论五大题型</text>
+        <text class="knowledge-tier-label" wx:else>知识模块</text>
+        <view class="tag-group knowledge-major-tags">
+          <view
+            class="tag-btn tag-btn-major {{selectedMajorKey === item.key ? 'active' : ''}}"
+            wx:for="{{knowledgeBlockTags}}"
+            wx:key="key"
+            bindtap="onTapKnowledgeMajor"
+            data-key="{{item.key}}"
+          >{{item.label}}</view>
+        </view>
+        <block wx:if="{{knowledgeQuanMajor}}">
+          <text class="knowledge-tier-label knowledge-tier-label-parallel">全模块</text>
+          <view class="tag-group knowledge-major-tags knowledge-quan-row">
+            <view
+              class="tag-btn tag-btn-major {{selectedMajorKey === knowledgeQuanMajor.key ? 'active' : ''}}"
+              bindtap="onTapKnowledgeMajor"
+              data-key="{{knowledgeQuanMajor.key}}"
+            >{{knowledgeQuanMajor.label}}</view>
+          </view>
+        </block>
+        <text wx:if="{{knowledgeSubTags.length && selectedSubject === 'xingce'}}" class="knowledge-tier-label knowledge-tier-label-sub">小考点（可选；再点同一「五大知识模块」可取消）</text>
+        <text wx:if="{{knowledgeSubTags.length && selectedSubject === 'shenlun'}}" class="knowledge-tier-label knowledge-tier-label-sub">小考点（单选；再点同一小考点可取消）</text>
+        <text wx:if="{{knowledgeSubTags.length && selectedSubject === 'gongjiti'}}" class="knowledge-tier-label knowledge-tier-label-sub">小考点（可选；再点同一「知识模块」可取消）</text>
+        <view wx:if="{{knowledgeSubTags.length}}" class="tag-group knowledge-quick-tags">
+          <view
+            class="tag-btn tag-btn-ghost {{ kp.isKpSelected(knowledgeSelectedParts, item.value) ? 'active' : '' }}"
+            wx:for="{{knowledgeSubTags}}"
+            wx:key="value"
+            bindtap="onTapQuickKnowledge"
+            data-fromsub="1"
+            data-value="{{item.value}}"
+          >{{item.label}}</view>
+        </view>
+      </block>
     </view>
 
-    <view class="config-section">
-      <text class="config-label">📊 生成数量</text>
+    <view class="config-section" wx:if="{{selectedType !== 'essay'}}">
+      <text class="config-label">📊 生成数量（最多 20 题，云端分批生成）</text>
       <view class="count-row">
         <view class="count-btn" bindtap="decreaseCount">−</view>
         <text class="count-value">{{generateCount}}</text>
@@ -129,7 +172,8 @@
       <view class="gen-q-header">
         <text class="gen-q-num">第 {{index + 1}} 题</text>
         <view>
-          <text class="tag tag-blue">{{item.subject || selectedSubjectName}}</text>
+          <text class="tag tag-purple" wx:if="{{item.questionTypeName}}">{{item.questionTypeName}}</text>
+          <text class="tag tag-blue" style="margin-left:8rpx">{{item.subject || selectedSubjectName}}</text>
           <text class="tag tag-gold" style="margin-left:8rpx">{{item.difficulty}}</text>
         </view>
       </view>

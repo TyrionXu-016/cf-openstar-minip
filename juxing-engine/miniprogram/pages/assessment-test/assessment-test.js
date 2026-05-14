@@ -1,4 +1,5 @@
 const { pickAssessmentQuestions } = require('../../data/question-bank.js');
+const { enrichQuestionTypeFields } = require('../../utils/question-type-meta.js');
 
 /**
  * 根据测评结果生成本地「学习计划」要点（不调用后端，便于离线可用）
@@ -89,7 +90,8 @@ Page({
     this._questionCount = count;
 
     const meta = wx.getStorageSync('currentAssessment') || {};
-    const questions = pickAssessmentQuestions(count, difficulty);
+    const rawList = pickAssessmentQuestions(count, difficulty);
+    const questions = rawList.map((q) => enrichQuestionTypeFields(q));
 
     if (questions.length === 0) {
       this.setData({

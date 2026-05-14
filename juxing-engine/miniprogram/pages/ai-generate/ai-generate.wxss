@@ -31,28 +31,13 @@
   font-weight: 600;
 }
 
-.difficulty-row { display: flex; gap: 20rpx; }
-.difficulty-item {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 8rpx;
-  padding: 24rpx;
-  border-radius: var(--radius);
-  background: var(--bg);
-  border: 2rpx solid var(--border);
-}
-.difficulty-item.active { border-color: var(--primary); background: rgba(26,31,94,0.06); }
-.diff-icon { font-size: 32rpx; }
-.diff-name { font-size: 24rpx; font-weight: 500; color: var(--text-primary); }
-
 .knowledge-input {
-  background: var(--bg);
+  /* 与卡片内其它表单一致：白底 + 内边距，避免灰底+长占位被截断显得像另一套样式 */
+  background: var(--card-bg);
   border-radius: var(--radius);
-  height: 88rpx;
-  line-height: 88rpx;
-  padding: 0 24rpx;
+  min-height: 88rpx;
+  line-height: 1.45;
+  padding: 20rpx 24rpx;
   font-size: 28rpx;
   color: var(--text-primary);
   border: 2rpx solid var(--border);
@@ -62,6 +47,81 @@
 }
 .knowledge-placeholder {
   color: var(--text-hint);
+}
+
+.knowledge-tier-label {
+  display: block;
+  margin-top: 16rpx;
+  margin-bottom: 10rpx;
+  font-size: 24rpx;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+.knowledge-tier-label-sub {
+  margin-top: 20rpx;
+  font-weight: 500;
+  color: var(--text-hint);
+  font-size: 22rpx;
+}
+.knowledge-major-tags {
+  margin-top: 0;
+}
+.tag-btn-major {
+  font-weight: 600;
+  border-width: 3rpx;
+}
+.knowledge-quick-tags .tag-btn.tag-btn-major.active {
+  background: var(--primary);
+  color: #fff;
+  border-color: var(--primary);
+  border-style: solid;
+  font-weight: 600;
+}
+
+.knowledge-tier-label-parallel {
+  margin-top: 28rpx;
+}
+.knowledge-quan-row {
+  margin-top: 0;
+}
+
+.knowledge-quick-hint {
+  display: block;
+  margin-top: 16rpx;
+  font-size: 22rpx;
+  color: var(--text-secondary);
+  line-height: 1.4;
+}
+.knowledge-rotate-hint {
+  display: block;
+  margin-top: 10rpx;
+  font-size: 22rpx;
+  color: var(--text-hint);
+  line-height: 1.45;
+}
+.knowledge-rotate-hint-second {
+  margin-top: 8rpx;
+}
+.knowledge-quick-tags {
+  margin-top: 16rpx;
+}
+.tag-btn-ghost {
+  background: #fff;
+  color: var(--text-primary);
+  border-style: dashed;
+  border-color: var(--border);
+}
+.tag-btn-ghost:active {
+  opacity: 0.85;
+}
+
+/* 快捷考点：选中态需盖过 ghost 底色 */
+.knowledge-quick-tags .tag-btn.tag-btn-ghost.active {
+  background: var(--primary);
+  color: #fff;
+  border-color: var(--primary);
+  border-style: solid;
+  font-weight: 600;
 }
 
 .count-row { display: flex; align-items: center; gap: 32rpx; }

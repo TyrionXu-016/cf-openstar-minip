@@ -1,9 +1,11 @@
 {
   "pages": [
     "pages/index/index",
+    "pages/quiz-focus/quiz-focus",
     "pages/quiz/quiz",
     "pages/assessment/assessment",
     "pages/ai-generate/ai-generate",
+    "pages/ai-quiz/ai-quiz",
     "pages/essay/essay",
     "pages/essay-result/essay-result",
     "pages/ai-chat/ai-chat",

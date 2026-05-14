@@ -55,7 +55,8 @@
     <view class="parse-card card">
       <view class="parse-header">
         <text class="card-title">🧠 题目解析</text>
-        <text class="tag tag-blue">{{recognizedQuestion.subject}}</text>
+        <text class="tag tag-purple" wx:if="{{recognizedQuestion.questionTypeName}}">{{recognizedQuestion.questionTypeName}}</text>
+        <text class="tag tag-blue" style="margin-left:8rpx">{{recognizedQuestion.subject}}</text>
         <text class="tag tag-gold" style="margin-left:8rpx">{{recognizedQuestion.difficulty || '中等'}}</text>
       </view>
 

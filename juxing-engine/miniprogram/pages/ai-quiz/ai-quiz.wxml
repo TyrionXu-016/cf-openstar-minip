@@ -1,0 +1,207 @@
+<!--pages/ai-quiz/ai-quiz.wxml — AI 生成题独立练题-->
+<wxs src="./ai-quiz.wxs" module="m" />
+<view class="container">
+  <view class="quiz-wrap" wx:if="{{!loading && currentQuestion}}">
+    <view class="quiz-progress">
+      <text class="progress-text">第 {{currentIndex + 1}} 题 / {{totalQuestions}} 题</text>
+      <view class="progress-dots">
+        <view
+          class="dot {{index < currentIndex ? 'done' : (index === currentIndex ? 'current' : '')}}"
+          wx:for="{{progressDots}}"
+          wx:key="*this"
+        ></view>
+      </view>
+    </view>
+    <text class="ai-batch-tip" wx:if="{{aiObjectiveBatchMode}}">可在各题间切换作答，全部选完后点击「提交全部答案」统一交卷。</text>
+    <text class="ai-batch-tip" wx:if="{{aiBatchReviewMode}}">以下为每题对错与解析，可用「上一题 / 下一题」浏览；最后一题点「下一题」或「查看本轮成绩」进入汇总。</text>
+
+    <view class="quiz-timer-bar card" wx:if="{{quizTimerVisible && quizRemainSec != null}}">
+      <text class="quiz-timer-label">{{quizTimerLabel}}</text>
+      <text class="quiz-timer-value {{quizTimerUrgent ? 'urgent' : ''}}">{{quizTimerFmt}}</text>
+    </view>
+
+    <view class="question-card card">
+      <view class="question-meta">
+        <text class="tag tag-purple" wx:if="{{currentQuestion.questionTypeName}}">{{currentQuestion.questionTypeName}}</text>
+        <text class="tag tag-blue" style="margin-left:12rpx">{{currentQuestion.subject}}</text>
+        <text class="tag tag-{{currentQuestion.difficulty === '简单' ? 'green' : (currentQuestion.difficulty === '困难' ? 'red' : 'gold')}}" style="margin-left:12rpx">{{currentQuestion.difficulty}}</text>
+        <text class="tag tag-gray" wx:if="{{currentQuestion.knowledgeTag}}" style="margin-left:12rpx">{{currentQuestion.knowledgeTag}}</text>
+      </view>
+      <text class="question-text">{{currentQuestion.question}}</text>
+      <text class="multi-hint" wx:if="{{!answered && m.isJudge(currentQuestion)}}">判断题：根据题干陈述，选择「正确」或「错误」</text>
+      <text class="multi-hint" wx:if="{{!answered && m.isMulti(currentQuestion)}}">本题为多选题，可多次点选多个选项</text>
+      <text class="multi-hint" wx:if="{{!answered && !essayGrading && m.isEssay(currentQuestion) && essayScoreGate}}">申论主观题（{{essayScoreGate.major}}）<text wx:if="{{essayScoreGate.majorResolvedFromStem}}">（题型按题干用语识别）</text>：本题满分 {{essayScoreGate.maxTotal}} 分<text wx:if="{{essayScoreGate.stemOverridesProfile}}">（已按题干标明的 {{essayScoreGate.stemDeclaredPoints}} 分计）</text>，提交后由 AI 按该满分批改。得分≥{{essayScoreGate.passScore}} 分不自动加入错题本与收藏；低于此前提将自动加入错题本与收藏便于复盘。</text>
+    </view>
+
+    <view class="options-list" wx:if="{{!m.isEssay(currentQuestion)}}">
+      <view
+        class="option-item {{answered ? (m.includesKey(currentQuestion.answer, item.key) ? 'correct' : (m.includesKey(selectedAnswer, item.key) && !m.includesKey(currentQuestion.answer, item.key) ? 'wrong' : '')) : (m.isMulti(currentQuestion) ? (m.includesKey(selectedAnswer, item.key) ? 'selected' : '') : (selectedAnswer === item.key ? 'selected' : ''))}}"
+        wx:for="{{currentQuestion.options}}"
+        wx:key="key"
+        bindtap="selectOption"
+        data-key="{{item.key}}"
+        data-index="{{index}}"
+      >
+        <view class="option-key">{{item.key}}</view>
+        <text class="option-text">{{item.text}}</text>
+        <view class="option-check" wx:if="{{answered}}">
+          <text wx:if="{{m.includesKey(currentQuestion.answer, item.key)}}">✓</text>
+          <text wx:elif="{{m.includesKey(selectedAnswer, item.key) && !m.includesKey(currentQuestion.answer, item.key)}}">✗</text>
+        </view>
+      </view>
+    </view>
+
+    <view class="essay-answer-card card" wx:if="{{m.isEssay(currentQuestion)}}">
+      <text class="essay-answer-label">我的作答</text>
+      <text class="essay-char-meta" wx:if="{{!answered}}">
+        <text class="{{essayCharCount < essayMinChars ? 'essay-char-warn' : 'essay-char-ok'}}">已输入 {{essayCharCount}} 字</text>
+        <text class="essay-char-meta-rest">，提交需不少于 {{essayMinChars}} 字</text>
+      </text>
+      <textarea
+        wx:if="{{!answered}}"
+        class="essay-textarea"
+        placeholder="在此输入作答内容…"
+        value="{{selectedAnswer}}"
+        maxlength="8000"
+        auto-height
+        show-confirm-bar="{{false}}"
+        cursor-spacing="120"
+        disabled="{{essayGrading}}"
+        bindinput="onEssayAnswerInput"
+      />
+      <scroll-view wx:else scroll-y class="essay-answered-scroll">
+        <text class="essay-answered-text">{{selectedAnswer}}</text>
+      </scroll-view>
+    </view>
+
+    <view class="essay-grading-card card" wx:if="{{m.isEssay(currentQuestion) && essayGrading}}">
+      <view class="essay-grading-row">
+        <view class="loading-spinner essay-spinner"></view>
+        <text class="essay-grading-text">AI 正在结合题干为你的作答评分…</text>
+      </view>
+    </view>
+
+    <view class="explanation-card card" wx:if="{{answered && (!m.isEssay(currentQuestion) || essayGradeResult)}}">
+      <view id="essay-grade-anchor" class="essay-grade-anchor" wx:if="{{m.isEssay(currentQuestion) && essayGradeResult}}"></view>
+      <block wx:if="{{m.isEssay(currentQuestion)}}">
+        <view class="explanation-header explanation-header-essay">
+          <text class="expl-result {{isCorrect ? 'correct' : 'wrong'}}">{{essayGradeResult.totalScore}} 分<text wx:if="{{essayGradeResult.grade}}"> · {{essayGradeResult.grade}}</text></text>
+          <text class="expl-essay-tip" wx:if="{{isCorrect && essayScoreGate}}">已达 {{essayScoreGate.passScore}} 分及以上（满分 {{essayScoreGate.maxTotal}}），未自动加入错题本与收藏。</text>
+          <text class="expl-essay-tip" wx:elif="{{!isCorrect && essayScoreGate}}">未达 {{essayScoreGate.passScore}} 分（满分 {{essayScoreGate.maxTotal}}），已自动加入错题本与收藏。</text>
+        </view>
+        <view class="divider"></view>
+        <text class="expl-title">📝 AI 总体评语</text>
+        <text class="expl-content">{{essayGradeResult.overallFeedback}}</text>
+        <view class="divider" wx:if="{{essayGradeResult.dimensions && essayGradeResult.dimensions.length}}"></view>
+        <block wx:if="{{essayGradeResult.dimensions && essayGradeResult.dimensions.length}}">
+          <text class="expl-title">📊 分维度</text>
+          <view class="essay-dim-list">
+            <view class="essay-dim-item" wx:for="{{essayGradeResult.dimensions}}" wx:for-index="dimIdx" wx:key="dimIdx">
+              <text class="essay-dim-head">{{item.name}} {{item.score}}/{{item.maxScore}}</text>
+              <text class="essay-dim-body" wx:if="{{item.feedback}}">{{item.feedback}}</text>
+              <view class="essay-dim-improve" wx:if="{{item.improvements && item.improvements.length}}">
+                <text class="essay-dim-improve-line" wx:for="{{item.improvements}}" wx:for-item="imp" wx:for-index="imIdx" wx:key="imIdx">· {{imp}}</text>
+              </view>
+            </view>
+          </view>
+        </block>
+        <view class="divider" wx:if="{{essayGradeResult.weakAnalysisItems && essayGradeResult.weakAnalysisItems.length}}"></view>
+        <block wx:if="{{essayGradeResult.weakAnalysisItems && essayGradeResult.weakAnalysisItems.length}}">
+          <text class="expl-title">🔍 不足与改进</text>
+          <view class="essay-weak-list">
+            <view class="essay-weak-item" wx:for="{{essayGradeResult.weakAnalysisItems}}" wx:for-index="widx" wx:key="widx">
+              <text class="essay-weak-tag">{{item.tag}}</text>
+              <text class="essay-weak-text">{{item.text}}</text>
+            </view>
+          </view>
+        </block>
+        <view class="divider"></view>
+        <text class="expl-title">📌 参考答案要点</text>
+        <text class="expl-content">{{currentQuestion.answer}}</text>
+        <view class="divider" wx:if="{{currentQuestion.explanation}}"></view>
+        <text class="expl-title" wx:if="{{currentQuestion.explanation}}">📖 解析说明</text>
+        <text class="expl-content" wx:if="{{currentQuestion.explanation}}">{{currentQuestion.explanation}}</text>
+      </block>
+      <block wx:else>
+        <view class="explanation-header">
+          <text class="expl-result {{isCorrect ? 'correct' : 'wrong'}}">
+            {{isCorrect ? '✓ 回答正确' : '✗ 回答错误'}}
+          </text>
+          <text class="expl-answer">正确答案：{{currentQuestion.answer}}</text>
+        </view>
+        <view class="divider"></view>
+        <text class="expl-title">📖 解析</text>
+        <text class="expl-content">{{currentQuestion.explanation}}</text>
+      </block>
+    </view>
+
+    <view class="quiz-nav-row">
+      <button
+        class="btn-outline btn-nav"
+        disabled="{{essayGrading || currentIndex === 0}}"
+        bindtap="prevQuestion"
+      >上一题</button>
+      <button
+        class="btn-outline btn-nav"
+        disabled="{{essayGrading || (currentIndex >= totalQuestions - 1 && (!answered || aiObjectiveBatchMode))}}"
+        bindtap="jumpNextQuestion"
+      >下一题</button>
+    </view>
+
+    <view class="quiz-actions" wx:if="{{aiObjectiveBatchMode}}">
+      <button class="btn-outline" bindtap="markWrong">标记错题</button>
+      <button class="btn-outline" bindtap="markFavorite">收藏</button>
+      <button
+        class="btn-primary full"
+        disabled="{{!aiBatchAllFilled || essayGrading}}"
+        bindtap="submitAiBatchAll"
+      >提交全部答案</button>
+    </view>
+    <view class="quiz-actions" wx:else>
+      <button class="btn-outline" bindtap="markWrong" wx:if="{{!answered && !essayGrading}}">标记错题</button>
+      <button class="btn-outline" bindtap="markFavorite" wx:if="{{!answered && !essayGrading}}">收藏</button>
+      <button
+        class="btn-primary {{answered ? 'full' : ''}}"
+        disabled="{{essayGrading}}"
+        bindtap="{{answered ? 'nextQuestion' : 'submitAnswer'}}"
+      >
+        {{essayGrading ? 'AI 评分中…' : (answered ? (hasNext ? '下一题 ›' : (aiBatchReviewMode ? '查看本轮成绩' : '完成练习')) : '提交答案')}}
+      </button>
+    </view>
+  </view>
+
+  <view class="loading-wrap" wx:if="{{loading}}">
+    <view class="loading-spinner"></view>
+    <text>加载题目中...</text>
+  </view>
+
+  <view class="quiz-empty card" wx:if="{{!loading && !finished && !currentQuestion}}">
+    <text class="quiz-empty-title">暂无题目</text>
+    <text class="quiz-empty-desc">请返回 AI 出题页重新生成后再进入练题</text>
+    <button class="btn-primary" style="margin-top:28rpx" bindtap="goHome">返回</button>
+  </view>
+
+  <view class="finish-card card" wx:if="{{!loading && finished}}">
+    <text class="finish-emoji">🎉</text>
+    <text class="finish-title">本轮练习完成！</text>
+    <view class="finish-stats">
+      <view class="finish-stat">
+        <text class="finish-val">{{sessionStats.total}}</text>
+        <text class="finish-key">共答题</text>
+      </view>
+      <view class="finish-stat">
+        <text class="finish-val correct-color">{{sessionStats.correct}}</text>
+        <text class="finish-key">答对</text>
+      </view>
+      <view class="finish-stat">
+        <text class="finish-val accent-color">{{sessionStats.rate}}%</text>
+        <text class="finish-key">正确率</text>
+      </view>
+    </view>
+    <button class="btn-primary" style="margin-top:32rpx" bindtap="restartQuiz">再来一轮</button>
+    <button class="btn-outline" style="margin-top:20rpx" bindtap="goHome">返回出题页</button>
+    <button class="btn-outline" style="margin-top:20rpx" bindtap="goQuizTab">打开刷题 Tab</button>
+  </view>
+
+  <view class="safe-bottom"></view>
+</view>

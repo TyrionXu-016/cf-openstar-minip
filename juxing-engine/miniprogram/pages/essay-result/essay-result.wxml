@@ -2,6 +2,15 @@
 <view class="container">
   <view class="ai-generated-mark">内容由 AI 生成，仅供参考</view>
   <view wx:if="{{result}}">
+    <view class="topic-brief card">
+      <view class="topic-brief-meta">
+        <text class="tag tag-purple">申论题</text>
+        <text class="tag tag-blue" wx:if="{{topic && topic.category}}" style="margin-left:8rpx">{{topic.category}}</text>
+        <text class="tag tag-gold" wx:if="{{topic && topic.difficulty}}" style="margin-left:8rpx">{{topic.difficulty}}</text>
+      </view>
+      <text class="topic-brief-title" wx:if="{{topic && topic.title}}">{{topic.title}}</text>
+    </view>
+
     <!-- 总分卡 -->
     <view class="score-hero gradient-bg">
       <view class="score-hero-inner">

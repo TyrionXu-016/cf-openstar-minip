@@ -17,7 +17,8 @@
 
     <view class="question-card card">
       <view class="question-meta">
-        <text class="tag tag-blue">{{currentQuestion.subject}}</text>
+        <text class="tag tag-purple" wx:if="{{currentQuestion.questionTypeName}}">{{currentQuestion.questionTypeName}}</text>
+        <text class="tag tag-blue" style="margin-left:12rpx">{{currentQuestion.subject}}</text>
         <text class="tag tag-{{currentQuestion.difficulty === '简单' ? 'green' : (currentQuestion.difficulty === '困难' ? 'red' : 'gold')}}" style="margin-left:12rpx">{{currentQuestion.difficulty}}</text>
       </view>
       <text class="question-text">{{currentQuestion.question}}</text>

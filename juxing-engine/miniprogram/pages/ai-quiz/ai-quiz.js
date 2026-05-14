@@ -1,11 +1,8 @@
-// pages/quiz/quiz.js
+// pages/ai-quiz/ai-quiz.js — AI 生成题独立练题（不经过底部「刷题」Tab）
 
-const { QUESTION_BANK } = require('../../data/question-bank.js');
 const { enrichQuestionTypeFields } = require('../../utils/question-type-meta.js');
-const { buildQuizFilterBar } = require('../../utils/quiz-bank-filters.js');
 const { pushStudyStats } = require('../../utils/study-stats-sync.js');
 const { getEssayScoringProfileForQuestion, getEssaySubmitMinChars, getEssayFullTextForParsing, getEssayAnswerCountdownSeconds } = require('../../utils/shenlun-essay-score.js');
-const app = getApp();
 
 /** 仅「AI 智能出题」跳转刷题时写入；错题本/拍题等专项仍用 quiz_source=ai 但无倒计时 */
 const STORAGE_QUIZ_SESSION_AI_COUNTDOWN = 'quiz_session_ai_countdown';
@@ -110,29 +107,7 @@ function prepareQuestionsList(list) {
 
 Page({
   data: {
-    subjects: [
-      { id: 'all', name: '全部' },
-      { id: 'lx', name: '逻辑推理' },
-      { id: 'yc', name: '言语理解' },
-      { id: 'sl', name: '数量关系' },
-      { id: 'cg', name: '常识' },
-      { id: 'cz', name: '资料分析' },
-      { id: 'sl_guina', name: '归纳概括' },
-      { id: 'sl_zonghe', name: '综合分析' },
-      { id: 'sl_duice', name: '提出对策' },
-      { id: 'sl_gongwen', name: '公文写作' },
-      { id: 'sl_zuowen', name: '大作文' },
-      { id: 'gj_law', name: '公基·法律' },
-      { id: 'gj_pol', name: '公基·政治' },
-      { id: 'gj_marx', name: '公基·马原' },
-      { id: 'gj_party', name: '公基·党史' },
-      { id: 'gj_econ', name: '公基·经济' },
-      { id: 'gj_human', name: '公基·人文' },
-      { id: 'gj_tech', name: '公基·科技' },
-      { id: 'gj_doc', name: '公基·公文' },
-    ],
-    activeSubject: 'all',
-    loading: false,
+    loading: true,
     finished: false,
     questions: [],
     currentIndex: 0,
@@ -145,7 +120,7 @@ Page({
     hasNext: false,
     sessionStats: { total: 0, correct: 0, rate: 0 },
     correctCount: 0,
-    aiSource: false,
+    aiSource: true,
     essayGrading: false,
     essayGradeResult: null,
     essayScoreGate: null,
@@ -156,15 +131,8 @@ Page({
     quizTimerLabel: '',
     quizTimerFmt: '',
     quizTimerUrgent: false,
-    quizFilterBarVisible: false,
-    quizFilterTypeId: 'single',
-    quizFilterKp: '',
-    quizFilterTypeModes: [],
-    quizKnowledgeChips: [{ label: '不限', value: '' }],
-    /** AI 智能出题且全场均为客观题：先逐题选答，最后「提交全部」 */
     aiObjectiveBatchMode: false,
     aiBatchAllFilled: false,
-    /** 客观题统一交卷后的逐题解析阶段 */
     aiBatchReviewMode: false,
   },
 
@@ -461,362 +429,58 @@ Page({
     this.clearQuizAnswerTimer();
   },
 
-  onLoad(options) {
-    this._quizOpenOptions = options && typeof options === 'object' ? options : {};
-    if (this.tryLoadAISource(options)) {
-      this._quizRouteHydrated = true;
-      return;
-    }
-    /** 普通刷题：在 onShow 统一读 storage，避免 onLoad/onShow 双消费或后一次覆盖分类 */
-    this._quizRouteHydrated = false;
+  onLoad() {
+    this.bootstrapFromAiStorage();
   },
 
-  onShow() {
-    if (this.tryLoadAISource({})) {
-      this._quizRouteHydrated = true;
-      return;
-    }
-    if (this.data.aiSource) {
-      this._quizRouteHydrated = true;
-      return;
-    }
-    if (this._quizRouteHydrated) return;
-
-    const entry = this.consumeQuizEntryPayload();
-    if (entry) {
-      const { category, kp } = entry;
-      const patch = {
-        activeSubject: category,
-        aiSource: false,
-        quizFilterKp: kp,
-        quizFilterTypeId: 'single',
-      };
-      this._quizRouteHydrated = true;
-      this.setData(patch, () => this.loadQuestions(category));
-      return;
-    }
-
-    const pending = this.consumeQuizPendingCategory();
-    if (pending) {
-      const kpInfo = this.consumeQuizPendingKnowledgeFlags();
-      const patch = { activeSubject: pending, aiSource: false };
-      if (kpInfo.apply && kpInfo.kp) {
-        patch.quizFilterKp = kpInfo.kp;
-        patch.quizFilterTypeId = 'single';
-      } else {
-        patch.quizFilterKp = '';
-        patch.quizFilterTypeId = 'single';
-      }
-      this._quizRouteHydrated = true;
-      this.setData(patch, () => this.loadQuestions(pending));
-      return;
-    }
-
-    if (this.data.questions && this.data.questions.length > 0) {
-      this._quizRouteHydrated = true;
-      return;
-    }
-
-    let category = (this._quizOpenOptions && this._quizOpenOptions.category) || 'all';
-    const patchDefault = {
-      activeSubject: category,
-      aiSource: false,
-      quizFilterKp: '',
-      quizFilterTypeId: 'single',
-    };
-    this._quizRouteHydrated = true;
-    this.setData(patchDefault, () => this.loadQuestions(category));
-  },
-
-  onHide() {
-    this._quizRouteHydrated = false;
-  },
-  consumeQuizEntryPayload() {
-    try {
-      const raw = wx.getStorageSync('quiz_entry_payload');
-      if (raw == null || raw === '') return null;
-      let o;
-      if (typeof raw === 'string') o = JSON.parse(raw);
-      else if (typeof raw === 'object') o = raw;
-      else return null;
-      const category = String(o.category || '').trim();
-      const kp = String(o.kp != null ? o.kp : '').trim();
-      if (!category || (category !== 'all' && !QUESTION_BANK[category])) {
-        try {
-          wx.removeStorageSync('quiz_entry_payload');
-        } catch (e0) {
-          /* ignore */
-        }
-        return null;
-      }
-      wx.removeStorageSync('quiz_entry_payload');
-      try {
-        wx.removeStorageSync('quiz_pending_category');
-        wx.removeStorageSync('quiz_pending_apply_kp');
-        wx.removeStorageSync('quiz_pending_knowledge');
-      } catch (e) {
-        /* ignore */
-      }
-      return { category, kp };
-    } catch (e) {
-      try {
-        wx.removeStorageSync('quiz_entry_payload');
-      } catch (e2) {
-        /* ignore */
-      }
-      return null;
-    }
-  },
-
-  /** tabBar 无法用 URL 带参，首页等入口通过 storage 传分类 id */
-  consumeQuizPendingCategory() {
-    try {
-      const id = String(wx.getStorageSync('quiz_pending_category') || '').trim();
-      if (id) {
-        wx.removeStorageSync('quiz_pending_category');
-        if (id === 'all' || QUESTION_BANK[id]) return id;
-      }
-    } catch (e) {
-      /* ignore */
-    }
-    return '';
-  },
-
-  /** 与首页小知识点弹层配合：quiz_pending_apply_kp 为 1 时才应用 quiz_pending_knowledge */
-  consumeQuizPendingKnowledgeFlags() {
-    try {
-      const flag = String(wx.getStorageSync('quiz_pending_apply_kp') || '').trim();
-      const kpRaw = wx.getStorageSync('quiz_pending_knowledge');
-      wx.removeStorageSync('quiz_pending_apply_kp');
-      wx.removeStorageSync('quiz_pending_knowledge');
-      if (flag === '1') {
-        return { apply: true, kp: String(kpRaw != null ? kpRaw : '').trim() };
-      }
-    } catch (e) {
-      /* ignore */
-    }
-    return { apply: false, kp: '' };
-  },
-
-  onQuizFilterType(e) {
-    if (this.data.aiSource) return;
-    const id = e.currentTarget.dataset.id;
-    if (!id || id === this.data.quizFilterTypeId) return;
-    this.setData({ quizFilterTypeId: id, quizFilterKp: '' }, () => {
-      this.loadQuestions(this.data.activeSubject);
-    });
-  },
-
-  onQuizFilterKp(e) {
-    if (this.data.aiSource) return;
-    const idx = Number(e.currentTarget.dataset.idx);
-    const chips = this.data.quizKnowledgeChips || [];
-    const row = chips[Number.isFinite(idx) ? idx : -1];
-    const v = row && row.value != null ? String(row.value) : '';
-    if (v === this.data.quizFilterKp) return;
-    this.setData({ quizFilterKp: v }, () => this.loadQuestions(this.data.activeSubject));
-  },
-
-  tryLoadAISource(options) {
-    const fromStorage = wx.getStorageSync('quiz_source');
-    const fromGlobal = app && app.globalData ? app.globalData.pendingQuizSource : '';
-    const source = (options && options.source) || fromStorage || fromGlobal;
-    if (source !== 'ai') return false;
-
-    wx.removeStorageSync('quiz_source');
-    if (app && app.globalData) {
-      app.globalData.pendingQuizSource = '';
-    }
-    try {
-      wx.removeStorageSync('quiz_entry_payload');
-      wx.removeStorageSync('quiz_pending_category');
-      wx.removeStorageSync('quiz_pending_apply_kp');
-      wx.removeStorageSync('quiz_pending_knowledge');
-    } catch (e) {
-      /* ignore */
-    }
+  bootstrapFromAiStorage() {
     const list = wx.getStorageSync('ai_generated_questions') || [];
     if (!list.length) {
-      try {
-        wx.removeStorageSync(STORAGE_QUIZ_SESSION_AI_COUNTDOWN);
-      } catch (e) {
-        /* ignore */
-      }
-      wx.showToast({ title: '暂无题目，请先生成', icon: 'none' });
-      setTimeout(() => wx.switchTab({ url: '/pages/index/index' }), 1500);
-      return true;
+      this.setData({ loading: false });
+      wx.showToast({ title: '暂无题目，请返回生成', icon: 'none' });
+      setTimeout(() => wx.navigateBack(), 1600);
+      return;
     }
 
     let enableAnswerCountdown = false;
     try {
       enableAnswerCountdown = wx.getStorageSync(STORAGE_QUIZ_SESSION_AI_COUNTDOWN) === '1';
       wx.removeStorageSync(STORAGE_QUIZ_SESSION_AI_COUNTDOWN);
-    } catch (e) {
-      /* ignore */
-    }
+    } catch (e) {}
     this._quizEnableAnswerCountdown = enableAnswerCountdown;
 
-    this.setData({ loading: true, aiSource: true });
-    setTimeout(() => {
-      this.clearQuizAnswerTimer();
-      this._quizObjectiveRemain = null;
-      const questions = prepareQuestionsList(list.slice());
-      const aiObjectiveBatchMode =
-        questions.length > 0 && questions.every((qq) => !isEssayQuestion(qq));
-      this.setData(
-        {
-          loading: false,
-          finished: false,
-          questions,
-          totalQuestions: questions.length,
-          currentIndex: 0,
-          correctCount: 0,
-          progressDots: questions.map((_, i) => i),
-          currentQuestion: questions[0] || null,
-          answered: false,
-          selectedAnswer: '',
-          hasNext: questions.length > 1,
-          essayGrading: false,
-          essayGradeResult: null,
-          quizFilterBarVisible: false,
-          quizFilterTypeModes: [],
-          quizKnowledgeChips: [{ label: '不限', value: '' }],
-          aiObjectiveBatchMode,
-          aiBatchAllFilled: false,
-          aiBatchReviewMode: false,
-        },
-        () => {
-          this.initRoundSnapshots(questions);
-          this.updateEssayScoreGate();
-          this.setupQuizAnswerCountdown();
-          this.touchAiBatchAllFilled();
-        }
-      );
-    }, 200);
-    return true;
-  },
-
-  loadQuestions(subject) {
     this.clearQuizAnswerTimer();
     this._quizObjectiveRemain = null;
-    this._quizEnableAnswerCountdown = false;
-    this.setData({ loading: true });
-    setTimeout(() => {
-      let questions = [];
-      if (subject === 'all') {
-        Object.values(QUESTION_BANK).forEach((list) => {
-          questions = questions.concat(list);
-        });
-      } else {
-        questions = QUESTION_BANK[subject] || [];
+    const questions = prepareQuestionsList(list.slice());
+    const aiObjectiveBatchMode =
+      questions.length > 0 && questions.every((qq) => !isEssayQuestion(qq));
+    this.setData(
+      {
+        loading: false,
+        finished: false,
+        questions,
+        totalQuestions: questions.length,
+        currentIndex: 0,
+        correctCount: 0,
+        progressDots: questions.map((_, i) => i),
+        currentQuestion: questions[0] || null,
+        answered: false,
+        selectedAnswer: '',
+        hasNext: questions.length > 1,
+        essayGrading: false,
+        essayGradeResult: null,
+        aiSource: true,
+        aiObjectiveBatchMode,
+        aiBatchAllFilled: false,
+        aiBatchReviewMode: false,
+      },
+      () => {
+        this.initRoundSnapshots(questions);
+        this.updateEssayScoreGate();
+        this.setupQuizAnswerCountdown();
+        this.touchAiBatchAllFilled();
       }
-
-      questions = prepareQuestionsList(questions.sort(() => Math.random() - 0.5));
-
-      const typeId = (this.data.quizFilterTypeId || '').trim();
-      const kp = (this.data.quizFilterKp || '').trim();
-      const slMiniBanks = new Set(['sl_guina', 'sl_zonghe', 'sl_duice', 'sl_gongwen', 'sl_zuowen']);
-      const isShenlunMiniBank = slMiniBanks.has(subject);
-      const applyFineFilter =
-        !this.data.aiSource && subject !== 'all' && (typeId || kp);
-      if (applyFineFilter) {
-        questions = questions.filter((q) => {
-          // 首页申论模块带小考点进入时，只按 knowledgeTag 筛，避免题型与题库不一致导致全被滤掉
-          if (typeId && !(isShenlunMiniBank && kp)) {
-            const tid = String(q.questionType || 'single').toLowerCase();
-            if (tid !== typeId) return false;
-          }
-          if (kp) {
-            const qk = String(q.knowledgeTag || q.knowledgePoint || '').trim();
-            if (qk !== kp) return false;
-          }
-          return true;
-        });
-      }
-
-      if (!questions.length && applyFineFilter) {
-        wx.showToast({ title: '该筛选下暂无题目', icon: 'none' });
-        if (kp) {
-          this.setData({ quizFilterKp: '' }, () => this.loadQuestions(subject));
-          return;
-        }
-        if (typeId && typeId !== 'single') {
-          this.setData({ quizFilterTypeId: 'single', quizFilterKp: '' }, () => {
-            this.loadQuestions(subject);
-          });
-          return;
-        }
-      }
-
-      const bar = this.data.aiSource
-        ? {
-            quizFilterBarVisible: false,
-            quizFilterTypeModes: [],
-            quizKnowledgeChips: [{ label: '不限', value: '' }],
-          }
-        : (() => {
-            const b = buildQuizFilterBar(subject, this.data.quizFilterTypeId);
-            return {
-              quizFilterBarVisible: b.visible,
-              quizFilterTypeModes: b.typeModes,
-              quizKnowledgeChips: b.knowledgeChips,
-            };
-          })();
-
-      this.setData(
-        {
-          loading: false,
-          finished: false,
-          questions,
-          totalQuestions: questions.length,
-          currentIndex: 0,
-          correctCount: 0,
-          progressDots: questions.map((_, i) => i),
-          currentQuestion: questions[0] || null,
-          answered: false,
-          selectedAnswer: '',
-          hasNext: questions.length > 1,
-          essayGrading: false,
-          essayGradeResult: null,
-          ...bar,
-          aiObjectiveBatchMode: false,
-          aiBatchAllFilled: false,
-          aiBatchReviewMode: false,
-        },
-        () => {
-          this.initRoundSnapshots(questions);
-          this.updateEssayScoreGate();
-          this.setupQuizAnswerCountdown();
-        }
-      );
-    }, 300);
-  },
-
-  switchSubject(e) {
-    if (this.data.aiSource) {
-      wx.showToast({ title: '当前为专项题目，请返回刷题首页切换', icon: 'none' });
-      return;
-    }
-    const id = e.currentTarget.dataset.id;
-    this.setData({
-      activeSubject: id,
-      quizFilterTypeId: 'single',
-      quizFilterKp: '',
-    });
-    this.loadQuestions(id);
-  },
-
-  loadAllSubjects() {
-    if (this.data.aiSource) {
-      wx.showToast({ title: '当前为专项题目，请返回首页', icon: 'none' });
-      return;
-    }
-    this.setData({
-      activeSubject: 'all',
-      quizFilterTypeId: 'single',
-      quizFilterKp: '',
-    });
-    this.loadQuestions('all');
+    );
   },
 
   onEssayAnswerInput(e) {
@@ -1296,49 +960,58 @@ Page({
   },
 
   restartQuiz() {
-    if (this.data.aiSource) {
-      const list = wx.getStorageSync('ai_generated_questions') || [];
-      if (!list.length) {
-        this.loadQuestions('all');
-        this.setData({ aiSource: false });
-        return;
-      }
-      const questions = prepareQuestionsList(list.slice().sort(() => Math.random() - 0.5));
-      const aiObjectiveBatchMode =
-        questions.length > 0 && questions.every((qq) => !isEssayQuestion(qq));
-      this.clearQuizAnswerTimer();
-      this._quizObjectiveRemain = null;
-      this.setData(
-        {
-          finished: false,
-          questions,
-          totalQuestions: questions.length,
-          currentIndex: 0,
-          correctCount: 0,
-          progressDots: questions.map((_, i) => i),
-          currentQuestion: questions[0] || null,
-          answered: false,
-          selectedAnswer: '',
-          hasNext: questions.length > 1,
-          essayGrading: false,
-          essayGradeResult: null,
-          aiObjectiveBatchMode,
-          aiBatchAllFilled: false,
-          aiBatchReviewMode: false,
-        },
-        () => {
-          this.initRoundSnapshots(questions);
-          this.updateEssayScoreGate();
-          this.setupQuizAnswerCountdown();
-          this.touchAiBatchAllFilled();
-        }
-      );
+    const list = wx.getStorageSync('ai_generated_questions') || [];
+    if (!list.length) {
+      wx.showToast({ title: '暂无题目，请返回出题页重新生成', icon: 'none' });
       return;
     }
-    this.loadQuestions(this.data.activeSubject);
+    let enableAnswerCountdown = false;
+    try {
+      enableAnswerCountdown = wx.getStorageSync(STORAGE_QUIZ_SESSION_AI_COUNTDOWN) === '1';
+      wx.removeStorageSync(STORAGE_QUIZ_SESSION_AI_COUNTDOWN);
+    } catch (e) {
+      /* ignore */
+    }
+    this._quizEnableAnswerCountdown = enableAnswerCountdown;
+
+    const questions = prepareQuestionsList(list.slice().sort(() => Math.random() - 0.5));
+    const aiObjectiveBatchMode =
+      questions.length > 0 && questions.every((qq) => !isEssayQuestion(qq));
+    this.clearQuizAnswerTimer();
+    this._quizObjectiveRemain = null;
+    this.setData(
+      {
+        finished: false,
+        questions,
+        totalQuestions: questions.length,
+        currentIndex: 0,
+        correctCount: 0,
+        progressDots: questions.map((_, i) => i),
+        currentQuestion: questions[0] || null,
+        answered: false,
+        selectedAnswer: '',
+        hasNext: questions.length > 1,
+        essayGrading: false,
+        essayGradeResult: null,
+        aiSource: true,
+        aiObjectiveBatchMode,
+        aiBatchAllFilled: false,
+        aiBatchReviewMode: false,
+      },
+      () => {
+        this.initRoundSnapshots(questions);
+        this.updateEssayScoreGate();
+        this.setupQuizAnswerCountdown();
+        this.touchAiBatchAllFilled();
+      }
+    );
   },
 
   goHome() {
-    wx.switchTab({ url: '/pages/index/index' });
+    wx.navigateBack({ delta: 1 });
+  },
+
+  goQuizTab() {
+    wx.switchTab({ url: '/pages/quiz/quiz' });
   },
 });

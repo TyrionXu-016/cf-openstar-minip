@@ -137,12 +137,19 @@ Page({
 
     const studentInfo = studentInfoOverride || this.data.studentInfo;
 
+    // 与后端 Qdrant payload.category 对齐，避免「语义 TopK 全是另一考试类型」被前端考试类型筛成 0 条
+    const recommendBody = { studentInfo, topK: 120 };
+    const et = studentInfo && studentInfo.examType;
+    if (et === '国考' || et === '省考') {
+      recommendBody.category = et;
+    }
+
     // 1) 优先：语义推荐（较长超时，避免弱网误以为失败）
     request({
       url: `${baseUrl}/api/v1/mini/recommend`,
       method: 'POST',
       header: { 'content-type': 'application/json' },
-      data: { studentInfo, topK: 120 },
+      data: recommendBody,
       timeout: 45000,
     })
       .then((res) => {
@@ -273,11 +280,29 @@ Page({
     }
   },
 
+  /** 补齐 calculateMatches 依赖字段，避免 payload 不完整时抛错导致「不推」 */
+  normalizePositionForMatch: function(pos) {
+    if (!pos || typeof pos !== 'object') return pos;
+    const req = pos.requirements && typeof pos.requirements === 'object' ? pos.requirements : {};
+    const majors = Array.isArray(req.majors) ? req.majors : [];
+    const eduRaw = req.education;
+    const education =
+      Array.isArray(eduRaw) ? (eduRaw[0] || '本科') : (eduRaw != null && eduRaw !== '' ? String(eduRaw) : '本科');
+    return {
+      ...pos,
+      category: pos.category || '省考',
+      tags: Array.isArray(pos.tags) ? pos.tags : [],
+      difficulty: pos.difficulty || '中等',
+      requirements: { ...req, majors, education },
+    };
+  },
+
   // 智能匹配算法
   calculateMatches: function(studentInfo, dataSource = null) {
     const { major, education, examType, gender } = studentInfo;
     const majorKeywords = this.normalizeMajor(major);
-    const positions = dataSource || positionsDB;
+    const rawList = dataSource || positionsDB;
+    const positions = rawList.map((p) => this.normalizePositionForMatch(p));
 
     // 按考试类型筛选
     let filtered = positions.filter(pos => {
@@ -285,6 +310,10 @@ Page({
       if (examType === '省考') return pos.category === '省考';
       return true;
     });
+    // 语义候选与考试类型无交集时仍展示候选，避免列表为空
+    if (!filtered.length && positions.length) {
+      filtered = positions;
+    }
 
     // 计算匹配分数
     const scored = filtered.map(pos => {

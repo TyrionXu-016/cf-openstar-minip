@@ -108,24 +108,87 @@
     </view>
   </view>
 
-  <!-- 题库分类 -->
+  <!-- 题库分类：行测 / 公基 / 申论五大题型模块（点模块可先选小知识点） -->
   <view class="section-title">
     <text class="title-text">题库分类</text>
     <text class="more-text" bindtap="goQuiz">全部 ›</text>
   </view>
-  <view class="category-grid">
-    <view
-      class="category-item"
-      wx:for="{{categories}}"
-      wx:key="id"
-      bindtap="goCategory"
-      data-id="{{item.id}}"
-    >
-      <view class="category-icon-wrap" style="background: {{item.bgColor}}">
-        <text class="category-icon">{{item.icon}}</text>
+
+  <view class="bank-block">
+    <view class="bank-block-head">
+      <text class="bank-block-tag bank-block-tag-xc">行测</text>
+      <view class="bank-block-head-text">
+        <text class="bank-block-title">知识模块</text>
+        <text class="bank-block-desc">点模块可先选小知识点，再进入刷题</text>
       </view>
-      <text class="category-name">{{item.name}}</text>
-      <text class="category-count">{{item.count}}题</text>
+    </view>
+    <view class="category-grid">
+      <view
+        class="category-item"
+        wx:for="{{xingceBankCategories}}"
+        wx:key="id"
+        bindtap="openBankKnowledge"
+        data-bank-id="{{item.id}}"
+        data-bank-name="{{item.name}}"
+      >
+        <view class="category-icon-wrap" style="background: {{item.bgColor}}">
+          <view class="category-icon">{{item.icon}}</view>
+        </view>
+        <view class="category-name">{{item.name}}</view>
+        <view class="category-count">{{item.count}}题</view>
+      </view>
+    </view>
+  </view>
+
+  <view class="bank-block bank-block-spaced">
+    <view class="bank-block-head">
+      <text class="bank-block-tag bank-block-tag-gj">公基</text>
+      <view class="bank-block-head-text">
+        <text class="bank-block-title">知识模块</text>
+        <text class="bank-block-desc">点模块可先选小知识点，再进入刷题</text>
+      </view>
+    </view>
+    <view class="category-grid">
+      <view
+        class="category-item"
+        wx:for="{{gongjiBankCategories}}"
+        wx:key="id"
+        bindtap="openBankKnowledge"
+        data-bank-id="{{item.id}}"
+        data-bank-name="{{item.name}}"
+      >
+        <view class="category-icon-wrap" style="background: {{item.bgColor}}">
+          <view class="category-icon">{{item.icon}}</view>
+        </view>
+        <view class="category-name">{{item.name}}</view>
+        <view class="category-count">{{item.count}}题</view>
+      </view>
+    </view>
+  </view>
+
+  <view class="bank-block bank-block-spaced">
+    <view class="bank-block-head">
+      <text class="bank-block-tag bank-block-tag-sl">申论</text>
+      <view class="bank-block-head-text">
+        <text class="bank-block-title">申论模块</text>
+        <text class="bank-block-desc">点模块可先选小知识点，再进入刷题</text>
+      </view>
+    </view>
+    <view class="category-grid category-grid-shenlun">
+      <view
+        class="category-item"
+        wx:for="{{shenlunBankCategories}}"
+        wx:key="id"
+        bindtap="openBankKnowledge"
+        data-bank-id="{{item.id}}"
+        data-bank-name="{{item.name}}"
+      >
+        <view class="category-icon-wrap" style="background: {{item.bgColor}}">
+          <view class="category-icon">{{item.icon}}</view>
+        </view>
+        <view class="category-name">{{item.name}}</view>
+        <view class="category-count">{{item.count}}题</view>
+      </view>
     </view>
   </view>
 
@@ -143,4 +206,32 @@
   </view>
 
   <view class="safe-bottom"></view>
+
+  <!-- 知识模块 → 小知识点（与刷题页 taxonomy 一致） -->
+  <view class="kp-modal-mask" wx:if="{{kpModalVisible}}">
+    <view class="kp-modal-mask-bg" bindtap="closeKpModal"></view>
+    <view class="kp-modal-sheet" catchtap="noop">
+      <view class="kp-modal-handle"></view>
+      <text class="kp-modal-title">{{kpModalTitle}}</text>
+      <scroll-view scroll-y class="kp-modal-scroll" enable-flex>
+        <view
+          class="kp-modal-chip kp-modal-chip-all"
+          bindtap="confirmKpModal"
+          data-action="all"
+        >不限 · 本模块全部题目</view>
+        <view
+          class="kp-modal-chip"
+          wx:for="{{kpModalSubs}}"
+          wx:for-index="kpIdx"
+          wx:key="value"
+          bindtap="confirmKpModal"
+          data-action="kp"
+          data-kp-index="{{kpIdx}}"
+        >{{item.label}}</view>
+      </scroll-view>
+      <view class="kp-modal-footer">
+        <text class="kp-modal-cancel" bindtap="closeKpModal">取消</text>
+      </view>
+    </view>
+  </view>
 </view>

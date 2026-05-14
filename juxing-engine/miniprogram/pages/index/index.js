@@ -1,7 +1,24 @@
 // pages/index/index.js
-const { getCategoryCounts, getAllQuestions } = require('../../data/question-bank.js');
+const { getCategoryCounts, getAllQuestions, CATEGORY_KEYS } = require('../../data/question-bank.js');
 const { pullStudyStats, pushStudyStats, getStudentPhone } = require('../../utils/study-stats-sync.js');
+const { getKnowledgeSubTagsForBankCategory } = require('../../utils/exam-taxonomy.js');
 const app = getApp();
+
+/** 行测 / 公基 / 申论分库：选考点后进独立练题页，不跳底部「刷题」Tab */
+const BANK_FOCUS_IDS = new Set(CATEGORY_KEYS);
+
+function shouldUseBankFocusWindow(bankId) {
+  return BANK_FOCUS_IDS.has(String(bankId || '').trim());
+}
+
+function navigateToBankFocus(bankId, kp) {
+  const b = String(bankId || '').trim();
+  if (!b) return;
+  const k = kp != null ? String(kp).trim() : '';
+  const qs = [`bank=${encodeURIComponent(b)}`];
+  if (k) qs.push(`kp=${encodeURIComponent(k)}`);
+  wx.navigateTo({ url: `/pages/quiz-focus/quiz-focus?${qs.join('&')}` });
+}
 
 Page({
   data: {
@@ -21,8 +38,14 @@ Page({
       { key: 'days', icon: '🔥', value: '0', label: '连续天数' },
       { key: 'essay', icon: '📝', value: '0', label: '申论篇数' },
     ],
-    categories: [],
+    xingceBankCategories: [],
+    gongjiBankCategories: [],
+    shenlunBankCategories: [],
     recommendQuestion: null,
+    kpModalVisible: false,
+    kpModalTitle: '',
+    kpModalCategoryId: '',
+    kpModalSubs: [],
   },
 
   onLoad() {
@@ -49,13 +72,29 @@ Page({
       qText = pick.question.length > 72 ? `${pick.question.slice(0, 72)}…` : pick.question;
     }
     this.setData({
-      categories: [
+      xingceBankCategories: [
         { id: 'lx', icon: '🧩', name: '逻辑推理', count: counts.lx, bgColor: 'rgba(26,31,94,0.1)' },
         { id: 'sl', icon: '🔢', name: '数量关系', count: counts.sl, bgColor: 'rgba(245,166,35,0.1)' },
         { id: 'yc', icon: '📖', name: '言语理解', count: counts.yc, bgColor: 'rgba(7,193,96,0.1)' },
         { id: 'cz', icon: '📊', name: '资料分析', count: counts.cz, bgColor: 'rgba(100,100,255,0.1)' },
         { id: 'cg', icon: '⚖️', name: '常识判断', count: counts.cg, bgColor: 'rgba(238,10,36,0.1)' },
-        { id: 'sl2', icon: '📜', name: '申论专练', count: counts.sl2, bgColor: 'rgba(255,153,102,0.1)' },
+      ],
+      gongjiBankCategories: [
+        { id: 'gj_law', icon: '⚖️', name: '法律', count: counts.gj_law, bgColor: 'rgba(30,136,229,0.1)' },
+        { id: 'gj_pol', icon: '🏛️', name: '政治', count: counts.gj_pol, bgColor: 'rgba(211,47,47,0.08)' },
+        { id: 'gj_marx', icon: '📕', name: '马克思主义', count: counts.gj_marx, bgColor: 'rgba(123,31,162,0.08)' },
+        { id: 'gj_party', icon: '⭐', name: '党史党建', count: counts.gj_party, bgColor: 'rgba(230,81,0,0.1)' },
+        { id: 'gj_econ', icon: '💹', name: '经济', count: counts.gj_econ, bgColor: 'rgba(0,137,123,0.1)' },
+        { id: 'gj_human', icon: '🏺', name: '人文与历史', count: counts.gj_human, bgColor: 'rgba(121,85,72,0.1)' },
+        { id: 'gj_tech', icon: '🔬', name: '科技与生活', count: counts.gj_tech, bgColor: 'rgba(0,151,167,0.1)' },
+        { id: 'gj_doc', icon: '📋', name: '公文', count: counts.gj_doc, bgColor: 'rgba(93,64,55,0.1)' },
+      ],
+      shenlunBankCategories: [
+        { id: 'sl_guina', icon: '📝', name: '归纳概括', count: counts.sl_guina, bgColor: 'rgba(255,153,102,0.12)' },
+        { id: 'sl_zonghe', icon: '🔍', name: '综合分析', count: counts.sl_zonghe, bgColor: 'rgba(129,212,250,0.15)' },
+        { id: 'sl_duice', icon: '💡', name: '提出对策', count: counts.sl_duice, bgColor: 'rgba(165,214,167,0.2)' },
+        { id: 'sl_gongwen', icon: '📋', name: '公文写作', count: counts.sl_gongwen, bgColor: 'rgba(206,147,216,0.15)' },
+        { id: 'sl_zuowen', icon: '✍️', name: '大作文', count: counts.sl_zuowen, bgColor: 'rgba(255,183,77,0.15)' },
       ],
       recommendQuestion: pick
         ? { subject: pick.subject, difficulty: pick.difficulty, question: qText }
@@ -154,9 +193,77 @@ Page({
     wx.switchTab({ url: '/pages/quiz/quiz' });
   },
 
-  goCategory(e) {
-    const id = e.currentTarget.dataset.id;
-    wx.navigateTo({ url: `/pages/quiz/quiz?category=${id}` });
+  openBankKnowledge(e) {
+    const ds = e.currentTarget.dataset || {};
+    const id = (ds.bankId != null ? ds.bankId : ds.id) || '';
+    const name = String(ds.bankName != null ? ds.bankName : ds.name || '').trim();
+    if (!id) return;
+    const pack = getKnowledgeSubTagsForBankCategory(id);
+    if (!pack || !pack.subs || !pack.subs.length) {
+      this.goCategoryDirect(id);
+      return;
+    }
+    this.setData({
+      kpModalVisible: true,
+      kpModalCategoryId: id,
+      kpModalTitle: name ? `${name} · 小知识点` : '小知识点',
+      kpModalSubs: pack.subs,
+    });
+  },
+
+  closeKpModal() {
+    this.setData({ kpModalVisible: false });
+  },
+
+  confirmKpModal(e) {
+    const action = e.currentTarget.dataset.action;
+    const id = this.data.kpModalCategoryId;
+    if (!id) {
+      this.closeKpModal();
+      return;
+    }
+    let kp = '';
+    if (action === 'kp') {
+      const ds = e.currentTarget.dataset || {};
+      const rawIx = ds.kpIndex != null ? ds.kpIndex : ds.kpindex != null ? ds.kpindex : ds.idx;
+      const idx = rawIx === '' || rawIx == null ? NaN : Number(rawIx);
+      const subs = this.data.kpModalSubs || [];
+      const row = subs[Number.isFinite(idx) && idx >= 0 && idx < subs.length ? idx : -1];
+      kp = row && row.value != null ? String(row.value).trim() : '';
+    }
+    this.setData({ kpModalVisible: false });
+
+    if (shouldUseBankFocusWindow(id)) {
+      navigateToBankFocus(id, kp);
+      return;
+    }
+
+    try {
+      wx.setStorageSync('quiz_entry_payload', JSON.stringify({ category: id, kp }));
+      wx.removeStorageSync('quiz_pending_category');
+      wx.removeStorageSync('quiz_pending_apply_kp');
+      wx.removeStorageSync('quiz_pending_knowledge');
+    } catch (err) {
+      /* ignore */
+    }
+    wx.switchTab({ url: '/pages/quiz/quiz' });
+  },
+
+  goCategoryDirect(id) {
+    if (!id) return;
+    if (shouldUseBankFocusWindow(id)) {
+      navigateToBankFocus(id, '');
+      return;
+    }
+    try {
+      wx.setStorageSync('quiz_entry_payload', JSON.stringify({ category: id, kp: '' }));
+      wx.removeStorageSync('quiz_pending_category');
+      wx.removeStorageSync('quiz_pending_apply_kp');
+      wx.removeStorageSync('quiz_pending_knowledge');
+    } catch (err) {
+      /* ignore */
+    }
+    wx.switchTab({ url: '/pages/quiz/quiz' });
   },
 
   goGenerate() {
@@ -178,4 +285,6 @@ Page({
   goAssessment() {
     wx.navigateTo({ url: '/pages/student-info/student-info' });
   },
+
+  noop() {},
 });

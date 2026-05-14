@@ -9,6 +9,18 @@ def _cap_correct(total: int, correct: int) -> int:
     return min(max(correct, 0), total)
 
 
+def _row_to_api_dict(row: StudyStats) -> dict:
+    """ORM 若读到 NULL 整型字段，JSON 会变成 null；接口统一成数字。"""
+    return {
+        "total": int(row.total_questions or 0),
+        "correct": int(row.correct_count or 0),
+        "days": int(row.study_days or 0),
+        "essay": int(row.essay_count or 0),
+        "todayDate": row.today_study_date or "",
+        "todayQuestions": int(row.today_questions or 0),
+    }
+
+
 def _merge_today(
     server_date: str | None,
     server_q: int,
@@ -32,14 +44,7 @@ def get_stats_dict(db: Session, student_phone: str) -> dict | None:
     row = db.scalar(select(StudyStats).where(StudyStats.student_phone == student_phone.strip()))
     if not row:
         return None
-    return {
-        "total": row.total_questions,
-        "correct": row.correct_count,
-        "days": row.study_days,
-        "essay": row.essay_count,
-        "todayDate": row.today_study_date or "",
-        "todayQuestions": row.today_questions,
-    }
+    return _row_to_api_dict(row)
 
 
 def upsert_merge(db: Session, payload: StudyStatsUpsert) -> dict:
@@ -79,14 +84,7 @@ def upsert_merge(db: Session, payload: StudyStatsUpsert) -> dict:
 
     db.commit()
     db.refresh(row)
-    return {
-        "total": row.total_questions,
-        "correct": row.correct_count,
-        "days": row.study_days,
-        "essay": row.essay_count,
-        "todayDate": row.today_study_date or "",
-        "todayQuestions": row.today_questions,
-    }
+    return _row_to_api_dict(row)
 
 
 def admin_set_stats(db: Session, payload: StudyStatsAdminSet) -> dict:
@@ -121,11 +119,4 @@ def admin_set_stats(db: Session, payload: StudyStatsAdminSet) -> dict:
 
     db.commit()
     db.refresh(row)
-    return {
-        "total": row.total_questions,
-        "correct": row.correct_count,
-        "days": row.study_days,
-        "essay": row.essay_count,
-        "todayDate": row.today_study_date or "",
-        "todayQuestions": row.today_questions,
-    }
+    return _row_to_api_dict(row)

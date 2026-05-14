@@ -1,0 +1,13 @@
+@import '../quiz/quiz.wxss';
+
+.container {
+  min-height: 100vh;
+  background: var(--bg);
+}
+
+.focus-head {
+  padding: 20rpx 24rpx 8rpx;
+  font-size: 24rpx;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}

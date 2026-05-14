@@ -46,6 +46,57 @@ function buildQuestionPrompt(subject, difficulty, questionType, knowledgePoint, 
 }`;
   }
 
+  if (questionType === 'judge') {
+    return `请生成${count}道公考${subjectName}判断题，难度为${diffName}，考查知识点：「${knowledgePoint}」。
+
+题型定义（必须严格遵守）：
+- 「判断题」= 给出**一句陈述**（或一段很短的可判定文字），考生只判断该陈述**为真还是为假**。
+- **禁止**出成单选题、多选题、计算四选一、选词填空等带四个无关选项的题型。
+- 每道题**只能有 2 个选项**，且选项文案**必须且只能**为下面两行（顺序不可改）：
+  "A. 正确"  （表示考生认为题干陈述为**真**）
+  "B. 错误"  （表示考生认为题干陈述为**假**）
+- "question" 字段**只写题干陈述**（可含简短背景），**不要**把「A. 正确」「B. 错误」或选项列表写进题干。
+- answer 只能是单个字母 **A** 或 **B**：题干陈述为真则 **A**，为假则 **B**。
+- 解析简要说明为何为真或为假（150 字内）。
+
+输出格式（严格JSON数组，不要包含其他内容）：
+[
+  {
+    "question": "仅题干陈述，一句或一小段可判定文字",
+    "options": ["A. 正确", "B. 错误"],
+    "answer": "A",
+    "explanation": "解析",
+    "subject": "${subjectName}",
+    "difficulty": "${diffName}",
+    "knowledgePoint": "${knowledgePoint}",
+    "questionType": "judge"
+  }
+]`;
+  }
+
+  if (questionType === 'multi') {
+    return `请生成${count}道公考${subjectName}多选题，难度为${diffName}，考查知识点：「${knowledgePoint}」。
+
+要求（必须遵守）：
+1. 每题有且仅有 4 个选项 A–D，可有 2 个或以上正确答案。
+2. answer 字段只写字母，不要逗号或空格：例如正确答案为 A 与 C 时写 "AC"（字母按 A–D 顺序排列）。
+3. 解析中说明每个选项为何对或错。
+
+输出格式（严格JSON数组，不要包含其他内容）：
+[
+  {
+    "question": "题目正文",
+    "options": ["A. 选项1", "B. 选项2", "C. 选项3", "D. 选项4"],
+    "answer": "AC",
+    "explanation": "解析",
+    "subject": "${subjectName}",
+    "difficulty": "${diffName}",
+    "knowledgePoint": "${knowledgePoint}",
+    "questionType": "multi"
+  }
+]`;
+  }
+
   return `请生成${count}道公考${subjectName}${typeName}，难度为${diffName}，考查知识点：「${knowledgePoint}」。
 
 要求：
@@ -62,14 +113,11 @@ function buildQuestionPrompt(subject, difficulty, questionType, knowledgePoint, 
     "explanation": "详细解析（200字内）",
     "subject": "${subjectName}",
     "difficulty": "${diffName}",
-    "knowledgePoint": "${knowledgePoint}"
+    "knowledgePoint": "${knowledgePoint}",
+    "questionType": "single"
   }
 ]`;
 }
-
-/**
- * 从文本中提取JSON
- */
 function extractJSON(text) {
   try {
     // 尝试直接解析
@@ -119,12 +167,29 @@ async function callHunyuan(prompt) {
   return response.Choices[0].Message.Content;
 }
 
+/** 申论固定 1 题；客观题单次 1～5 题，减轻超时又比逐题少轮次 */
+function resolveBatchCount(questionType, rawCount) {
+  if (questionType === 'essay') return 1;
+  const n = parseInt(rawCount, 10);
+  if (Number.isNaN(n) || n < 1) return 1;
+  return Math.min(n, 5);
+}
+
+/** event.count 为 null 时解构默认值不会生效（仅 undefined 才用默认），会拼出「请生成null道」 */
+function normalizeIncomingCount(raw) {
+  if (raw === undefined || raw === null || raw === '') return 1;
+  const n = Number(raw);
+  if (!Number.isFinite(n) || n < 1) return 1;
+  return Math.floor(n);
+}
+
 exports.main = async (event, context) => {
   const { subject = 'xingce', difficulty = 'medium', questionType = 'single', knowledgePoint = '综合' } = event;
+  const count = normalizeIncomingCount(event.count);
 
   try {
-    // 单次仅生成 1 题，避免多题请求导致超时；多题由前端串行调用聚合。
-    const prompt = buildQuestionPrompt(subject, difficulty, questionType, knowledgePoint, 1);
+    const batch = resolveBatchCount(questionType, count);
+    const prompt = buildQuestionPrompt(subject, difficulty, questionType, knowledgePoint, batch);
     const rawResponse = await callHunyuan(prompt);
     const parsed = extractJSON(rawResponse);
 

@@ -1,0 +1,46 @@
+// 与刷题页 quiz.wxs 一致（客观题选项态）
+function includesKey(str, k) {
+  str = '' + (str || '');
+  k = '' + (k || '');
+  return str.indexOf(k) >= 0;
+}
+
+function lettersOnly(s) {
+  s = '' + (s || '');
+  var out = '';
+  var i = 0;
+  var ch = '';
+  var code = 0;
+  for (i = 0; i < s.length; i++) {
+    ch = s.charAt(i);
+    code = ch.charCodeAt(0);
+    if (code >= 65 && code <= 90) {
+      out += ch;
+    } else if (code >= 97 && code <= 122) {
+      out += String.fromCharCode(code - 32);
+    }
+  }
+  return out;
+}
+
+function isMulti(q) {
+  if (!q) return false;
+  if (q.questionType === 'multi' || q.type === 'multi') return true;
+  var a = lettersOnly(q.answer || '');
+  return a.length >= 2;
+}
+
+function isJudge(q) {
+  if (!q) return false;
+  return q.questionType === 'judge' || q.type === 'judge';
+}
+
+function isEssay(q) {
+  if (!q) return false;
+  return q.questionType === 'essay' || q.type === 'essay';
+}
+
+module.exports.includesKey = includesKey;
+module.exports.isMulti = isMulti;
+module.exports.isJudge = isJudge;
+module.exports.isEssay = isEssay;

@@ -6,6 +6,9 @@
 
   <scroll-view scroll-y class="scroll" wx:else>
     <view class="card item" wx:for="{{list}}" wx:key="id" data-index="{{index}}" bindtap="openDetail">
+      <view class="item-meta">
+        <text class="tag tag-purple">申论题</text>
+      </view>
       <text class="title">{{item.topicTitle}}</text>
       <view class="row">
         <text class="score">得分 {{item.totalScore}}</text>
