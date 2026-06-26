@@ -12,8 +12,11 @@ services:
   redis:
     image: docker.m.daocloud.io/library/redis:7-alpine
     restart: unless-stopped
+    environment:
+      REDIS_PASSWORD: ${REDIS_PASSWORD:?set REDIS_PASSWORD in deploy/.env or shell}
+    command: sh -c 'exec redis-server --requirepass "$$REDIS_PASSWORD"'
     ports:
-      - "6379:6379"
+      - "127.0.0.1:6379:6379"
 
   backend:
     build:
